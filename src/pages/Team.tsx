@@ -1,32 +1,52 @@
 import React, { useState, useMemo } from 'react';
 import MemberCard from '../components/team/MemberCard';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Users } from 'lucide-react';
+import { Search, Users, ChevronDown } from 'lucide-react';
 import { mockMembers } from '../data/mockData';
+
+type SortOption = 'contributions' | 'seniority';
 
 const Team: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
+    const [sortBy, setSortBy] = useState<SortOption>('contributions');
+
+    const sortMembers = (members: typeof mockMembers) => {
+        return [...members].sort((a, b) => {
+            if (sortBy === 'contributions') {
+                const aCount = a.contributions.reduce((acc, curr) => acc + curr.count, 0);
+                const bCount = b.contributions.reduce((acc, curr) => acc + curr.count, 0);
+                return bCount - aCount;
+            } else {
+                // Parse date like "2021.01.01" from "2021.01.01 - Present"
+                const aDate = new Date(a.period.split(' - ')[0].replace(/\./g, '-')).getTime();
+                const bDate = new Date(b.period.split(' - ')[0].replace(/\./g, '-')).getTime();
+                return aDate - bDate; // Oldest first
+            }
+        });
+    };
 
     const currentMembers = useMemo(() => {
-        return mockMembers.filter(member =>
+        const filtered = mockMembers.filter(member =>
             member.isCurrent && (
                 member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 member.role.toLowerCase().includes(searchQuery.toLowerCase())
             )
         );
-    }, [searchQuery]);
+        return sortMembers(filtered);
+    }, [searchQuery, sortBy]);
 
     const alumniMembers = useMemo(() => {
-        return mockMembers.filter(member =>
+        const filtered = mockMembers.filter(member =>
             !member.isCurrent && (
                 member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 member.role.toLowerCase().includes(searchQuery.toLowerCase())
             )
         );
-    }, [searchQuery]);
+        return sortMembers(filtered);
+    }, [searchQuery, sortBy]);
 
     return (
-        <div className="min-h-screen pt-28 pb-20 px-6 container mx-auto">
+        <div className="min-h-screen pt-28 pb-20 px-6 container mx-auto text-white">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -43,17 +63,30 @@ const Team: React.FC = () => {
                 </p>
             </motion.div>
 
-            <div className="flex justify-center mb-16">
-                {/* Search - Primary Interaction */}
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-16">
+                {/* Search */}
                 <div className="relative w-full md:w-[28rem] group">
                     <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-brand-accent transition-colors" size={20} />
                     <input
                         type="text"
-                        placeholder="누구를 찾으시나요?"
+                        placeholder="이름이나 역할을 검색해 보세요"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-[2rem] py-4 pl-14 pr-6 text-white text-lg focus:outline-none focus:border-brand-accent/50 focus:bg-white/10 transition-all font-light placeholder:text-gray-600 shadow-2xl"
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-white text-lg focus:outline-none focus:border-brand-accent/50 focus:bg-white/10 transition-all font-light placeholder:text-gray-600 shadow-2xl"
                     />
+                </div>
+
+                {/* Sort Dropdown */}
+                <div className="relative w-full md:w-auto">
+                    <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value as SortOption)}
+                        className="appearance-none w-full md:w-56 bg-white/5 border border-white/10 rounded-2xl py-4 pl-6 pr-12 text-white font-light focus:outline-none focus:border-brand-accent/50 transition-all shadow-xl cursor-pointer"
+                    >
+                        <option value="contributions" className="bg-brand-dark">Most Contributions</option>
+                        <option value="seniority" className="bg-brand-dark">Seniority (Oldest First)</option>
+                    </select>
+                    <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" size={18} />
                 </div>
             </div>
 
@@ -74,7 +107,7 @@ const Team: React.FC = () => {
                             </AnimatePresence>
                         </div>
                     ) : (
-                        <div className="text-center py-10 bg-white/2 rounded-3xl border border-dashed border-white/5">
+                        <div className="text-center py-10 bg-white/5 rounded-3xl border border-dashed border-white/10">
                             <p className="text-gray-500 italic">No active members found.</p>
                         </div>
                     )}
@@ -102,7 +135,7 @@ const Team: React.FC = () => {
                     <div className="text-center py-20">
                         <Users className="mx-auto text-gray-700 mb-4" size={48} />
                         <p className="text-gray-500 text-lg italic tracking-tight font-light">
-                            검색 결과가 없습니다. 다시 검색해 주세요.
+                            결과가 없습니다.
                         </p>
                     </div>
                 )}
