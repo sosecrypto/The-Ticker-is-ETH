@@ -2,42 +2,6 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { mockMembers, mockContributors } from '../../data/mockData';
 
-const GlowingConduit: React.FC<{ d: string; delay: number }> = ({ d, delay }) => (
-    <g>
-        {/* Base Static Path */}
-        <path
-            d={d}
-            fill="none"
-            stroke="white"
-            strokeWidth="0.8"
-            strokeDasharray="4 6"
-            className="opacity-20"
-        />
-        {/* Glowing Pulse Path */}
-        <motion.path
-            d={d}
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{
-                pathLength: [0, 0.4, 0],
-                pathOffset: [0, 1],
-                opacity: [0, 1, 0]
-            }}
-            transition={{
-                duration: 4,
-                repeat: Infinity,
-                delay: delay,
-                ease: "linear"
-            }}
-            style={{
-                filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.9))',
-            }}
-        />
-    </g>
-);
-
 const AvatarParticle: React.FC<{
     avatarUrl: string;
     name: string;
@@ -72,7 +36,7 @@ const AvatarParticle: React.FC<{
                 delay: delay,
                 ease: "linear",
             }}
-            className="absolute pointer-events-none z-30 -translate-x-1/2 -translate-y-1/2"
+            className="absolute pointer-events-none -translate-x-1/2 -translate-y-1/2"
         >
             <div className="relative group">
                 <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border border-white/40 bg-brand-dark shadow-2xl backdrop-blur-sm">
@@ -97,51 +61,30 @@ const MemberAvatarFlow: React.FC = () => {
         [...mockMembers, ...mockContributors].forEach(m => {
             if (!unique.has(m.name)) unique.set(m.name, m);
         });
-        return Array.from(unique.values()).slice(0, 12);
+        return Array.from(unique.values()).slice(0, 15);
     }, []);
 
     const angles = [-90, -30, 30, 90, 150, 210];
-
-    const conduits = useMemo(() => {
-        return angles.map((angleDeg, i) => {
-            const angleVal = (angleDeg) * (Math.PI / 180);
-            const rStart = 85;
-            const x = 50 + Math.cos(angleVal) * rStart;
-            const y = 50 + Math.sin(angleVal) * rStart;
-            return {
-                id: i,
-                d: `M ${x} ${y} L 50 50`,
-                delay: i * 0.6
-            };
-        });
-    }, []);
 
     const particles = useMemo(() => {
         return allAvatars.map((member, i) => ({
             id: member.id + i,
             avatarUrl: member.avatarUrl,
             name: member.name,
-            delay: Math.random() * 6,
-            duration: 5 + Math.random() * 3,
+            delay: Math.random() * 8,
+            duration: 6 + Math.random() * 4,
             angle: angles[i % 6]
         }));
     }, [allAvatars]);
 
     return (
         /* Enforce a large square viewport that remains centered on the logo */
-        <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none">
+        <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none overflow-hidden">
             <div className="relative w-full h-full">
-                {/* SVG Layer for Glowing Conduits */}
-                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-                    {conduits.map(c => (
-                        <GlowingConduit key={c.id} d={c.d} delay={c.delay} />
-                    ))}
-                </svg>
-
                 {/* Ambient Center Glow */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-brand-primary/10 rounded-full blur-[140px]" />
 
-                {/* Avatars flowing along paths */}
+                {/* Avatars flowing along radial paths towards the center */}
                 <div className="absolute inset-0">
                     {particles.map(p => (
                         <AvatarParticle key={p.id} {...p} />

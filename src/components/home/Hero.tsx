@@ -78,12 +78,12 @@ const Hero: React.FC = () => {
                 style={{ y }}
                 className="relative w-full max-w-lg mt-12 lg:mt-16 aspect-[1/1.1] min-h-[400px] flex items-center justify-center pointer-events-none select-none px-6"
             >
-                {/* Member Avatar Flow Animation Overlay - Higher Z-Index */}
-                <div className="absolute inset-0 z-20 flex items-center justify-center">
+                {/* Member Avatar Flow Animation Overlay - Behind the Logo */}
+                <div className="absolute inset-0 z-10 flex items-center justify-center">
                     <MemberAvatarFlow />
                 </div>
 
-                <div className="relative z-10">
+                <div className="relative z-20">
                     {/* Backglow for the logo */}
                     <div className="absolute inset-0 bg-white/5 blur-3xl rounded-full scale-75" />
 
