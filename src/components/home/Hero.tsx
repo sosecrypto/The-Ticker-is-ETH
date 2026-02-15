@@ -73,10 +73,10 @@ const Hero: React.FC = () => {
                 </motion.div>
             </div>
 
-            {/* Custom Logo Image with Parallax and Animation - Pulled up */}
+            {/* Custom Logo Image with Parallax and Animation - Reduced Size */}
             <motion.div
                 style={{ y }}
-                className="relative w-full max-w-lg mt-12 lg:mt-16 pointer-events-none select-none px-6"
+                className="relative w-full max-w-[280px] mt-12 lg:mt-16 pointer-events-none select-none px-6"
             >
                 {/* Member Avatar Flow Animation Overlay */}
                 <MemberAvatarFlow />
@@ -93,13 +93,17 @@ const Hero: React.FC = () => {
                         alt="Ethereum Custom Logo"
                         className="w-full h-auto object-contain mx-auto relative z-10"
                         style={{
-                            filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.05))',
+                            filter: 'drop-shadow(0 0 20px rgba(0,0,0,0.5))',
                         }}
                     />
+
+                    {/* Gradient Masks to blend logo better if it has a background */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505] z-10 pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-transparent to-[#050505] z-10 pointer-events-none" />
                 </div>
 
-                {/* Bottom Shadow Fade */}
-                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#050505] to-transparent z-20" />
+                {/* Bottom Shadow Fade - Stronger */}
+                <div className="absolute inset-x-0 -bottom-10 h-40 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-20" />
             </motion.div>
 
 
