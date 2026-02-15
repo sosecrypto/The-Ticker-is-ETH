@@ -100,8 +100,8 @@ const Hero: React.FC = () => {
                     />
                 </div>
 
-                {/* Bottom Shadow Fade - Blended with page background */}
-                <div className="absolute inset-x-0 -bottom-10 h-40 bg-gradient-to-t from-[#050505] via-[#050505] to-transparent z-20" />
+                {/* Bottom Shadow Fade - Moved lower and behind to prevent logo clipping */}
+                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent -z-10" />
             </motion.div>
 
 
