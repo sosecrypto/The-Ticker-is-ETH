@@ -26,7 +26,7 @@ export const mockMembers: TeamMember[] = [
         role: 'Core Team',
         period: '2022.03.15 - Present',
         isCurrent: true,
-        avatarUrl: '/assets/team/Jay.jpg',
+        avatarUrl: '/assets/team/jay.jpg',
         bio: '기술적 장벽을 낮추기 위해 이더리움 코어 기술 및 로드맵을 한국어로 심층 연구하고 전파합니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com' },
