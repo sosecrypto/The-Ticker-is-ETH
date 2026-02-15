@@ -2,10 +2,11 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Send, Linkedin, Mail, Twitter } from 'lucide-react';
 import ethLogoCustom from '../../assets/eth-logo-custom.png';
-import KoreanFlagFlow from './KoreanFlagFlow';
+import MemberAvatarFlow from './MemberAvatarFlow';
 
 const Hero: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
+    // ... rest of imports
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end start"]
@@ -77,8 +78,8 @@ const Hero: React.FC = () => {
                 style={{ y }}
                 className="relative w-full max-w-lg mt-12 lg:mt-16 pointer-events-none select-none px-6"
             >
-                {/* Korean Flag Flow Animation Overlay */}
-                <KoreanFlagFlow />
+                {/* Member Avatar Flow Animation Overlay */}
+                <MemberAvatarFlow />
 
                 <div className="relative">
                     {/* Backglow for the logo */}
