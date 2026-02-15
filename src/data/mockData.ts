@@ -7,7 +7,7 @@ export const mockMembers: TeamMember[] = [
         role: 'Core Team',
         period: '2021.01.01 - Present',
         isCurrent: true,
-        avatarUrl: 'https://ui-avatars.com/api/?name=Sose&background=3C4CA8&color=fff',
+        avatarUrl: '/assets/team/sose.jpg',
         bio: '이더리움 생태계의 성장을 돕는 정원사(Gardener) 역할을 수행하며 비영리 단체의 비전과 방향성을 이끕니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com', github: 'https://github.com' },
@@ -26,7 +26,7 @@ export const mockMembers: TeamMember[] = [
         role: 'Core Team',
         period: '2022.03.15 - Present',
         isCurrent: true,
-        avatarUrl: 'https://ui-avatars.com/api/?name=Jay&background=A086FC&color=fff',
+        avatarUrl: '/assets/team/Jay.jpg',
         bio: '기술적 장벽을 낮추기 위해 이더리움 코어 기술 및 로드맵을 한국어로 심층 연구하고 전파합니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com' },
@@ -45,7 +45,7 @@ export const mockMembers: TeamMember[] = [
         role: 'Core Team',
         period: '2022.06.01 - Present',
         isCurrent: true,
-        avatarUrl: 'https://ui-avatars.com/api/?name=sm-stack&background=333&color=fff',
+        avatarUrl: '/assets/team/sm-stack.jpg',
         bio: '커뮤니티의 기술적 공공재인 웹 도구와 인프라를 개발하며, 오픈 소스 생태계 기여를 주도합니다.',
         memberType: 'core',
         social: { github: 'https://github.com/sm-stack' },
@@ -64,7 +64,7 @@ export const mockMembers: TeamMember[] = [
         role: 'Core Team',
         period: '2022.09.20 - Present',
         isCurrent: true,
-        avatarUrl: 'https://ui-avatars.com/api/?name=Rejamong&background=FECACA&color=fff',
+        avatarUrl: '/assets/team/rejamong.jpg',
         bio: '이더리움의 가치를 시각적으로 전달하며, 생태계 구성원들이 즐겁게 참여할 수 있는 브랜드 경험을 디자인합니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com' },
@@ -83,7 +83,7 @@ export const mockMembers: TeamMember[] = [
         role: 'Core Team',
         period: '2023.01.10 - Present',
         isCurrent: true,
-        avatarUrl: 'https://ui-avatars.com/api/?name=Kuma&background=FDE047&color=fff',
+        avatarUrl: '/assets/team/kuma.jpg',
         bio: '커뮤니티 멤버들의 활발한 소통을 돕고, 정원(Garden) 안에서 누구나 편안하게 활동할 수 있도록 지원합니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com' },
@@ -102,7 +102,7 @@ export const mockMembers: TeamMember[] = [
         role: 'Core Team',
         period: '2023.02.15 - Present',
         isCurrent: true,
-        avatarUrl: 'https://ui-avatars.com/api/?name=Jenna&background=C084FC&color=fff',
+        avatarUrl: '/assets/team/jenna.jpg',
         bio: '비영리 단체의 효율적인 운영과 프로젝트 관리를 담당하며, 지속 가능한 생태계를 위한 청지기 역할을 수행합니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com' },
@@ -121,7 +121,7 @@ export const mockMembers: TeamMember[] = [
         role: 'Core Team',
         period: '2021.05.01 - 2023.12.31',
         isCurrent: false,
-        avatarUrl: 'https://ui-avatars.com/api/?name=Meenari&background=4ADE80&color=fff',
+        avatarUrl: '/assets/team/meenari.jpg',
         bio: '초기 이더리움 문서 번역 및 가이드 제작을 주도하며 한국 생태계의 기초를 닦았습니다.',
         memberType: 'core',
         social: { github: 'https://github.com' },
@@ -139,7 +139,7 @@ export const mockMembers: TeamMember[] = [
         role: 'Core Team',
         period: '2021.10.15 - 2023.08.30',
         isCurrent: false,
-        avatarUrl: 'https://ui-avatars.com/api/?name=100y&background=FB923C&color=fff',
+        avatarUrl: '/assets/team/100y.jpg',
         bio: '심도 있는 가치 연구를 통해 생태계에 철학적인 영양분을 공급하며 기초를 다졌습니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com' },
@@ -155,128 +155,69 @@ export const mockMembers: TeamMember[] = [
 
 export const mockContributors: (TeamMember & { category: string })[] = [
     {
-        id: '1',
-        name: 'Sose',
+        ...mockMembers[0],
+        id: 'c1',
         role: 'Contributor',
         category: 'Community',
+        memberType: 'contributor',
         period: '2021.01.01 - Present',
         isCurrent: true,
-        memberType: 'contributor',
-        avatarUrl: 'https://ui-avatars.com/api/?name=Sose&background=3C4CA8&color=fff',
-        bio: '이더리움 생태계의 성장을 돕는 정원사(Gardener) 역할을 수행합니다.',
-        social: { twitter: 'https://x.com', github: 'https://github.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 8)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.15', type: 'telegram', content: '[분석] Infinite Garden 철학 기반 생태계 로드맵 공유' }
-        ]
     },
     {
-        id: '2',
-        name: 'Jay',
+        ...mockMembers[1],
+        id: 'c2',
         role: 'Contributor',
         category: 'Research',
+        memberType: 'contributor',
         period: '2022.03.15 - Present',
         isCurrent: true,
-        memberType: 'contributor',
-        avatarUrl: 'https://ui-avatars.com/api/?name=Jay&background=A086FC&color=fff',
-        bio: '이더리움 코어 기술 및 로드맵을 연구하고 전파합니다.',
-        social: { twitter: 'https://x.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 6)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.14', type: 'telegram', content: '[리서치] 덴쿤 업그레이드 기술 총정리' }
-        ]
     },
     {
-        id: '3',
-        name: 'sm-stack',
+        ...mockMembers[2],
+        id: 'c3',
         role: 'Contributor',
         category: 'Development',
+        memberType: 'contributor',
         period: '2022.06.01 - Present',
         isCurrent: true,
-        memberType: 'contributor',
-        avatarUrl: 'https://ui-avatars.com/api/?name=sm-stack&background=333&color=fff',
-        bio: '커뮤니티 공공재 도구 및 인프라를 개발합니다.',
-        social: { github: 'https://github.com/sm-stack' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 10)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.13', type: 'github', content: '공식 사이트 v2.0 배포' }
-        ]
     },
     {
-        id: '4',
-        name: 'Rejamong',
+        ...mockMembers[3],
+        id: 'c4',
         role: 'Contributor',
         category: 'Design',
+        memberType: 'contributor',
         period: '2022.09.20 - Present',
         isCurrent: true,
-        memberType: 'contributor',
-        avatarUrl: 'https://ui-avatars.com/api/?name=Rejamong&background=FECACA&color=fff',
-        bio: '이더리움의 가치를 시각적으로 디자인합니다.',
-        social: { twitter: 'https://x.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 5)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.12', type: 'telegram', content: '[디자인] 신규 굿즈 시안 공유' }
-        ]
     },
     {
-        id: '5',
-        name: 'Kuma',
+        ...mockMembers[4],
+        id: 'c5',
         role: 'Contributor',
         category: 'Community',
+        memberType: 'contributor',
         period: '2023.01.10 - Present',
         isCurrent: true,
-        memberType: 'contributor',
-        avatarUrl: 'https://ui-avatars.com/api/?name=Kuma&background=FDE047&color=fff',
-        bio: '커뮤니티 소통과 멤버 활동을 지원합니다.',
-        social: { twitter: 'https://x.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 7)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.14', type: 'telegram', content: '[이벤트] 설날 퀴즈 이벤트 진행' }
-        ]
     },
     {
-        id: '6',
-        name: 'Jenna',
+        ...mockMembers[5],
+        id: 'c6',
         role: 'Contributor',
         category: 'Community',
+        memberType: 'contributor',
         period: '2023.02.15 - Present',
         isCurrent: true,
-        memberType: 'contributor',
-        avatarUrl: 'https://ui-avatars.com/api/?name=Jenna&background=C084FC&color=fff',
-        bio: '비영리 단체 운영 및 프로젝트 관리를 담당합니다.',
-        social: { twitter: 'https://x.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 4)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.11', type: 'telegram', content: '[운영] 투명성 보고서 게시' }
-        ]
     },
     {
-        id: '7',
+        ...mockMembers[6],
+        id: 'c7',
         name: 'Meenari',
         role: 'Contributor',
         category: 'Translation',
         period: '2021.05.01 - Present',
         isCurrent: true,
         memberType: 'contributor',
-        avatarUrl: 'https://ui-avatars.com/api/?name=Meenari&background=4ADE80&color=fff',
+        avatarUrl: '/assets/team/meenari.jpg',
         bio: '이더리움 한국어 번역 및 가이드 제작에 기여하고 있습니다.',
         social: { github: 'https://github.com' },
         contributions: Array.from({ length: 140 }, (_, i) => ({
@@ -288,14 +229,15 @@ export const mockContributors: (TeamMember & { category: string })[] = [
         ]
     },
     {
-        id: '8',
+        ...mockMembers[7],
+        id: 'c8',
         name: '100y',
         role: 'Contributor',
         category: 'Research',
         period: '2021.10.15 - Present',
         isCurrent: true,
         memberType: 'contributor',
-        avatarUrl: 'https://ui-avatars.com/api/?name=100y&background=FB923C&color=fff',
+        avatarUrl: '/assets/team/100y.jpg',
         bio: '이더리움의 가치와 기술 연구에 참여하고 있습니다.',
         social: { twitter: 'https://x.com' },
         contributions: Array.from({ length: 140 }, (_, i) => ({
@@ -307,14 +249,14 @@ export const mockContributors: (TeamMember & { category: string })[] = [
         ]
     },
     {
-        id: 'c6',
+        id: 'c9',
         name: 'Gen',
         role: 'Contributor',
         category: 'Community',
         period: '2023.10.01 - Present',
         isCurrent: true,
         memberType: 'contributor',
-        avatarUrl: 'https://ui-avatars.com/api/?name=Gen&background=60A5FA&color=fff',
+        avatarUrl: '/assets/contributors/gen.jpg',
         bio: '커뮤니티를 위한 양질의 콘텐츠를 생산하고 소통을 돕습니다.',
         social: { twitter: 'https://x.com' },
         contributions: Array.from({ length: 140 }, (_, i) => ({
