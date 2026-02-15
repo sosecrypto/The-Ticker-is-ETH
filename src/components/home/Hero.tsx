@@ -79,7 +79,7 @@ const Hero: React.FC = () => {
                 className="relative w-full max-w-lg mt-12 lg:mt-16 pointer-events-none select-none px-6"
             >
                 {/* Member Avatar Flow Animation Overlay - Higher Z-Index */}
-                <div className="relative z-20">
+                <div className="absolute inset-0 z-20">
                     <MemberAvatarFlow />
                 </div>
 

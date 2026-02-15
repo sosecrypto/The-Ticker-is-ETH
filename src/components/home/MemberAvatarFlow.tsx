@@ -47,8 +47,8 @@ const AvatarParticle: React.FC<{
 }> = ({ avatarUrl, name, delay, duration, angle }) => {
     const radian = (angle * Math.PI) / 180;
 
-    // Use a square coordinate system (0-100)
-    const startRadius = 45; // % from center
+    // Using percentages within a square coordinate system (0-100)
+    const startRadius = 45;
     const startX = 50 + Math.cos(radian) * startRadius;
     const startY = 50 + Math.sin(radian) * startRadius;
 
@@ -101,9 +101,8 @@ const MemberAvatarFlow: React.FC = () => {
     }, []);
 
     const conduits = useMemo(() => {
-        // Switch to 6 directions (60 degree intervals)
         return Array.from({ length: 6 }, (_, i) => {
-            const angle = (i * 60 - 90) * (Math.PI / 180); // Start from top (-90 degrees)
+            const angle = (i * 60 - 90) * (Math.PI / 180);
             const rStart = 85;
             const x = 50 + Math.cos(angle) * rStart;
             const y = 50 + Math.sin(angle) * rStart;
@@ -123,28 +122,34 @@ const MemberAvatarFlow: React.FC = () => {
             name: member.name,
             delay: Math.random() * 6,
             duration: 5 + Math.random() * 3,
-            angle: (i % 6) * 60 - 90 // Match the 6 conduit angles
+            angle: (i % 6) * 60 - 90
         }));
     }, [allAvatars]);
 
     return (
-        /* aspect-square ensures radial math iscircular. centered with transform. */
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full aspect-square pointer-events-none overflow-visible">
-            {/* SVG Layer for Glowing Conduits */}
-            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-                {conduits.map(c => (
-                    <GlowingConduit key={c.id} d={c.d} delay={c.delay} />
-                ))}
-            </svg>
+        /* 
+           Using a fixed square sizing relative to parent. 
+           w-full h-full would squash if parent is wide but short.
+           Instead, we use a large square that centers itself and covers the area.
+        */
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] pointer-events-none">
+            <div className="relative w-full h-full">
+                {/* SVG Layer for Glowing Conduits */}
+                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                    {conduits.map(c => (
+                        <GlowingConduit key={c.id} d={c.d} delay={c.delay} />
+                    ))}
+                </svg>
 
-            {/* Ambient Center Glow */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-brand-primary/10 rounded-full blur-[120px]" />
+                {/* Ambient Center Glow */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-brand-primary/10 rounded-full blur-[140px]" />
 
-            {/* Avatars flowing along paths */}
-            <div className="absolute inset-0">
-                {particles.map(p => (
-                    <AvatarParticle key={p.id} {...p} />
-                ))}
+                {/* Avatars flowing along paths */}
+                <div className="absolute inset-0">
+                    {particles.map(p => (
+                        <AvatarParticle key={p.id} {...p} />
+                    ))}
+                </div>
             </div>
         </div>
     );
