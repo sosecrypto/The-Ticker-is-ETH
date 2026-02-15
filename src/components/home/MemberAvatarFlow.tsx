@@ -4,26 +4,26 @@ import { mockMembers, mockContributors } from '../../data/mockData';
 
 const GlowingConduit: React.FC<{ d: string; delay: number }> = ({ d, delay }) => (
     <g>
-        {/* Base Path */}
+        {/* Base Static Path - More visible */}
         <path
             d={d}
             fill="none"
             stroke="white"
-            strokeWidth="0.5"
-            strokeDasharray="4 4"
-            className="opacity-10"
+            strokeWidth="0.8"
+            strokeDasharray="4 6"
+            className="opacity-20"
         />
-        {/* Glowing Pulse Path */}
+        {/* Glowing Pulse Path - Stronger glow */}
         <motion.path
             d={d}
             fill="none"
             stroke="white"
-            strokeWidth="1.5"
+            strokeWidth="2"
             initial={{ pathLength: 0, opacity: 0 }}
             animate={{
                 pathLength: [0, 0.4, 0],
                 pathOffset: [0, 1],
-                opacity: [0, 0.8, 0]
+                opacity: [0, 1, 0]
             }}
             transition={{
                 duration: 4,
@@ -32,7 +32,7 @@ const GlowingConduit: React.FC<{ d: string; delay: number }> = ({ d, delay }) =>
                 ease: "linear"
             }}
             style={{
-                filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.8))',
+                filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.9))',
             }}
         />
     </g>
@@ -43,37 +43,40 @@ const AvatarParticle: React.FC<{
     name: string;
     delay: number;
     duration: number;
-    pathId: number;
     angle: number;
-}> = ({ avatarUrl, name, delay, duration, pathId, angle }) => {
-    // 8 radial paths centered at 50, 50
+}> = ({ avatarUrl, name, delay, duration, angle }) => {
     const radian = (angle * Math.PI) / 180;
-    const rStart = 300; // Start distance (percent)
+
+    // Start at edge of defined conduit (let's say 48%)
+    // End at 50% (center)
+    const startOffset = 45;
+    const startX = 50 + Math.cos(radian) * startOffset;
+    const startY = 50 + Math.sin(radian) * startOffset;
 
     return (
         <motion.div
             initial={{
                 opacity: 0,
                 scale: 0,
-                left: `${50 + Math.cos(radian) * 45}%`,
-                top: `${50 + Math.sin(radian) * 45}%`
+                left: `${startX}%`,
+                top: `${startY}%`,
             }}
             animate={{
                 opacity: [0, 1, 1, 0],
-                scale: [0.4, 0.8, 0.8, 0.4],
-                left: [`${50 + Math.cos(radian) * 45}%`, '50%', '50%'],
-                top: [`${50 + Math.sin(radian) * 45}%`, '50%', '50%'],
+                scale: [0.3, 0.8, 0.8, 0.2],
+                left: [`${startX}%`, '50%', '50%'],
+                top: [`${startY}%`, '50%', '50%'],
             }}
             transition={{
                 duration: duration,
                 repeat: Infinity,
                 delay: delay,
-                ease: "easeIn",
+                ease: "linear", // Move linearly along the conduit
             }}
-            className="absolute pointer-events-none z-20 -translate-x-1/2 -translate-y-1/2"
+            className="absolute pointer-events-none z-30 -translate-x-1/2 -translate-y-1/2"
         >
             <div className="relative group">
-                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border border-white/30 bg-brand-dark shadow-2xl backdrop-blur-sm">
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border border-white/40 bg-brand-dark shadow-2xl backdrop-blur-sm">
                     <img
                         src={avatarUrl}
                         alt={name}
@@ -102,14 +105,14 @@ const MemberAvatarFlow: React.FC = () => {
     const conduits = useMemo(() => {
         return Array.from({ length: 8 }, (_, i) => {
             const angle = (i * 45) * (Math.PI / 180);
-            const rStart = 80;
+            const rStart = 85; // Visual length of the conduit
             const x = 50 + Math.cos(angle) * rStart;
             const y = 50 + Math.sin(angle) * rStart;
             return {
                 id: i,
                 d: `M ${x} ${y} L 50 50`,
                 angle: i * 45,
-                delay: i * 0.4
+                delay: i * 0.5
             };
         });
     }, []);
@@ -119,10 +122,9 @@ const MemberAvatarFlow: React.FC = () => {
             id: member.id + i,
             avatarUrl: member.avatarUrl,
             name: member.name,
-            delay: Math.random() * 8,
-            duration: 4 + Math.random() * 4,
-            pathId: i % 8,
-            angle: (i % 8) * 45
+            delay: Math.random() * 6,
+            duration: 5 + Math.random() * 3,
+            angle: (i % 8) * 45 // Assign to one of the 8 conduit angles
         }));
     }, [allAvatars]);
 
@@ -136,7 +138,7 @@ const MemberAvatarFlow: React.FC = () => {
             </svg>
 
             {/* Ambient Center Glow */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-brand-primary/10 rounded-full blur-[100px]" />
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-brand-primary/10 rounded-full blur-[120px]" />
 
             {/* Avatars flowing along paths */}
             <div className="absolute inset-0">
