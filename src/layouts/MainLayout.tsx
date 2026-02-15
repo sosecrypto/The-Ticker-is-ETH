@@ -16,9 +16,10 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     }, []);
 
     const navLinks = [
-        { name: 'Research', path: '/research' },
+        { name: 'About', path: '/about' },
         { name: 'Core Team', path: '/team' },
         { name: 'Contributors', path: '/contributors' },
+        { name: 'Research', path: '/research' },
         { name: 'Events', path: '/events' },
     ];
 
