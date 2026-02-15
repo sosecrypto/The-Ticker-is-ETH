@@ -64,7 +64,20 @@ const MemberAvatarFlow: React.FC = () => {
         return Array.from(unique.values()).slice(0, 15);
     }, []);
 
-    const angles = [-90, -30, 30, 90, 150, 210];
+    const angles = useMemo(() => [-90, -30, 30, 90, 150, 210], []);
+
+    const conduits = useMemo(() => {
+        return angles.map((angleDeg, i) => {
+            const angleVal = (angleDeg) * (Math.PI / 180);
+            const rStart = 85;
+            const x = 50 + Math.cos(angleVal) * rStart;
+            const y = 50 + Math.sin(angleVal) * rStart;
+            return {
+                id: i,
+                d: `M ${x} ${y} L 50 50`,
+            };
+        });
+    }, [angles]);
 
     const particles = useMemo(() => {
         return allAvatars.map((member, i) => ({
@@ -75,12 +88,27 @@ const MemberAvatarFlow: React.FC = () => {
             duration: 6 + Math.random() * 4,
             angle: angles[i % 6]
         }));
-    }, [allAvatars]);
+    }, [allAvatars, angles]);
 
     return (
         /* Enforce a large square viewport that remains centered on the logo */
         <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none overflow-hidden">
             <div className="relative w-full h-full">
+                {/* Static SVG Layer for Conduits */}
+                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                    {conduits.map(c => (
+                        <path
+                            key={c.id}
+                            d={c.d}
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="0.5"
+                            strokeDasharray="4 6"
+                            className="opacity-10"
+                        />
+                    ))}
+                </svg>
+
                 {/* Ambient Center Glow */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-brand-primary/10 rounded-full blur-[140px]" />
 
