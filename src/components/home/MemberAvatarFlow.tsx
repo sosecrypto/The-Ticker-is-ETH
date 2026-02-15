@@ -47,7 +47,7 @@ const AvatarParticle: React.FC<{
 }> = ({ avatarUrl, name, delay, duration, angle }) => {
     const radian = (angle * Math.PI) / 180;
 
-    // Using percentages within a square coordinate system (0-100)
+    // Using a 100x100 square coordinate system
     const startRadius = 45;
     const startX = 50 + Math.cos(radian) * startRadius;
     const startY = 50 + Math.sin(radian) * startRadius;
@@ -62,7 +62,7 @@ const AvatarParticle: React.FC<{
             }}
             animate={{
                 opacity: [0, 1, 1, 0],
-                scale: [0.3, 0.8, 0.8, 0.2],
+                scale: [0.3, 0.8, 0.8, 0],
                 left: [`${startX}%`, '50%', '50%'],
                 top: [`${startY}%`, '50%', '50%'],
             }}
@@ -100,16 +100,17 @@ const MemberAvatarFlow: React.FC = () => {
         return Array.from(unique.values()).slice(0, 12);
     }, []);
 
+    const angles = [-90, -30, 30, 90, 150, 210];
+
     const conduits = useMemo(() => {
-        return Array.from({ length: 6 }, (_, i) => {
-            const angle = (i * 60 - 90) * (Math.PI / 180);
+        return angles.map((angleDeg, i) => {
+            const angleVal = (angleDeg) * (Math.PI / 180);
             const rStart = 85;
-            const x = 50 + Math.cos(angle) * rStart;
-            const y = 50 + Math.sin(angle) * rStart;
+            const x = 50 + Math.cos(angleVal) * rStart;
+            const y = 50 + Math.sin(angleVal) * rStart;
             return {
                 id: i,
                 d: `M ${x} ${y} L 50 50`,
-                angle: i * 60 - 90,
                 delay: i * 0.6
             };
         });
@@ -122,17 +123,13 @@ const MemberAvatarFlow: React.FC = () => {
             name: member.name,
             delay: Math.random() * 6,
             duration: 5 + Math.random() * 3,
-            angle: (i % 6) * 60 - 90
+            angle: angles[i % 6]
         }));
     }, [allAvatars]);
 
     return (
-        /* 
-           Using a fixed square sizing relative to parent. 
-           w-full h-full would squash if parent is wide but short.
-           Instead, we use a large square that centers itself and covers the area.
-        */
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] pointer-events-none">
+        /* Enforce a large square viewport that remains centered on the logo */
+        <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none">
             <div className="relative w-full h-full">
                 {/* SVG Layer for Glowing Conduits */}
                 <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">

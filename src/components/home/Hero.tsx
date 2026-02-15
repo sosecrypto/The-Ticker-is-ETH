@@ -76,10 +76,10 @@ const Hero: React.FC = () => {
             {/* Custom Logo Image with Parallax and Animation - Restored Size */}
             <motion.div
                 style={{ y }}
-                className="relative w-full max-w-lg mt-12 lg:mt-16 pointer-events-none select-none px-6"
+                className="relative w-full max-w-lg mt-12 lg:mt-16 aspect-[1/1.1] min-h-[400px] flex items-center justify-center pointer-events-none select-none px-6"
             >
                 {/* Member Avatar Flow Animation Overlay - Higher Z-Index */}
-                <div className="absolute inset-0 z-20">
+                <div className="absolute inset-0 z-20 flex items-center justify-center">
                     <MemberAvatarFlow />
                 </div>
 
