@@ -70,7 +70,7 @@ const AvatarParticle: React.FC<{
                 delay: delay,
                 ease: "easeIn",
             }}
-            className="absolute pointer-events-none z-0 -translate-x-1/2 -translate-y-1/2"
+            className="absolute pointer-events-none z-20 -translate-x-1/2 -translate-y-1/2"
         >
             <div className="relative group">
                 <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border border-white/30 bg-brand-dark shadow-2xl backdrop-blur-sm">

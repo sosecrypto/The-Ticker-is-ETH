@@ -78,10 +78,12 @@ const Hero: React.FC = () => {
                 style={{ y }}
                 className="relative w-full max-w-lg mt-12 lg:mt-16 pointer-events-none select-none px-6"
             >
-                {/* Member Avatar Flow Animation Overlay */}
-                <MemberAvatarFlow />
+                {/* Member Avatar Flow Animation Overlay - Higher Z-Index */}
+                <div className="relative z-20">
+                    <MemberAvatarFlow />
+                </div>
 
-                <div className="relative">
+                <div className="relative z-10">
                     {/* Backglow for the logo */}
                     <div className="absolute inset-0 bg-white/5 blur-3xl rounded-full scale-75" />
 
@@ -91,17 +93,16 @@ const Hero: React.FC = () => {
                         transition={{ duration: 1.2, ease: "easeOut" }}
                         src={ethLogoCustom}
                         alt="Ethereum Custom Logo"
-                        className="w-full h-auto object-contain mx-auto relative z-10 mix-blend-screen"
+                        className="w-full h-auto object-contain mx-auto relative mix-blend-screen"
                         style={{
-                            maskImage: 'radial-gradient(ellipse 50% 70% at 50% 50%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)',
-                            WebkitMaskImage: 'radial-gradient(ellipse 50% 70% at 50% 50%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)',
-                            filter: 'drop-shadow(0 0 30px rgba(255,255,255,0.05))',
+                            maskImage: 'radial-gradient(ellipse 90% 90% at 50% 50%, black 70%, transparent 100%)',
+                            WebkitMaskImage: 'radial-gradient(ellipse 90% 90% at 50% 50%, black 70%, transparent 100%)',
                         }}
                     />
                 </div>
 
-                {/* Bottom Shadow Fade - Moved lower and behind to prevent logo clipping */}
-                <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent -z-10" />
+                {/* Bottom Shadow Fade - Deeply recessed to avoid any clipping */}
+                <div className="absolute inset-x-0 -bottom-20 h-40 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent -z-10" />
             </motion.div>
 
 
