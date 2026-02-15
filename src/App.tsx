@@ -10,6 +10,9 @@ import About from './pages/About';
 import Contributors from './pages/Contributors';
 
 import Events from './pages/Events';
+import Research from './pages/Research';
+import ResearchDetail from './pages/ResearchDetail';
+import WriteResearch from './pages/WriteResearch';
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
           <Route path="/contributors" element={<Contributors />} />
           <Route path="/contributors/:id" element={<MemberDetail />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/research" element={<Research />} />
+          <Route path="/research/:id" element={<ResearchDetail />} />
+          <Route path="/research/write" element={<WriteResearch />} />
           {/* Add other routes here */}
         </Routes>
       </MainLayout>
