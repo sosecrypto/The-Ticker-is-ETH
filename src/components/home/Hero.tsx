@@ -93,8 +93,9 @@ const Hero: React.FC = () => {
                         alt="Ethereum Custom Logo"
                         className="w-full h-auto object-contain mx-auto relative z-10 mix-blend-screen"
                         style={{
-                            maskImage: 'radial-gradient(circle, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 70%)',
-                            WebkitMaskImage: 'radial-gradient(circle, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 70%)',
+                            maskImage: 'radial-gradient(ellipse 50% 70% at 50% 50%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)',
+                            WebkitMaskImage: 'radial-gradient(ellipse 50% 70% at 50% 50%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)',
+                            filter: 'drop-shadow(0 0 30px rgba(255,255,255,0.05))',
                         }}
                     />
                 </div>

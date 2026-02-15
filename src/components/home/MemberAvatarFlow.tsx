@@ -74,17 +74,18 @@ const AvatarParticle: React.FC<{
             className="absolute left-1/2 top-1/2 pointer-events-none z-0 -translate-x-1/2 -translate-y-1/2"
         >
             <div className="relative group">
-                <div className="w-6 h-6 md:w-8 md:h-8 rounded-full overflow-hidden border border-white/40 bg-brand-dark shadow-2xl backdrop-blur-sm">
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border border-white/20 bg-brand-dark shadow-2xl backdrop-blur-sm">
                     <img
                         src={avatarUrl}
                         alt={name}
-                        className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                        className="w-full h-full object-cover transition-all duration-500 scale-110"
                         onError={(e) => {
                             (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${name}&background=random`;
                         }}
                     />
                 </div>
-                <div className="absolute inset-0 bg-white/20 blur-md rounded-full -z-10" />
+                {/* Subtle Primary Glow */}
+                <div className="absolute inset-0 bg-brand-primary/30 blur-md rounded-full -z-10 group-hover:bg-brand-accent/50 transition-all duration-500" />
             </div>
         </motion.div>
     );
