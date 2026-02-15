@@ -1,23 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Zap, Heart } from 'lucide-react';
+import { Shield, Sprout, Heart } from 'lucide-react';
 
 const MissionSection: React.FC = () => {
     const values = [
         {
-            icon: <Shield className="text-brand-accent" />,
-            title: "Neutrality",
-            description: "No tokens, no bias. 객관적인 연구와 뉴스를 공공재로서 제공하는 중립적 연구 집단입니다."
+            icon: <Shield className="text-brand-accent" size={24} />,
+            title: "Subtraction",
+            description: "권력을 독점하기보다 생태계로 분산시키며, 커뮤니티가 스스로 번영할 수 있는 환경을 만듭니다."
         },
         {
-            icon: <Zap className="text-brand-primary" />,
-            title: "Stewardship",
-            description: "탈중앙화와 개방성이라는 이더리움의 영혼을 한국 생태계에서 지켜나가는 청지기입니다."
+            icon: <Heart className="text-pink-400" size={24} />,
+            title: "Public Goods",
+            description: "보조금과 기부만으로 운영되는 순수한 지원. 오직 공공재의 가치를 위해 존재합니다."
         },
         {
-            icon: <Heart className="text-pink-400" />,
+            icon: <Sprout className="text-brand-primary" size={24} />,
             title: "Infinite Garden",
-            description: "한국의 빌더와 연구자들이 함께 가꾸고 성장할 수 있는 무한한 정원을 만들어갑니다."
+            description: "정원사의 마음으로 한국 이더리움 생태계를 돌보고 성장을 돕는 무한한 정원을 가꿉니다."
         },
     ];
 
@@ -31,7 +31,7 @@ const MissionSection: React.FC = () => {
                         viewport={{ once: true }}
                         className="text-brand-primary font-bold tracking-widest uppercase text-sm mb-4 block"
                     >
-                        Our Core Purpose
+                        Our Mission
                     </motion.span>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -40,7 +40,7 @@ const MissionSection: React.FC = () => {
                         transition={{ duration: 0.8 }}
                         className="text-3xl md:text-5xl font-bold mb-8 leading-tight"
                     >
-                        Expanding the <span className="text-white">Ethereum Frontier</span> in South Korea.
+                        Nurturing the <span className="text-white">Infinite Garden</span> in Korea.
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -49,7 +49,7 @@ const MissionSection: React.FC = () => {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-gray-400 text-lg md:text-xl leading-relaxed"
                     >
-                        "The Ticker is ETH" is a non-profit collective dedicated to dismantling language and information barriers, fostering a globally connected Ethereum community in Korea.
+                        The Ticker is ETH는 이더리움 재단의 철학에 영감을 받아, 정원사의 마음으로 <br className="hidden md:block" /> 한국 이더리움 생태계의 성장을 돕는 비영리 단체입니다.
                     </motion.p>
                 </div>
 
@@ -61,13 +61,13 @@ const MissionSection: React.FC = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: i * 0.1 }}
-                            className="p-8 rounded-3xl border border-white/5 bg-white/[0.02] backdrop-blur-sm hover:border-brand-primary/50 transition-all group"
+                            className="p-8 rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-md hover:border-brand-primary/30 transition-all group"
                         >
-                            <div className="w-12 h-12 bg-brand-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 {v.icon}
                             </div>
                             <h3 className="text-xl font-bold text-white mb-4">{v.title}</h3>
-                            <p className="text-gray-400 leading-relaxed text-sm">
+                            <p className="text-gray-400 leading-relaxed text-sm font-light">
                                 {v.description}
                             </p>
                         </motion.div>
