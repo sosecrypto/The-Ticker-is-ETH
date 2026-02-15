@@ -40,7 +40,7 @@ const MissionSection: React.FC = () => {
                         transition={{ duration: 0.8 }}
                         className="text-3xl md:text-5xl font-bold mb-8 leading-tight"
                     >
-                        Nurturing the <span className="text-white">Infinite Garden</span> in Korea.
+                        Nurturing the <span className="text-white">Infinite Garden</span> <br /> in <span className="text-brand-accent">Korea</span>.
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}

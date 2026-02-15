@@ -18,7 +18,7 @@ const About: React.FC = () => {
                         Vision
                     </motion.span>
                     <h1 className="text-4xl md:text-6xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-brand-accent leading-tight">
-                        Nurturing the <br />Infinite Garden.
+                        Nurturing the <br />Infinite Garden <br /> in <span className="text-brand-accent">Korea</span>.
                     </h1>
                 </div>
 
