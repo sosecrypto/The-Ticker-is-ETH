@@ -4,7 +4,7 @@ import { mockMembers, mockContributors } from '../../data/mockData';
 
 const GlowingConduit: React.FC<{ d: string; delay: number }> = ({ d, delay }) => (
     <g>
-        {/* Base Static Path - More visible */}
+        {/* Base Static Path */}
         <path
             d={d}
             fill="none"
@@ -13,7 +13,7 @@ const GlowingConduit: React.FC<{ d: string; delay: number }> = ({ d, delay }) =>
             strokeDasharray="4 6"
             className="opacity-20"
         />
-        {/* Glowing Pulse Path - Stronger glow */}
+        {/* Glowing Pulse Path */}
         <motion.path
             d={d}
             fill="none"
@@ -47,11 +47,10 @@ const AvatarParticle: React.FC<{
 }> = ({ avatarUrl, name, delay, duration, angle }) => {
     const radian = (angle * Math.PI) / 180;
 
-    // Start at edge of defined conduit (let's say 48%)
-    // End at 50% (center)
-    const startOffset = 45;
-    const startX = 50 + Math.cos(radian) * startOffset;
-    const startY = 50 + Math.sin(radian) * startOffset;
+    // Use a square coordinate system (0-100)
+    const startRadius = 45; // % from center
+    const startX = 50 + Math.cos(radian) * startRadius;
+    const startY = 50 + Math.sin(radian) * startRadius;
 
     return (
         <motion.div
@@ -71,7 +70,7 @@ const AvatarParticle: React.FC<{
                 duration: duration,
                 repeat: Infinity,
                 delay: delay,
-                ease: "linear", // Move linearly along the conduit
+                ease: "linear",
             }}
             className="absolute pointer-events-none z-30 -translate-x-1/2 -translate-y-1/2"
         >
@@ -86,7 +85,6 @@ const AvatarParticle: React.FC<{
                         }}
                     />
                 </div>
-                {/* Colored Core Glow */}
                 <div className="absolute inset-0 bg-brand-primary/40 blur-md rounded-full -z-10 group-hover:bg-brand-accent/60 transition-all duration-500" />
             </div>
         </motion.div>
@@ -103,16 +101,17 @@ const MemberAvatarFlow: React.FC = () => {
     }, []);
 
     const conduits = useMemo(() => {
-        return Array.from({ length: 8 }, (_, i) => {
-            const angle = (i * 45) * (Math.PI / 180);
-            const rStart = 85; // Visual length of the conduit
+        // Switch to 6 directions (60 degree intervals)
+        return Array.from({ length: 6 }, (_, i) => {
+            const angle = (i * 60 - 90) * (Math.PI / 180); // Start from top (-90 degrees)
+            const rStart = 85;
             const x = 50 + Math.cos(angle) * rStart;
             const y = 50 + Math.sin(angle) * rStart;
             return {
                 id: i,
                 d: `M ${x} ${y} L 50 50`,
-                angle: i * 45,
-                delay: i * 0.5
+                angle: i * 60 - 90,
+                delay: i * 0.6
             };
         });
     }, []);
@@ -124,14 +123,15 @@ const MemberAvatarFlow: React.FC = () => {
             name: member.name,
             delay: Math.random() * 6,
             duration: 5 + Math.random() * 3,
-            angle: (i % 8) * 45 // Assign to one of the 8 conduit angles
+            angle: (i % 6) * 60 - 90 // Match the 6 conduit angles
         }));
     }, [allAvatars]);
 
     return (
-        <div className="absolute inset-0 pointer-events-none overflow-visible">
+        /* aspect-square ensures radial math iscircular. centered with transform. */
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full aspect-square pointer-events-none overflow-visible">
             {/* SVG Layer for Glowing Conduits */}
-            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
                 {conduits.map(c => (
                     <GlowingConduit key={c.id} d={c.d} delay={c.delay} />
                 ))}
