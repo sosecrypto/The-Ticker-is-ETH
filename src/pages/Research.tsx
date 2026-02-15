@@ -7,6 +7,11 @@ import { mockResearch } from '../data/mockData';
 const Research: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState<string>('all');
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    React.useEffect(() => {
+        setIsAdmin(localStorage.getItem('isAdmin') === 'true');
+    }, []);
 
     const categories = ['all', 'Technical', 'Economic', 'Social', 'Governance'];
 
@@ -43,13 +48,15 @@ const Research: React.FC = () => {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                 >
-                    <Link
-                        to="/research/write"
-                        className="flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/80 text-white px-6 py-3 rounded-2xl font-bold transition-all shadow-lg shadow-brand-primary/20"
-                    >
-                        <PenSquare size={20} />
-                        Write Research
-                    </Link>
+                    {isAdmin && (
+                        <Link
+                            to="/research/write"
+                            className="flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/80 text-white px-6 py-3 rounded-2xl font-bold transition-all shadow-lg shadow-brand-primary/20"
+                        >
+                            <PenSquare size={20} />
+                            Write Research
+                        </Link>
+                    )}
                 </motion.div>
             </div>
 

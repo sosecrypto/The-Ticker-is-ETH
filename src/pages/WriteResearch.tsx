@@ -7,6 +7,13 @@ import ReactMarkdown from 'react-markdown';
 const WriteResearch: React.FC = () => {
     const navigate = useNavigate();
     const [previewMode, setPreviewMode] = useState(false);
+
+    React.useEffect(() => {
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
+        if (!isAdmin) {
+            navigate('/research');
+        }
+    }, [navigate]);
     const [formData, setFormData] = useState({
         title: '',
         category: 'Technical',
@@ -38,8 +45,8 @@ const WriteResearch: React.FC = () => {
                         <button
                             onClick={() => setPreviewMode(!previewMode)}
                             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold transition-all border ${previewMode
-                                    ? 'bg-brand-primary/20 border-brand-primary text-brand-primary'
-                                    : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
+                                ? 'bg-brand-primary/20 border-brand-primary text-brand-primary'
+                                : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
                                 }`}
                         >
                             {previewMode ? <PenLine size={18} /> : <Eye size={18} />}

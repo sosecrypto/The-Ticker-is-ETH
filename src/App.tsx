@@ -13,6 +13,7 @@ import Events from './pages/Events';
 import Research from './pages/Research';
 import ResearchDetail from './pages/ResearchDetail';
 import WriteResearch from './pages/WriteResearch';
+import AdminLogin from './pages/AdminLogin';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/research" element={<Research />} />
           <Route path="/research/:id" element={<ResearchDetail />} />
           <Route path="/research/write" element={<WriteResearch />} />
+          <Route path="/admin" element={<AdminLogin />} />
           {/* Add other routes here */}
         </Routes>
       </MainLayout>
