@@ -1,20 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Globe, Code, PenTool, BookOpen, Users } from 'lucide-react';
-
-// Enhanced Mock Data
-const contributors = [
-    { id: '1', name: 'Dave', role: 'Translation', category: 'Translation', period: '2023 - Present', isCurrent: true },
-    { id: '2', name: 'Eve', role: 'UI Design', category: 'Design', period: '2023 - Present', isCurrent: true },
-    { id: '3', name: 'Frank', role: 'Security Research', category: 'Research', period: '2022 - 2023', isCurrent: false },
-    { id: '4', name: 'Grace', role: 'Frontend Dev', category: 'Development', period: '2022 - Present', isCurrent: true },
-    { id: '5', name: 'Heidi', role: 'Community Manager', category: 'Community', period: '2021 - Present', isCurrent: true },
-    { id: '6', name: 'Ivan', role: 'News Translation', category: 'Translation', period: '2021 - 2022', isCurrent: false },
-    { id: '7', name: 'Jin', role: 'Contract Dev', category: 'Development', period: '2023', isCurrent: true },
-    { id: '8', name: 'Ken', role: 'Content Writing', category: 'Community', period: '2022 - 2023', isCurrent: false },
-    { id: '9', name: 'Luna', role: 'Protocol Research', category: 'Research', period: '2023 - Present', isCurrent: true },
-    { id: '10', name: 'Minsu', role: 'Visual Design', category: 'Design', period: '2022 - Present', isCurrent: true },
-];
+import MemberCard from '../components/team/MemberCard';
+import { mockContributors } from '../data/mockData';
 
 const categories = [
     { id: 'all', label: 'All', icon: <Users size={16} /> },
@@ -30,7 +18,7 @@ const Contributors: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const filteredContributors = useMemo(() => {
-        return contributors.filter(c => {
+        return mockContributors.filter(c => {
             const matchesCategory = activeCategory === 'all' || c.category === activeCategory;
             const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 c.role.toLowerCase().includes(searchQuery.toLowerCase());
@@ -64,8 +52,8 @@ const Contributors: React.FC = () => {
                             key={cat.id}
                             onClick={() => setActiveCategory(cat.id)}
                             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${activeCategory === cat.id
-                                    ? 'bg-white text-black shadow-lg'
-                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                ? 'bg-white text-black shadow-lg'
+                                : 'text-gray-400 hover:text-white hover:bg-white/5'
                                 }`}
                         >
                             {cat.icon}
@@ -89,35 +77,11 @@ const Contributors: React.FC = () => {
 
             <motion.div
                 layout
-                className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"
+                className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
                 <AnimatePresence mode="popLayout">
                     {filteredContributors.map((c) => (
-                        <motion.div
-                            key={c.id}
-                            layout
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            className={`relative bg-white/5 border border-white/10 rounded-3xl p-6 text-center group overflow-hidden transition-all hover:bg-white/10 hover:border-brand-accent/30 ${!c.isCurrent ? 'grayscale opacity-60' : ''}`}
-                        >
-                            {/* Decorative Background */}
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-brand-primary/10 rounded-full -translate-y-12 translate-x-12 blur-2xl group-hover:bg-brand-accent/15 transition-colors" />
-
-                            <div className="relative">
-                                <div className="w-16 h-16 bg-gradient-to-br from-brand-primary/20 to-brand-accent/20 rounded-full mx-auto mb-4 flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform duration-500">
-                                    <span className="text-xl font-bold text-white uppercase">{c.name.charAt(0)}</span>
-                                </div>
-
-                                <h3 className="text-white font-bold text-lg mb-1 group-hover:text-brand-accent transition-colors">{c.name}</h3>
-                                <p className="text-sm text-brand-primary font-medium mb-3">{c.role}</p>
-
-                                <div className="flex flex-col items-center gap-1">
-                                    <span className="text-[10px] uppercase tracking-widest text-gray-500 font-semibold">{c.period}</span>
-                                    <div className={`mt-2 h-1 w-8 rounded-full ${c.isCurrent ? 'bg-green-500/50' : 'bg-gray-700'}`} />
-                                </div>
-                            </div>
-                        </motion.div>
+                        <MemberCard key={c.id} member={c} />
                     ))}
                 </AnimatePresence>
             </motion.div>

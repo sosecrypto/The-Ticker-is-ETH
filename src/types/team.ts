@@ -21,6 +21,7 @@ export interface TeamMember {
     contributions: Contribution[]; // Mock data for heatmap
     recentActivity: Activity[];
     bio: string;
+    memberType: 'core' | 'contributor';
     social: {
         twitter?: string;
         github?: string;

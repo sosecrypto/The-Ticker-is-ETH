@@ -65,7 +65,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
             </div>
 
             <Link
-                to={`/team/${member.id}`}
+                to={member.memberType === 'core' ? `/team/${member.id}` : `/contributors/${member.id}`}
                 className="block w-full text-center py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm font-medium text-white transition-colors border border-transparent hover:border-white/10"
             >
                 View Profile & Activity Log

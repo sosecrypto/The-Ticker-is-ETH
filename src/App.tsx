@@ -21,6 +21,7 @@ function App() {
           <Route path="/team" element={<Team />} />
           <Route path="/team/:id" element={<MemberDetail />} />
           <Route path="/contributors" element={<Contributors />} />
+          <Route path="/contributors/:id" element={<MemberDetail />} />
           <Route path="/events" element={<Events />} />
           {/* Add other routes here */}
         </Routes>

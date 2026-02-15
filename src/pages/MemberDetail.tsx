@@ -3,11 +3,13 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Github, Twitter, MessageCircle, PenTool, ArrowLeft } from 'lucide-react';
 import ContributionGraph from '../components/team/ContributionGraph';
-import { mockMembers } from '../data/mockData';
+import { mockMembers, mockContributors } from '../data/mockData';
 
 const MemberDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const member = mockMembers.find(m => m.id === id);
+
+    // Search in both arrays
+    const member = [...mockMembers, ...mockContributors].find(m => m.id === id);
 
     if (!member) {
         return (
@@ -29,10 +31,13 @@ const MemberDetail: React.FC = () => {
         }
     };
 
+    const backLink = member.memberType === 'core' ? '/team' : '/contributors';
+    const backLabel = member.memberType === 'core' ? 'Back to Team' : 'Back to Contributors';
+
     return (
         <div className="min-h-screen pt-28 pb-20 px-6 container mx-auto">
-            <Link to="/team" className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors group">
-                <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Team
+            <Link to={backLink} className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors group">
+                <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" /> {backLabel}
             </Link>
 
             <div className="grid lg:grid-cols-3 gap-12">
@@ -74,7 +79,7 @@ const MemberDetail: React.FC = () => {
                             <div className="flex justify-between">
                                 <span>Membership</span>
                                 <span className={member.isCurrent ? "text-green-400 font-medium" : "text-gray-500"}>
-                                    {member.isCurrent ? "Active Core" : "Alumni"}
+                                    {member.isCurrent ? (member.memberType === 'core' ? "Active Core" : "Active Contributor") : "Alumni"}
                                 </span>
                             </div>
                             <div className="flex justify-between">
