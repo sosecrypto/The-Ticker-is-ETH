@@ -109,7 +109,11 @@ const Research: React.FC = () => {
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
                                 ) : (
-                                    <div className="w-full h-full bg-gradient-to-br from-[#6B3FA0] via-[#3C4CA8] to-[#8B5CF6] transition-transform duration-700 group-hover:scale-110" />
+                                    <div className="w-full h-full bg-gradient-to-br from-[#1B2838] via-[#1a2744] to-[#0e1621] transition-transform duration-700 group-hover:scale-110 flex items-center justify-center">
+                                        <svg viewBox="0 0 240 240" className="w-16 h-16 opacity-30">
+                                            <path d="M120 0C53.7 0 0 53.7 0 120s53.7 120 120 120 120-53.7 120-120S186.3 0 120 0zm55.6 82.1L155.2 174c-2.6 11.7-9.4 14.6-19 9.1l-26.4-19.4-12.7 12.2c-1.4 1.4-2.6 2.6-5.3 2.6l1.9-26.7 48.8-44.1c2.1-1.9-.5-2.9-3.3-1.1l-60.3 38-26-8.1c-5.6-1.8-5.8-5.6 1.2-8.4l101.7-39.2c4.7-1.7 8.8 1.1 7.3 8.2z" fill="#26A5E4"/>
+                                        </svg>
+                                    </div>
                                 )}
                                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark to-transparent opacity-60" />
                                 <div className="absolute top-4 left-4">
