@@ -14,10 +14,11 @@
 
 - Hero 섹션 (멤버 아바타 애니메이션)
 - Core Team / Contributors 프로필 (소셜 링크, 기여 히트맵)
-- Research 블로그 (작성/열람, 패스프레이즈 인증)
+- Research 블로그 (작성/열람, 패스프레이즈 인증, Telegram 카테고리)
 - Events 페이지
 - 이더리움 다이아몬드 커스텀 커서 + Trail 효과 (데스크탑)
 - Telegram 채널 메시지 기반 기여도 분석
+- Route 기반 Code-Splitting (React.lazy + Suspense)
 
 ## Project Structure
 
