@@ -46,9 +46,9 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-accent transition-all group-hover:w-full" />
                             </Link>
                         ))}
-                        <button className="bg-white/10 hover:bg-white/20 text-white px-5 py-2 rounded-full text-sm font-medium transition-colors border border-white/5">
+                        <a href="https://t.me/thetickeriseth" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 text-white px-5 py-2 rounded-full text-sm font-medium transition-colors border border-white/5">
                             Subscribe
-                        </button>
+                        </a>
                     </div>
 
                     {/* Mobile Nav Button */}
@@ -102,17 +102,19 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         <div>
                             <h4 className="text-white font-semibold mb-4">Community</h4>
                             <ul className="space-y-2 text-gray-400">
-                                <li><a href="#" className="hover:text-brand-accent">Twitter</a></li>
-                                <li><a href="#" className="hover:text-brand-accent">Discord</a></li>
-                                <li><a href="#" className="hover:text-brand-accent">Telegram</a></li>
+                                <li><a href="https://x.com/TickerisETH_kr" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Twitter</a></li>
+                                <li><a href="https://t.me/thetickeriseth" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Telegram Channel</a></li>
+                                <li><a href="https://t.me/thetickerisethchat" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Telegram Chat</a></li>
+                                <li><a href="https://linkedin.com/company/the-ticker-is-eth/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">LinkedIn</a></li>
                             </ul>
                         </div>
                         <div>
                             <h4 className="text-white font-semibold mb-4">Resources</h4>
                             <ul className="space-y-2 text-gray-400">
-                                <li><a href="#" className="hover:text-brand-accent">Blog</a></li>
-                                <li><a href="#" className="hover:text-brand-accent">Events</a></li>
-                                <li><a href="#" className="hover:text-brand-accent">Contact</a></li>
+                                <li><Link to="/research" className="hover:text-brand-accent">Blog</Link></li>
+                                <li><Link to="/events" className="hover:text-brand-accent">Events</Link></li>
+                                <li><a href="https://substack.com/@tickeriseth" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Newsletter</a></li>
+                                <li><a href="https://t.me/thetickerisethchat" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Contact</a></li>
                             </ul>
                         </div>
                     </div>

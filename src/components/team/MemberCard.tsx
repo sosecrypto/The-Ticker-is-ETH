@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import type { TeamMember } from '../../types/team';
 import ContributionGraph from './ContributionGraph';
-import { Github, Twitter } from 'lucide-react';
+import { Github, Twitter, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface MemberCardProps {
@@ -20,9 +20,12 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
                 <div className="flex items-center gap-4">
                     <div className="relative">
                         <img
-                            src={member.avatarUrl}
+                            src={member.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=3C4CA8&color=fff&size=64`}
                             alt={member.name}
                             className="w-16 h-16 rounded-full object-cover border-2 border-transparent group-hover:border-brand-accent transition-colors"
+                            onError={(e) => {
+                                (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=3C4CA8&color=fff&size=64`;
+                            }}
                         />
                         {member.isCurrent && (
                             <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-brand-dark rounded-full" title="Active Object" />
@@ -45,6 +48,11 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
                     {member.social.twitter && (
                         <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
                             <Twitter size={18} />
+                        </a>
+                    )}
+                    {member.social.telegram && (
+                        <a href={member.social.telegram} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#26A5E4] transition-colors">
+                            <MessageCircle size={18} />
                         </a>
                     )}
                 </div>

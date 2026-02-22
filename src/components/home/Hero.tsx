@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Send, Linkedin, Mail, Twitter } from 'lucide-react';
 import ethLogoCustom from '../../assets/eth-logo-custom.png';
@@ -43,10 +44,10 @@ const Hero: React.FC = () => {
                     {/* SNS Icons */}
                     <div className="flex justify-center gap-4 mb-8">
                         {[
-                            { icon: Send, href: "#", label: "Telegram" },
-                            { icon: Twitter, href: "#", label: "Twitter" },
-                            { icon: Linkedin, href: "#", label: "LinkedIn" },
-                            { icon: Mail, href: "#", label: "Newsletter" }
+                            { icon: Send, href: "https://t.me/thetickeriseth", label: "Telegram" },
+                            { icon: Twitter, href: "https://x.com/TickerisETH_kr", label: "Twitter" },
+                            { icon: Linkedin, href: "https://linkedin.com/company/the-ticker-is-eth/", label: "LinkedIn" },
+                            { icon: Mail, href: "https://substack.com/@tickeriseth", label: "Newsletter" }
                         ].map((sns, idx) => (
                             <motion.a
                                 key={idx}
@@ -63,12 +64,12 @@ const Hero: React.FC = () => {
                     </div>
 
                     <div className="flex justify-center mb-0">
-                        <button className="group relative px-12 py-4 bg-transparent border border-white/10 rounded-full overflow-hidden transition-all duration-500 hover:border-white/40">
+                        <Link to="/about" className="group relative px-12 py-4 bg-transparent border border-white/10 rounded-full overflow-hidden transition-all duration-500 hover:border-white/40 inline-block">
                             <span className="relative z-10 text-xs font-bold tracking-[0.3em] uppercase transition-colors duration-500 group-hover:text-white">
                                 Learn More
                             </span>
                             <div className="absolute inset-0 bg-white/5 translate-y-full transition-transform duration-500 group-hover:translate-y-0" />
-                        </button>
+                        </Link>
                     </div>
                 </motion.div>
             </div>

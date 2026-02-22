@@ -1,7 +1,67 @@
-import type { TeamMember } from '../types/team';
+import type { TeamMember, TelegramData, TelegramContributor } from '../types/team';
 import type { ResearchItem } from '../types/research';
+import telegramData from './telegram-contributors.json';
 
-export const mockMembers: TeamMember[] = [
+// --- Telegram 실데이터 헬퍼 함수 ---
+
+function findTelegramContributor(name: string): TelegramContributor | undefined {
+    const nameMap: Record<string, string> = {
+        'Sose': 'sose',
+    };
+    const tgName = nameMap[name] ?? name;
+    return (telegramData as TelegramData).contributors.find(
+        c => c.name.toLowerCase() === tgName.toLowerCase()
+    );
+}
+
+function extractFirstSentence(text: string): string {
+    const cleaned = text.replace(/\n+/g, ' ').trim();
+    const match = cleaned.match(/^.+?[.!?]\s/);
+    const sentence = match ? match[0].trim() : cleaned;
+    return sentence.length > 100 ? sentence.slice(0, 97) + '...' : sentence;
+}
+
+function buildTelegramActivity(contributor: TelegramContributor) {
+    const dateCounts = new Map<string, number>();
+    for (const msg of contributor.messages) {
+        const dateKey = msg.date.slice(0, 10);
+        dateCounts.set(dateKey, (dateCounts.get(dateKey) ?? 0) + 1);
+    }
+
+    const firstDate = new Date(contributor.firstMessageDate);
+    const totalDays = Math.ceil((Date.now() - firstDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+
+    const contributions = Array.from({ length: totalDays }, (_, i) => {
+        const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+        const key = d.toISOString().slice(0, 10);
+        return { date: d.toISOString(), count: dateCounts.get(key) ?? 0 };
+    });
+
+    const recentMessages = [...contributor.messages]
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    const recentActivity = recentMessages.map((msg, i) => {
+        const urlMatch = msg.text.match(/https?:\/\/[^\s),]+/);
+        return {
+            id: `tg-${i}`,
+            date: new Date(msg.date).toLocaleDateString('ko-KR', {
+                year: 'numeric', month: '2-digit', day: '2-digit'
+            }).replace(/\. /g, '.').replace(/\.$/, ''),
+            type: 'telegram' as const,
+            content: extractFirstSentence(msg.text),
+            link: `https://t.me/thetickeriseth/${msg.id}`,
+            views: msg.views,
+            forwards: msg.forwards,
+            sourceUrl: urlMatch?.[0],
+        };
+    });
+
+    return { contributions, recentActivity };
+}
+
+// --- Core Team 멤버 정의 ---
+
+const rawMembers: TeamMember[] = [
     {
         id: '1',
         name: 'Sose',
@@ -12,14 +72,8 @@ export const mockMembers: TeamMember[] = [
         bio: '이더리움 생태계의 성장을 돕는 정원사(Gardener) 역할을 수행하며 비영리 단체의 비전과 방향성을 이끕니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com', github: 'https://github.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 8)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.15', type: 'telegram', content: '[분석] Infinite Garden 철학에 기반한 2024년 생태계 로드맵 공유' },
-            { id: '2', date: '2024.02.10', type: 'telegram', content: '[공지] Subtraction(뺄셈의 철학)에 따른 커뮤니티 거버넌스 개편 안내' },
-        ]
+        contributions: [],
+        recentActivity: [],
     },
     {
         id: '2',
@@ -31,14 +85,8 @@ export const mockMembers: TeamMember[] = [
         bio: '기술적 장벽을 낮추기 위해 이더리움 코어 기술 및 로드맵을 한국어로 심층 연구하고 전파합니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 6)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.14', type: 'telegram', content: '[리서치] 이더리움 덴쿤(Dencun) 업그레이드의 기술적 의의 정리' },
-            { id: '2', date: '2024.02.08', type: 'telegram', content: '[Q&A] 레이어 2 확장성 솔루션 기술 세미나 진행' }
-        ]
+        contributions: [],
+        recentActivity: [],
     },
     {
         id: '3',
@@ -50,14 +98,8 @@ export const mockMembers: TeamMember[] = [
         bio: '커뮤니티의 기술적 공공재인 웹 도구와 인프라를 개발하며, 오픈 소스 생태계 기여를 주도합니다.',
         memberType: 'core',
         social: { github: 'https://github.com/sm-stack' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 10)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.13', type: 'github', content: 'Ethereum Korea 공식 웹사이트 v2.0 배포 완료', link: 'https://github.com' },
-            { id: '2', date: '2024.02.05', type: 'telegram', content: '[개발] 개발자들을 위한 이더리움 SDK 튜토리얼 게시' }
-        ]
+        contributions: [],
+        recentActivity: [],
     },
     {
         id: '4',
@@ -69,14 +111,8 @@ export const mockMembers: TeamMember[] = [
         bio: '이더리움의 가치를 시각적으로 전달하며, 생태계 구성원들이 즐겁게 참여할 수 있는 브랜드 경험을 디자인합니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 5)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.12', type: 'telegram', content: '[디자인] The Ticker is ETH 신규 굿즈 디자인 시안 투표' },
-            { id: '2', date: '2024.02.01', type: 'telegram', content: '[공지] 오프라인 밋업 현장 스케치 및 하이라이트 영상 공유' }
-        ]
+        contributions: [],
+        recentActivity: [],
     },
     {
         id: '5',
@@ -88,14 +124,8 @@ export const mockMembers: TeamMember[] = [
         bio: '커뮤니티 멤버들의 활발한 소통을 돕고, 정원(Garden) 안에서 누구나 편안하게 활동할 수 있도록 지원합니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 7)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.14', type: 'telegram', content: '[이벤트] 설날 맞이 이더리움 퀴즈 이벤트 진행' },
-            { id: '2', date: '2024.02.07', type: 'telegram', content: '[커뮤니티] 신규 멤버들을 위한 Q&A 채널 가이드 공지' }
-        ]
+        contributions: [],
+        recentActivity: [],
     },
     {
         id: '6',
@@ -107,14 +137,8 @@ export const mockMembers: TeamMember[] = [
         bio: '비영리 단체의 효율적인 운영과 프로젝트 관리를 담당하며, 지속 가능한 생태계를 위한 청지기 역할을 수행합니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 4)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.11', type: 'telegram', content: '[운영] 1분기 보조금(Grants) 집행 현황 및 투명성 보고서 게시' },
-            { id: '2', date: '2024.01.25', type: 'telegram', content: '[공지] 상반기 생태계 공헌 활동 계획 수립 안내' }
-        ]
+        contributions: [],
+        recentActivity: [],
     },
     {
         id: '7',
@@ -126,13 +150,8 @@ export const mockMembers: TeamMember[] = [
         bio: '초기 이더리움 문서 번역 및 가이드 제작을 주도하며 한국 생태계의 기초를 닦았습니다.',
         memberType: 'core',
         social: { github: 'https://github.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: i > 60 ? 0 : Math.floor(Math.random() * 3)
-        })),
-        recentActivity: [
-            { id: '1', date: '2023.12.20', type: 'telegram', content: '[운영] 번역 팀 운영 가이드라인 최종 업데이트' }
-        ]
+        contributions: [],
+        recentActivity: [],
     },
     {
         id: '8',
@@ -144,130 +163,89 @@ export const mockMembers: TeamMember[] = [
         bio: '심도 있는 가치 연구를 통해 생태계에 철학적인 영양분을 공급하며 기초를 다졌습니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: i > 100 ? 0 : Math.floor(Math.random() * 4)
-        })),
-        recentActivity: [
-            { id: '1', date: '2023.08.15', type: 'telegram', content: '[리서치] 이더리움 공공재 가치 보존의 역사 아카이브 완료' }
-        ]
+        contributions: [],
+        recentActivity: [],
     }
 ];
 
+// Telegram 실데이터 매핑
+export const mockMembers: TeamMember[] = rawMembers.map(member => {
+    const tgContributor = findTelegramContributor(member.name);
+    if (!tgContributor) return member;
+
+    const { contributions, recentActivity } = buildTelegramActivity(tgContributor);
+    return { ...member, contributions, recentActivity };
+});
+
+function telegramToContributors(data: TelegramData): (TeamMember & { category: string })[] {
+    return data.contributors.map((contributor, index) => {
+        const dateCounts = new Map<string, number>();
+        for (const msg of contributor.messages) {
+            const dateKey = msg.date.slice(0, 10);
+            dateCounts.set(dateKey, (dateCounts.get(dateKey) ?? 0) + 1);
+        }
+
+        const firstDate = new Date(contributor.firstMessageDate);
+        const totalDays = Math.ceil((Date.now() - firstDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+
+        const contributions = Array.from({ length: totalDays }, (_, i) => {
+            const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+            const key = d.toISOString().slice(0, 10);
+            return { date: d.toISOString(), count: dateCounts.get(key) ?? 0 };
+        });
+
+        const recentMessages = contributor.messages
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+        const recentActivity = recentMessages.map((msg, i) => ({
+            id: `t${index}-${i}`,
+            date: new Date(msg.date).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, ''),
+            type: 'telegram' as const,
+            content: msg.text.slice(0, 200),
+            link: `https://t.me/${data.channel}/${msg.id}`,
+        }));
+
+        const startDate = new Date(contributor.firstMessageDate);
+        const period = `${startDate.getFullYear()}.${String(startDate.getMonth() + 1).padStart(2, '0')}.${String(startDate.getDate()).padStart(2, '0')} - Present`;
+
+        return {
+            id: `tg-${index}`,
+            name: contributor.name,
+            role: 'Content Creator',
+            period,
+            isCurrent: true,
+            avatarUrl: `/assets/team/${contributor.name.toLowerCase()}.jpg`,
+            contributions,
+            recentActivity,
+            bio: `${data.channel} 채널에서 ${contributor.messageCount}개의 메시지를 작성한 기여자입니다.`,
+            memberType: 'contributor' as const,
+            category: 'Content',
+            social: {
+                telegram: `https://t.me/${data.channel}`,
+            },
+        };
+    });
+}
+
 export const mockContributors: (TeamMember & { category: string })[] = [
     {
-        ...mockMembers[0],
-        id: 'c1',
-        role: 'Contributor',
-        category: 'Community',
-        memberType: 'contributor',
-        period: '2021.01.01 - Present',
-        isCurrent: true,
-    },
-    {
-        ...mockMembers[1],
-        id: 'c2',
-        role: 'Contributor',
-        category: 'Research',
-        memberType: 'contributor',
-        period: '2022.03.15 - Present',
-        isCurrent: true,
-    },
-    {
-        ...mockMembers[2],
-        id: 'c3',
-        role: 'Contributor',
-        category: 'Development',
-        memberType: 'contributor',
-        period: '2022.06.01 - Present',
-        isCurrent: true,
-    },
-    {
-        ...mockMembers[3],
-        id: 'c4',
-        role: 'Contributor',
-        category: 'Design',
-        memberType: 'contributor',
-        period: '2022.09.20 - Present',
-        isCurrent: true,
-    },
-    {
-        ...mockMembers[4],
-        id: 'c5',
-        role: 'Contributor',
-        category: 'Community',
-        memberType: 'contributor',
-        period: '2023.01.10 - Present',
-        isCurrent: true,
-    },
-    {
-        ...mockMembers[5],
-        id: 'c6',
-        role: 'Contributor',
-        category: 'Community',
-        memberType: 'contributor',
-        period: '2023.02.15 - Present',
-        isCurrent: true,
-    },
-    {
-        ...mockMembers[6],
-        id: 'c7',
-        name: 'Meenari',
-        role: 'Contributor',
-        category: 'Translation',
-        period: '2021.05.01 - Present',
-        isCurrent: true,
-        memberType: 'contributor',
-        avatarUrl: '/assets/team/meenari.jpg',
-        bio: '이더리움 한국어 번역 및 가이드 제작에 기여하고 있습니다.',
-        social: { github: 'https://github.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 3)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.15', type: 'telegram', content: '[번역] 최신 EF 블로그 포스트 번역' }
-        ]
-    },
-    {
-        ...mockMembers[7],
-        id: 'c8',
-        name: '100y',
-        role: 'Contributor',
-        category: 'Research',
-        period: '2021.10.15 - Present',
-        isCurrent: true,
-        memberType: 'contributor',
-        avatarUrl: '/assets/team/100y.jpg',
-        bio: '이더리움의 가치와 기술 연구에 참여하고 있습니다.',
-        social: { twitter: 'https://x.com' },
-        contributions: Array.from({ length: 140 }, (_, i) => ({
-            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 4)
-        })),
-        recentActivity: [
-            { id: '1', date: '2024.02.10', type: 'telegram', content: '[리서치] 공공재 기여 가이드 업데이트' }
-        ]
-    },
-    {
-        id: 'c9',
+        id: 'gen-1',
         name: 'Gen',
         role: 'Contributor',
-        category: 'Community',
-        period: '2023.10.01 - Present',
+        period: '2024.01.01 - Present',
         isCurrent: true,
-        memberType: 'contributor',
         avatarUrl: '/assets/contributors/gen.jpg',
-        bio: '커뮤니티를 위한 양질의 콘텐츠를 생산하고 소통을 돕습니다.',
-        social: { twitter: 'https://x.com' },
         contributions: Array.from({ length: 140 }, (_, i) => ({
             date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-            count: Math.floor(Math.random() * 5)
+            count: 0,
         })),
-        recentActivity: [
-            { id: '1', date: '2024.02.14', type: 'telegram', content: '[콘텐츠] 텔레그램 커뮤니티 데일리 뉴스 브리핑' }
-        ]
-    }
+        recentActivity: [],
+        bio: 'The Ticker is ETH 커뮤니티 기여자입니다.',
+        memberType: 'contributor' as const,
+        category: 'Content',
+        social: {},
+    },
+    ...telegramToContributors(telegramData as TelegramData),
 ];
 
 export const mockResearch: ResearchItem[] = [
