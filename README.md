@@ -28,7 +28,7 @@ src/
 │   ├── cursor/          # 커스텀 커서 (ETH 다이아몬드 + trail)
 │   ├── home/            # Hero, KoreanFlagFlow, MemberAvatarFlow
 │   └── team/            # MemberCard, ContributionGraph
-├── data/                # mockData, telegram JSON
+├── data/                # mockData, researchData, telegram JSON
 ├── layouts/             # MainLayout
 ├── pages/               # Home, About, Team, Contributors, Research, Events
 └── types/               # TypeScript 타입 정의
