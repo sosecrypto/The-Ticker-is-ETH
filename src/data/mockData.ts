@@ -20,6 +20,18 @@ function extractFirstSentence(text: string): string {
     return sentence.length > 100 ? sentence.slice(0, 97) + '...' : sentence;
 }
 
+function formatDateStr(dateStr: string): string {
+    const d = new Date(dateStr);
+    return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function isStillActive(lastMessageDate: string): boolean {
+    const lastDate = new Date(lastMessageDate);
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    return lastDate >= oneMonthAgo;
+}
+
 function buildTelegramActivity(contributor: TelegramContributor) {
     const dateCounts = new Map<string, number>();
     for (const msg of contributor.messages) {
@@ -167,13 +179,23 @@ const rawMembers: TeamMember[] = [
     }
 ];
 
-// Telegram 실데이터 매핑
+// Telegram 실데이터 매핑 (활동 기간: 마지막 글 기준 1개월 이내 → Present, 초과 → 마지막 글 날짜)
 export const mockMembers: TeamMember[] = rawMembers.map(member => {
     const tgContributor = findTelegramContributor(member.name);
     if (!tgContributor) return member;
 
     const { contributions, recentActivity } = buildTelegramActivity(tgContributor);
-    return { ...member, contributions, recentActivity };
+    const active = isStillActive(tgContributor.lastMessageDate);
+    const startDate = member.period.split(' - ')[0];
+    const endDate = active ? 'Present' : formatDateStr(tgContributor.lastMessageDate);
+
+    return {
+        ...member,
+        contributions,
+        recentActivity,
+        period: `${startDate} - ${endDate}`,
+        isCurrent: active,
+    };
 });
 
 function telegramToContributors(data: TelegramData): (TeamMember & { category: string })[] {
@@ -204,15 +226,16 @@ function telegramToContributors(data: TelegramData): (TeamMember & { category: s
             link: `https://t.me/${data.channel}/${msg.id}`,
         }));
 
-        const startDate = new Date(contributor.firstMessageDate);
-        const period = `${startDate.getFullYear()}.${String(startDate.getMonth() + 1).padStart(2, '0')}.${String(startDate.getDate()).padStart(2, '0')} - Present`;
+        const active = isStillActive(contributor.lastMessageDate);
+        const endDate = active ? 'Present' : formatDateStr(contributor.lastMessageDate);
+        const period = `${formatDateStr(contributor.firstMessageDate)} - ${endDate}`;
 
         return {
             id: `tg-${index}`,
             name: contributor.name,
             role: 'Content Creator',
             period,
-            isCurrent: true,
+            isCurrent: active,
             avatarUrl: `/assets/team/${contributor.name.toLowerCase()}.jpg`,
             contributions,
             recentActivity,
