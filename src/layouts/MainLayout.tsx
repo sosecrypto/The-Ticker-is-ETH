@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import EthCursorTrail from '../components/cursor/EthCursorTrail';
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -24,7 +25,8 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     ];
 
     return (
-        <div className="min-h-screen flex flex-col bg-brand-dark overflow-x-hidden">
+        <div className="min-h-screen flex flex-col bg-brand-dark overflow-x-hidden cursor-none-desktop">
+            <EthCursorTrail />
             <nav
                 className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-brand-dark/80 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent py-6'
                     }`}

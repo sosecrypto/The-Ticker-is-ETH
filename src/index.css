@@ -25,3 +25,18 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* Custom Ethereum cursor - hide default on desktop */
+@media (pointer: fine) {
+  .cursor-none-desktop,
+  .cursor-none-desktop * {
+    cursor: none !important;
+  }
+}
+
+@media (pointer: coarse) {
+  .cursor-none-desktop,
+  .cursor-none-desktop * {
+    cursor: auto !important;
+  }
+}
