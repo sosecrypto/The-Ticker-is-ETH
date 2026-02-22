@@ -1,6 +1,7 @@
 import type { TeamMember, TelegramData, TelegramContributor } from '../types/team';
 import type { ResearchItem } from '../types/research';
 import telegramData from './telegram-contributors.json';
+import forwardedMessages from './forwarded-messages.json';
 
 // --- Telegram 실데이터 헬퍼 함수 ---
 
@@ -264,6 +265,44 @@ export const mockContributors: (TeamMember & { category: string })[] = [
     ...telegramContributors,
 ];
 
+// --- Telegram → Research 변환 ---
+function telegramToResearch(): ResearchItem[] {
+    return (forwardedMessages as Array<{
+        id: number;
+        date: string;
+        text: string;
+        fromChannelTitle: string | null;
+        fromPostAuthor: string | null;
+    }>)
+        .filter(msg => msg.text.length >= 200)
+        .map(msg => {
+            const text = msg.text;
+            const tagMatch = text.match(/^\[([^\]]+)\]/);
+            const title = tagMatch
+                ? tagMatch[1]
+                : text.split('\n')[0].slice(0, 80).replace(/\s+$/, '');
+            const author = msg.fromPostAuthor || 'Community';
+            const readTime = `${Math.max(1, Math.round(text.length / 500))} min`;
+            const dateObj = new Date(msg.date);
+            const date = `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`;
+
+            return {
+                id: `tg-${msg.id}`,
+                title,
+                author,
+                authorId: '',
+                date,
+                category: 'Telegram' as const,
+                summary: text.slice(0, 200).replace(/\n+/g, ' ').trim(),
+                content: text,
+                thumbnailUrl: '',
+                readTime,
+            };
+        });
+}
+
+const telegramResearchItems = telegramToResearch();
+
 export const mockResearch: ResearchItem[] = [
     {
         id: 'r1',
@@ -311,5 +350,6 @@ export const mockResearch: ResearchItem[] = [
 - **Stewardship**: 우리는 이러한 소중한 가치들을 지키기 위해 노력합니다.
 - **Subtraction**: 이익을 독점하기보다 생태계로 환원하는 뺄셈의 미학을 실천합니다.
 `
-    }
+    },
+    ...telegramResearchItems,
 ];

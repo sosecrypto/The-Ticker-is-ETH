@@ -13,7 +13,7 @@ const Research: React.FC = () => {
         setIsAdmin(localStorage.getItem('isAdmin') === 'true');
     }, []);
 
-    const categories = ['all', 'Technical', 'Economic', 'Social', 'Governance'];
+    const categories = ['all', 'Technical', 'Economic', 'Social', 'Governance', 'Telegram'];
 
     const filteredResearch = useMemo(() => {
         return mockResearch.filter(item => {
@@ -102,11 +102,15 @@ const Research: React.FC = () => {
                             className="group bg-white/5 border border-white/10 rounded-[2.5rem] overflow-hidden hover:border-brand-primary/50 transition-all duration-500 flex flex-col"
                         >
                             <Link to={`/research/${item.id}`} className="block relative aspect-video overflow-hidden">
-                                <img
-                                    src={item.thumbnailUrl}
-                                    alt={item.title}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
+                                {item.thumbnailUrl ? (
+                                    <img
+                                        src={item.thumbnailUrl}
+                                        alt={item.title}
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full bg-gradient-to-br from-[#6B3FA0] via-[#3C4CA8] to-[#8B5CF6] transition-transform duration-700 group-hover:scale-110" />
+                                )}
                                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark to-transparent opacity-60" />
                                 <div className="absolute top-4 left-4">
                                     <span className="px-3 py-1 rounded-full bg-brand-primary/20 backdrop-blur-md border border-white/10 text-xs font-bold text-brand-primary uppercase">

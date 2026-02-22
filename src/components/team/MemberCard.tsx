@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import type { TeamMember } from '../../types/team';
 import ContributionGraph from './ContributionGraph';
-import { Github, Twitter, MessageCircle, Linkedin, Globe } from 'lucide-react';
+import { Github, Twitter, Send, Linkedin, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface MemberCardProps {
@@ -52,7 +52,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
                     )}
                     {member.social.telegram && (
                         <a href={member.social.telegram} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#26A5E4] transition-colors">
-                            <MessageCircle size={18} />
+                            <Send size={18} />
                         </a>
                     )}
                     {member.social.linkedin && (

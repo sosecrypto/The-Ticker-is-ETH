@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Telegram data (regenerate: npm run fetch:telegram)
+src/data/telegram-contributors.json
+src/data/forwarded-messages.json
+src/data/unattributed-messages.json

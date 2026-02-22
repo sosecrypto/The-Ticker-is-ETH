@@ -6,7 +6,7 @@ export interface ResearchItem {
     author: string;
     authorId: string;
     date: string;
-    category: 'Technical' | 'Social' | 'Economic' | 'Governance';
+    category: 'Technical' | 'Social' | 'Economic' | 'Governance' | 'Telegram';
     summary: string;
     content: string;
     thumbnailUrl: string;

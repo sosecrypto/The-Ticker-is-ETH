@@ -27,11 +27,15 @@ const ResearchDetail: React.FC = () => {
         <div className="min-h-screen bg-brand-dark pb-20 overflow-x-hidden">
             {/* Hero Header */}
             <div className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
-                <img
-                    src={post.thumbnailUrl}
-                    alt={post.title}
-                    className="w-full h-full object-cover"
-                />
+                {post.thumbnailUrl ? (
+                    <img
+                        src={post.thumbnailUrl}
+                        alt={post.title}
+                        className="w-full h-full object-cover"
+                    />
+                ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[#6B3FA0] via-[#3C4CA8] to-[#8B5CF6]" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-transparent" />
 
                 <div className="absolute inset-0 flex flex-col justify-end">
