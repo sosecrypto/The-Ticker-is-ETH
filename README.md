@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
+# The Ticker is ETH
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+한국 이더리움 커뮤니티 비영리 단체 웹사이트.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Framework**: React 19 + TypeScript + Vite
+- **Styling**: Tailwind CSS 3 + Framer Motion
+- **3D**: Three.js + React Three Fiber
+- **Routing**: React Router DOM 7
+- **Data**: Telegram API 기반 실데이터 매핑
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Hero 섹션 (멤버 아바타 애니메이션)
+- Core Team / Contributors 프로필 (소셜 링크, 기여 히트맵)
+- Research 블로그 (작성/열람, 패스프레이즈 인증)
+- Events 페이지
+- 이더리움 다이아몬드 커스텀 커서 + Trail 효과 (데스크탑)
+- Telegram 채널 메시지 기반 기여도 분석
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── components/
+│   ├── cursor/          # 커스텀 커서 (ETH 다이아몬드 + trail)
+│   ├── home/            # Hero, KoreanFlagFlow, MemberAvatarFlow
+│   └── team/            # MemberCard, ContributionGraph
+├── data/                # mockData, telegram JSON
+├── layouts/             # MainLayout
+├── pages/               # Home, About, Team, Contributors, Research, Events
+└── types/               # TypeScript 타입 정의
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | 개발 서버 실행 |
+| `npm run build` | 프로덕션 빌드 |
+| `npm run preview` | 빌드 결과 미리보기 |
+| `npm run lint` | ESLint 실행 |
+| `npm run fetch:telegram` | Telegram 채널 데이터 수집 |
+
+## Deployment
+
+Vercel을 통한 자동 배포 (main 브랜치 push 시).
