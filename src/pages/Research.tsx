@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, BookOpen, Clock, User, ArrowRight, PenSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { mockResearch } from '../data/mockData';
+import { mockResearch } from '../data/researchData';
 
 const Research: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');

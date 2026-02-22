@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, User, Calendar, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { mockResearch } from '../data/mockData';
+import { mockResearch } from '../data/researchData';
 
 const ResearchDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
