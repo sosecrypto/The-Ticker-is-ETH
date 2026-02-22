@@ -125,7 +125,7 @@ async function main() {
       forwarded.push({
         id: msg.id,
         date: new Date(msg.date * 1000).toISOString(),
-        text: msg.message.slice(0, 1000),
+        text: msg.message.slice(0, 4096),
         fromChannelTitle: fwdFrom.fromName,
         fromPostAuthor: fwdFrom.postAuthor,
       });
@@ -149,7 +149,7 @@ async function main() {
     messages.push({
       id: msg.id,
       date: dateStr,
-      text: msg.message.slice(0, 1000),
+      text: msg.message.slice(0, 4096),
       postAuthor,
       views: (msg as Api.Message & { views?: number }).views ?? 0,
       forwards: (msg as Api.Message & { forwards?: number }).forwards ?? 0,
