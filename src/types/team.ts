@@ -53,5 +53,7 @@ export interface TeamMember {
         twitter?: string;
         github?: string;
         telegram?: string;
+        linkedin?: string;
+        website?: string;
     };
 }

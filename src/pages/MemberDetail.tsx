@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Github, Twitter, MessageCircle, PenTool, ArrowLeft, Eye, Share2, ExternalLink } from 'lucide-react';
+import { Github, Twitter, MessageCircle, PenTool, ArrowLeft, Eye, Share2, ExternalLink, Linkedin, Send, Globe } from 'lucide-react';
 import ContributionGraph from '../components/team/ContributionGraph';
 import { mockMembers, mockContributors } from '../data/mockData';
 
@@ -83,15 +83,30 @@ const MemberDetail: React.FC = () => {
                         <h1 className="text-3xl font-bold text-center text-white mb-2">{member.name}</h1>
                         <p className="text-center text-brand-primary font-semibold mb-6 uppercase tracking-wider text-xs">{member.role}</p>
 
-                        <div className="flex justify-center gap-4 mb-8">
+                        <div className="flex justify-center gap-3 mb-8">
+                            {member.social.twitter && (
+                                <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all" title="Twitter">
+                                    <Twitter size={20} />
+                                </a>
+                            )}
                             {member.social.github && (
-                                <a href={member.social.github} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
+                                <a href={member.social.github} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all" title="GitHub">
                                     <Github size={20} />
                                 </a>
                             )}
-                            {member.social.twitter && (
-                                <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
-                                    <Twitter size={20} />
+                            {member.social.linkedin && (
+                                <a href={member.social.linkedin} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all" title="LinkedIn">
+                                    <Linkedin size={20} />
+                                </a>
+                            )}
+                            {member.social.telegram && (
+                                <a href={member.social.telegram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all" title="Telegram">
+                                    <Send size={20} />
+                                </a>
+                            )}
+                            {member.social.website && (
+                                <a href={member.social.website} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all" title="Website">
+                                    <Globe size={20} />
                                 </a>
                             )}
                         </div>
