@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, User, Calendar, Share2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { mockResearch } from '../data/researchData';
 
@@ -63,9 +63,14 @@ const ResearchDetail: React.FC = () => {
                             </h1>
                             <div className="flex items-center gap-6 text-gray-300">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                                        <User size={20} className="text-brand-primary" />
-                                    </div>
+                                    <img
+                                        src={post.authorAvatar}
+                                        alt={post.author}
+                                        className="w-10 h-10 rounded-full object-cover border-2 border-white/10"
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&background=3C4CA8&color=fff&size=40`;
+                                        }}
+                                    />
                                     <span className="font-medium">{post.author}</span>
                                 </div>
                                 <div className="flex items-center gap-2">

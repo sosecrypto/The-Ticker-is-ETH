@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, BookOpen, Clock, User, ArrowRight, PenSquare } from 'lucide-react';
+import { Search, BookOpen, Clock, ArrowRight, PenSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { mockResearch } from '../data/researchData';
 
@@ -132,7 +132,14 @@ const Research: React.FC = () => {
                                 <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between text-sm">
                                     <div className="flex items-center gap-4">
                                         <div className="flex items-center gap-1.5 text-gray-500">
-                                            <User size={14} />
+                                            <img
+                                                src={item.authorAvatar}
+                                                alt={item.author}
+                                                className="w-5 h-5 rounded-full object-cover"
+                                                onError={(e) => {
+                                                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.author)}&background=3C4CA8&color=fff&size=20`;
+                                                }}
+                                            />
                                             <span>{item.author}</span>
                                         </div>
                                         <div className="flex items-center gap-1.5 text-gray-500">

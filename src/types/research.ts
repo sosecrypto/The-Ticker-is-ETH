@@ -11,6 +11,7 @@ export interface ResearchItem {
     content: string;
     thumbnailUrl: string;
     readTime: string;
+    authorAvatar: string;
 }
 
 // Dummy use to satisfy lint if necessary, or just use export type

@@ -5,7 +5,12 @@ import telegramData from './telegram-contributors.json';
 function formatTelegramToMarkdown(text: string): string {
     return text
         .replace(/(?<!\[|\()(https?:\/\/[^\s),\]]+)/g, '[$1]($1)')
-        .replace(/\n(?!\n)/g, '  \n');
+        .replace(/\n{1,}/g, '\n\n');
+}
+
+function getAvatarUrl(name: string): string {
+    const normalized = name.toLowerCase();
+    return `/assets/team/${normalized}.jpg`;
 }
 
 function contributorMessagesToResearch(): ResearchItem[] {
@@ -13,6 +18,8 @@ function contributorMessagesToResearch(): ResearchItem[] {
     const items: ResearchItem[] = [];
 
     for (const contributor of data.contributors) {
+        const avatar = getAvatarUrl(contributor.name);
+
         for (const msg of contributor.messages) {
             if (msg.text.length < 200) continue;
 
@@ -30,6 +37,7 @@ function contributorMessagesToResearch(): ResearchItem[] {
                 title,
                 author: contributor.name,
                 authorId: '',
+                authorAvatar: avatar,
                 date,
                 category: 'Telegram' as const,
                 summary: text.slice(0, 200).replace(/\n+/g, ' ').trim(),
