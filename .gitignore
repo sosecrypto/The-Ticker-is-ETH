@@ -23,7 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# Telegram data (regenerate: npm run fetch:telegram)
-src/data/telegram-contributors.json
+# Telegram data (forwarded/unattributed are review-only, not used in build)
 src/data/forwarded-messages.json
 src/data/unattributed-messages.json
