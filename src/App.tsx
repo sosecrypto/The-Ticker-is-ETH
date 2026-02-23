@@ -8,6 +8,8 @@ const Team = React.lazy(() => import('./pages/Team'));
 const MemberDetail = React.lazy(() => import('./pages/MemberDetail'));
 const Contributors = React.lazy(() => import('./pages/Contributors'));
 const Events = React.lazy(() => import('./pages/Events'));
+const News = React.lazy(() => import('./pages/News'));
+const NewsDetail = React.lazy(() => import('./pages/NewsDetail'));
 const Research = React.lazy(() => import('./pages/Research'));
 const ResearchDetail = React.lazy(() => import('./pages/ResearchDetail'));
 const WriteResearch = React.lazy(() => import('./pages/WriteResearch'));
@@ -32,6 +34,8 @@ function App() {
             <Route path="/contributors" element={<Contributors />} />
             <Route path="/contributors/:id" element={<MemberDetail />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/news/:id" element={<NewsDetail />} />
             <Route path="/research" element={<Research />} />
             <Route path="/research/:id" element={<ResearchDetail />} />
             <Route path="/research/write" element={<WriteResearch />} />

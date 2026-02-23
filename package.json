@@ -8,13 +8,15 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "fetch:telegram": "npx tsx scripts/fetch-telegram.ts"
+    "fetch:telegram": "npx tsx scripts/fetch-telegram.ts",
+    "fetch:news": "npx tsx scripts/fetch-news.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dompurify": "^3.3.1",
     "framer-motion": "^12.34.0",
     "lucide-react": "^0.563.0",
     "react": "^19.2.0",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/dompurify": "^3.0.5",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
@@ -35,6 +38,7 @@
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "fast-xml-parser": "^5.3.7",
     "globals": "^16.5.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.17",

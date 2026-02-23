@@ -10,6 +10,7 @@ export default defineConfig({
         manualChunks: {
           three: ['three', '@react-three/fiber', '@react-three/drei'],
           markdown: ['react-markdown'],
+          sanitize: ['dompurify'],
         },
       },
     },

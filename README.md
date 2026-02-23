@@ -9,12 +9,14 @@
 - **3D**: Three.js + React Three Fiber
 - **Routing**: React Router DOM 7
 - **Data**: Telegram API 기반 실데이터 매핑
+- **Sanitization**: DOMPurify (XSS 방지)
 
 ## Features
 
 - Hero 섹션 (멤버 아바타 애니메이션)
 - Core Team / Contributors 프로필 (소셜 링크, 기여 히트맵)
 - Research 블로그 (작성/열람, 패스프레이즈 인증, Telegram 카테고리)
+- News 페이지 (이더리움 주간 리서치 리포트 by @r2jamong, RSS 기반)
 - Events 페이지
 - 이더리움 다이아몬드 커스텀 커서 + Trail 효과 (데스크탑)
 - Telegram 채널 메시지 기반 기여도 분석
@@ -30,7 +32,7 @@ src/
 │   └── team/            # MemberCard, ContributionGraph
 ├── data/                # mockData, researchData, telegram JSON
 ├── layouts/             # MainLayout
-├── pages/               # Home, About, Team, Contributors, Research, Events
+├── pages/               # Home, About, Team, Contributors, Research, News, Events
 ├── types/               # TypeScript 타입 정의
 └── utils/               # 공유 헬퍼 (telegram, members)
 ```
@@ -51,6 +53,7 @@ npm run dev
 | `npm run preview` | 빌드 결과 미리보기 |
 | `npm run lint` | ESLint 실행 |
 | `npm run fetch:telegram` | Telegram 채널 데이터 수집 (로컬) |
+| `npm run fetch:news` | RSS 뉴스 피드 수집 (eth.rejamong.com) |
 
 ## Deployment
 
@@ -58,7 +61,7 @@ Vercel을 통한 자동 배포 (main 브랜치 push 시).
 
 ## Telegram Data Sync
 
-GitHub Actions cron이 매일 KST 09:00에 Telegram 채널 데이터를 자동 수집하여 커밋합니다.
+GitHub Actions cron이 매일 KST 09:00에 Telegram 채널 데이터와 RSS 뉴스 피드를 자동 수집하여 커밋합니다.
 수동 실행: Actions 탭 → Sync Telegram Data → Run workflow.
 
 필요한 GitHub Secrets: `TELEGRAM_API_ID`, `TELEGRAM_API_HASH`, `TELEGRAM_SESSION`

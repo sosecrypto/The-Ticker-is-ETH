@@ -21,6 +21,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         { name: 'Core Team', path: '/team' },
         { name: 'Contributors', path: '/contributors' },
         { name: 'Research', path: '/research' },
+        { name: 'News', path: '/news' },
         { name: 'Events', path: '/events' },
     ];
 
@@ -114,6 +115,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             <h4 className="text-white font-semibold mb-4">Resources</h4>
                             <ul className="space-y-2 text-gray-400">
                                 <li><Link to="/research" className="hover:text-brand-accent">Blog</Link></li>
+                                <li><Link to="/news" className="hover:text-brand-accent">News</Link></li>
                                 <li><Link to="/events" className="hover:text-brand-accent">Events</Link></li>
                                 <li><a href="https://substack.com/@tickeriseth" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Newsletter</a></li>
                                 <li><a href="https://t.me/thetickerisethchat" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Contact</a></li>
