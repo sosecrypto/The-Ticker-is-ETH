@@ -31,7 +31,8 @@ src/
 ├── data/                # mockData, researchData, telegram JSON
 ├── layouts/             # MainLayout
 ├── pages/               # Home, About, Team, Contributors, Research, Events
-└── types/               # TypeScript 타입 정의
+├── types/               # TypeScript 타입 정의
+└── utils/               # 공유 헬퍼 (telegram, members)
 ```
 
 ## Getting Started
