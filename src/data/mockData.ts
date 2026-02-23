@@ -115,9 +115,9 @@ const rawMembers: TeamMember[] = [
         period: '2025.09.01 - 2026.02.03',
         isCurrent: false,
         avatarUrl: '/assets/team/100y.jpg',
-        bio: 'Four Pillars Research Lead, 서울대 PhD. 이더리움 L1 확장성과 zkEVM 보안을 심층 분석하며, Asia Stablecoin Alliance 보드멤버로서 스테이블코인 정책 연구를 주도합니다.',
+        bio: 'Four Pillars에서 리서치리드 역할을 하고 있으며, 주 관심 분야는 전통금융 시스템과 온체인의 접점입니다.',
         memberType: 'core',
-        social: { twitter: 'https://x.com/100y_eth' },
+        social: { twitter: 'https://x.com/100y_eth', telegram: 'https://t.me/hodl100y' },
         contributions: [],
         recentActivity: [],
     }
