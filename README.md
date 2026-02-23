@@ -49,8 +49,15 @@ npm run dev
 | `npm run build` | 프로덕션 빌드 |
 | `npm run preview` | 빌드 결과 미리보기 |
 | `npm run lint` | ESLint 실행 |
-| `npm run fetch:telegram` | Telegram 채널 데이터 수집 |
+| `npm run fetch:telegram` | Telegram 채널 데이터 수집 (로컬) |
 
 ## Deployment
 
 Vercel을 통한 자동 배포 (main 브랜치 push 시).
+
+## Telegram Data Sync
+
+GitHub Actions cron이 매일 KST 09:00에 Telegram 채널 데이터를 자동 수집하여 커밋합니다.
+수동 실행: Actions 탭 → Sync Telegram Data → Run workflow.
+
+필요한 GitHub Secrets: `TELEGRAM_API_ID`, `TELEGRAM_API_HASH`, `TELEGRAM_SESSION`
