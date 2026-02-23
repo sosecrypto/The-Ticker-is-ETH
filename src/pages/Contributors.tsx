@@ -3,6 +3,7 @@ import MemberCard from '../components/team/MemberCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Users, ChevronDown } from 'lucide-react';
 import { mockContributors } from '../data/mockData';
+import { sortMembers } from '../utils/members';
 
 type SortOption = 'contributions' | 'seniority';
 
@@ -16,20 +17,6 @@ const Contributors: React.FC = () => {
         return ['all', ...Array.from(new Set(cats))];
     }, []);
 
-    const sortContributors = (list: typeof mockContributors) => {
-        return [...list].sort((a, b) => {
-            if (sortBy === 'contributions') {
-                const aCount = a.contributions.reduce((acc, curr) => acc + curr.count, 0);
-                const bCount = b.contributions.reduce((acc, curr) => acc + curr.count, 0);
-                return bCount - aCount;
-            } else {
-                const aDate = new Date(a.period.split(' - ')[0].replace(/\./g, '-')).getTime();
-                const bDate = new Date(b.period.split(' - ')[0].replace(/\./g, '-')).getTime();
-                return aDate - bDate;
-            }
-        });
-    };
-
     const filteredContributors = useMemo(() => {
         const filtered = mockContributors.filter(member => {
             const matchesFilter = filter === 'all' || member.category === filter;
@@ -38,7 +25,7 @@ const Contributors: React.FC = () => {
                 member.role.toLowerCase().includes(searchQuery.toLowerCase());
             return matchesFilter && matchesSearch;
         });
-        return sortContributors(filtered);
+        return sortMembers(filtered, sortBy);
     }, [filter, searchQuery, sortBy]);
 
     return (

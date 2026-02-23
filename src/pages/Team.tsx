@@ -3,27 +3,13 @@ import MemberCard from '../components/team/MemberCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Users, ChevronDown } from 'lucide-react';
 import { mockMembers } from '../data/mockData';
+import { sortMembers } from '../utils/members';
 
 type SortOption = 'contributions' | 'seniority';
 
 const Team: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState<SortOption>('contributions');
-
-    const sortMembers = (members: typeof mockMembers) => {
-        return [...members].sort((a, b) => {
-            if (sortBy === 'contributions') {
-                const aCount = a.contributions.reduce((acc, curr) => acc + curr.count, 0);
-                const bCount = b.contributions.reduce((acc, curr) => acc + curr.count, 0);
-                return bCount - aCount;
-            } else {
-                // Parse date like "2021.01.01" from "2021.01.01 - Present"
-                const aDate = new Date(a.period.split(' - ')[0].replace(/\./g, '-')).getTime();
-                const bDate = new Date(b.period.split(' - ')[0].replace(/\./g, '-')).getTime();
-                return aDate - bDate; // Oldest first
-            }
-        });
-    };
 
     const currentMembers = useMemo(() => {
         const filtered = mockMembers.filter(member =>
@@ -32,7 +18,7 @@ const Team: React.FC = () => {
                 member.role.toLowerCase().includes(searchQuery.toLowerCase())
             )
         );
-        return sortMembers(filtered);
+        return sortMembers(filtered, sortBy);
     }, [searchQuery, sortBy]);
 
     const alumniMembers = useMemo(() => {
@@ -42,7 +28,7 @@ const Team: React.FC = () => {
                 member.role.toLowerCase().includes(searchQuery.toLowerCase())
             )
         );
-        return sortMembers(filtered);
+        return sortMembers(filtered, sortBy);
     }, [searchQuery, sortBy]);
 
     return (

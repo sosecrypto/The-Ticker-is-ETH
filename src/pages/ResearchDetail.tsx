@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { mockResearch } from '../data/researchData';
+import { getAvatarFallbackUrl } from '../utils/members';
 
 const ResearchDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -72,7 +73,7 @@ const ResearchDetail: React.FC = () => {
                                         alt={post.author}
                                         className="w-10 h-10 rounded-full object-cover border-2 border-white/10"
                                         onError={(e) => {
-                                            (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&background=3C4CA8&color=fff&size=40`;
+                                            (e.target as HTMLImageElement).src = getAvatarFallbackUrl(post.author, 40);
                                         }}
                                     />
                                     <span className="font-medium">{post.author}</span>

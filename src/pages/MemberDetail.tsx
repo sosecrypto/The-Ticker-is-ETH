@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Github, Twitter, MessageCircle, PenTool, ArrowLeft, Eye, Share2, ExternalLink, Linkedin, Send, Globe } from 'lucide-react';
 import ContributionGraph from '../components/team/ContributionGraph';
 import { mockMembers, mockContributors } from '../data/mockData';
+import { getAvatarFallbackUrl, getTotalContributions } from '../utils/members';
 
 function extractDomain(url: string): string {
     try {
@@ -68,11 +69,11 @@ const MemberDetail: React.FC = () => {
                     >
                         <div className="relative w-32 h-32 mx-auto mb-6">
                             <img
-                                src={member.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=3C4CA8&color=fff&size=128`}
+                                src={member.avatarUrl || getAvatarFallbackUrl(member.name, 128)}
                                 alt={member.name}
                                 className="w-full h-full rounded-full object-cover border-4 border-brand-dark shadow-2xl"
                                 onError={(e) => {
-                                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=3C4CA8&color=fff&size=128`;
+                                    (e.target as HTMLImageElement).src = getAvatarFallbackUrl(member.name, 128);
                                 }}
                             />
                             {member.isCurrent && (
@@ -173,7 +174,7 @@ const MemberDetail: React.FC = () => {
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-bold text-white">Recent Contributions</h3>
                             <span className="text-xs text-gray-500">
-                                {member.contributions.reduce((a, c) => a + c.count, 0)} messages in {Math.ceil(member.contributions.length / 7)} weeks
+                                {getTotalContributions(member.contributions)} messages in {Math.ceil(member.contributions.length / 7)} weeks
                             </span>
                         </div>
                         <div className="max-h-[640px] overflow-y-auto pr-1 space-y-3">

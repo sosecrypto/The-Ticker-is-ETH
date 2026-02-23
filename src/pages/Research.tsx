@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, BookOpen, Clock, ArrowRight, PenSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { mockResearch } from '../data/researchData';
+import { getAvatarFallbackUrl } from '../utils/members';
 
 const Research: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -141,7 +142,7 @@ const Research: React.FC = () => {
                                                 alt={item.author}
                                                 className="w-5 h-5 rounded-full object-cover"
                                                 onError={(e) => {
-                                                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.author)}&background=3C4CA8&color=fff&size=20`;
+                                                    (e.target as HTMLImageElement).src = getAvatarFallbackUrl(item.author, 20);
                                                 }}
                                             />
                                             <span>{item.author}</span>

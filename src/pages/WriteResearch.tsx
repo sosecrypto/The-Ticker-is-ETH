@@ -24,8 +24,6 @@ const WriteResearch: React.FC = () => {
 
     const handlePublish = (e: React.FormEvent) => {
         e.preventDefault();
-        // Since we don't have a backend, we'll just simulate a success
-        console.log('Publishing:', formData);
         alert('Research published! (Simulated - in a real app, this would be sent to a server)');
         navigate('/research');
     };
