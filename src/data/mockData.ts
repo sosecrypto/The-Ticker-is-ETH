@@ -37,7 +37,7 @@ const rawMembers: TeamMember[] = [
         period: '2024.11.20 - Present',
         isCurrent: true,
         avatarUrl: '/assets/team/jay.jpg',
-        bio: 'Lightscale (Wemade) Business Strategist. 채널 최다 기여자로서 Kroma 등 L2 롤업 생태계와 거버넌스 동향을 심층 분석하며, 주요 프로토콜 업데이트를 전합니다.',
+        bio: 'Sunnyside Labs에서 프라이버시 솔루션 Privacy Boost를 빌딩하고 있습니다. 주 관심 분야는 레이어 2의 생태계입니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com/jaymayday_eth', linkedin: 'https://www.linkedin.com/in/jaesuk-jang/' },
         contributions: [],
