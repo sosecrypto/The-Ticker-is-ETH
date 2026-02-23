@@ -3,6 +3,7 @@ import type { TeamMember } from '../../types/team';
 import ContributionGraph from './ContributionGraph';
 import { Github, Twitter, Send, Linkedin, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getAvatarFallbackUrl, getTotalContributions } from '../../utils/members';
 
 interface MemberCardProps {
     member: TeamMember;
@@ -20,11 +21,11 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
                 <div className="flex items-center gap-4">
                     <div className="relative">
                         <img
-                            src={member.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=3C4CA8&color=fff&size=64`}
+                            src={member.avatarUrl || getAvatarFallbackUrl(member.name)}
                             alt={member.name}
                             className="w-16 h-16 rounded-full object-cover border-2 border-transparent group-hover:border-brand-accent transition-colors"
                             onError={(e) => {
-                                (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=3C4CA8&color=fff&size=64`;
+                                (e.target as HTMLImageElement).src = getAvatarFallbackUrl(member.name);
                             }}
                         />
                         {member.isCurrent && (
@@ -76,7 +77,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
                 <div className="flex justify-between items-center mb-2">
                     <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Recent Activity</span>
                     <span className="text-xs text-brand-accent">
-                        {member.contributions.reduce((acc, curr) => acc + curr.count, 0)} contributions
+                        {getTotalContributions(member.contributions)} contributions
                     </span>
                 </div>
                 <ContributionGraph data={member.contributions} />
