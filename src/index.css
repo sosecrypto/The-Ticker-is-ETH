@@ -98,7 +98,7 @@
   margin: 1rem 0;
 }
 
-/* News table styles */
+/* News table styles — scrollable wrapper with fade hint on mobile */
 .news-content table {
   width: 100%;
   border-collapse: collapse;
@@ -106,6 +106,21 @@
   font-size: 0.875rem;
   overflow-x: auto;
   display: block;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+@media (max-width: 640px) {
+  .news-content table {
+    mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent);
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent);
+  }
+
+  .news-content table:hover,
+  .news-content table:active {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
 }
 
 .news-content thead tr {

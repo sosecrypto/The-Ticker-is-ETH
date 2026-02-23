@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, ExternalLink } from 'lucide-react';
@@ -27,6 +27,13 @@ function formatDate(dateStr: string): string {
 const NewsDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const item = feed.items.find((i) => i.id === id);
+
+  useEffect(() => {
+    document.title = item
+      ? `${item.title} — The Ticker is ETH`
+      : 'News — The Ticker is ETH';
+    return () => { document.title = 'The Ticker is ETH'; };
+  }, [item]);
 
   if (!item) {
     return (

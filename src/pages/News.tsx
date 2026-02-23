@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Calendar, ExternalLink, ArrowRight } from 'lucide-react';
+import { Calendar, ExternalLink, ArrowRight, ChevronDown } from 'lucide-react';
 import type { NewsFeedData } from '../types/news';
 import newsFeedData from '../data/news-feed.json';
 
 const feed = newsFeedData as NewsFeedData;
+const ITEMS_PER_PAGE = 5;
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -13,6 +14,15 @@ function formatDate(dateStr: string): string {
 }
 
 const News: React.FC = () => {
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+  const visibleItems = feed.items.slice(0, visibleCount);
+  const hasMore = visibleCount < feed.items.length;
+
+  useEffect(() => {
+    document.title = 'News — The Ticker is ETH';
+    return () => { document.title = 'The Ticker is ETH'; };
+  }, []);
+
   return (
     <div className="min-h-screen pt-28 pb-20 px-6 container mx-auto">
       <motion.div
@@ -31,7 +41,7 @@ const News: React.FC = () => {
 
         {/* News Items */}
         <div className="space-y-6">
-          {feed.items.map((item, index) => (
+          {visibleItems.map((item, index) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 16 }}
@@ -54,7 +64,7 @@ const News: React.FC = () => {
                   {item.title}
                 </h2>
 
-                <p className="text-gray-400 text-sm leading-relaxed line-clamp-2 mb-4">
+                <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 mb-4">
                   {item.summary}
                 </p>
 
@@ -65,6 +75,19 @@ const News: React.FC = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* Load More */}
+        {hasMore && (
+          <div className="mt-8 text-center">
+            <button
+              onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
+              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 transition-all"
+            >
+              <ChevronDown size={16} />
+              Load More ({feed.items.length - visibleCount} remaining)
+            </button>
+          </div>
+        )}
 
         {/* CTA */}
         <div className="mt-20 text-center p-8 bg-gradient-to-br from-brand-primary/10 to-transparent rounded-3xl border border-white/5">
