@@ -24,7 +24,7 @@ const rawMembers: TeamMember[] = [
         period: '2024.11.01 - Present',
         isCurrent: true,
         avatarUrl: '/assets/team/sose.jpg',
-        bio: 'DeSpread Growth Lead. 이더리움 프로토콜 뉴스와 재단 정책을 전하며, AI 에이전트 생태계부터 양자 컴퓨팅 대응까지 이더리움의 미래를 조망합니다.',
+        bio: 'AI Vibe Coder | Web3 Native | DigitalAsset Analyst Team Lead - DeSpread | Core Team - The Ticker is ETH. 기술의 발전을 통한 세상의 긍정적인 발전을 기대합니다. Public goods, AI에 관심이 많습니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com/sosecrypto_kr', github: 'https://github.com/sumsun-dev', linkedin: 'https://www.linkedin.com/in/%EC%83%81%ED%98%84-%EC%97%84-5a03b628a/', telegram: 'https://t.me/crypto_offroad' },
         contributions: [],
