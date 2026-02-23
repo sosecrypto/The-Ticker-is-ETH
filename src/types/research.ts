@@ -1,5 +1,3 @@
-import type { Activity, Contribution } from './team';
-
 export interface ResearchItem {
     id: string;
     title: string;
@@ -13,6 +11,3 @@ export interface ResearchItem {
     readTime: string;
     authorAvatar: string;
 }
-
-// Dummy use to satisfy lint if necessary, or just use export type
-export type { Activity, Contribution };

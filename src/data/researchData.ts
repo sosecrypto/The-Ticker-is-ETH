@@ -1,5 +1,6 @@
 import type { ResearchItem } from '../types/research';
 import type { TelegramData } from '../types/team';
+import { formatDate } from '../utils/telegram';
 import telegramData from './telegram-contributors.json';
 
 function formatTelegramToMarkdown(text: string): string {
@@ -29,8 +30,7 @@ function contributorMessagesToResearch(): ResearchItem[] {
                 ? tagMatch[1]
                 : text.split('\n')[0].slice(0, 80).replace(/\s+$/, '');
             const readTime = `${Math.max(1, Math.round(text.length / 500))} min`;
-            const dateObj = new Date(msg.date);
-            const date = `${dateObj.getFullYear()}.${String(dateObj.getMonth() + 1).padStart(2, '0')}.${String(dateObj.getDate()).padStart(2, '0')}`;
+            const date = formatDate(msg.date);
 
             items.push({
                 id: `tg-${msg.id}`,

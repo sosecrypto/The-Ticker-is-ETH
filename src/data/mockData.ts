@@ -1,4 +1,5 @@
 import type { TeamMember, TelegramData, TelegramContributor } from '../types/team';
+import { formatDate, isStillActive, buildContributionGraph, buildActivityLog, extractFirstSentence } from '../utils/telegram';
 import telegramData from './telegram-contributors.json';
 
 // --- Telegram 실데이터 헬퍼 함수 ---
@@ -11,63 +12,6 @@ function findTelegramContributor(name: string): TelegramContributor | undefined 
     return (telegramData as TelegramData).contributors.find(
         c => c.name.toLowerCase() === tgName.toLowerCase()
     );
-}
-
-function extractFirstSentence(text: string): string {
-    const cleaned = text.replace(/\n+/g, ' ').trim();
-    const match = cleaned.match(/^.+?[.!?]\s/);
-    const sentence = match ? match[0].trim() : cleaned;
-    return sentence.length > 100 ? sentence.slice(0, 97) + '...' : sentence;
-}
-
-function formatDateStr(dateStr: string): string {
-    const d = new Date(dateStr);
-    return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
-}
-
-function isStillActive(lastMessageDate: string): boolean {
-    const lastDate = new Date(lastMessageDate);
-    const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-    return lastDate >= oneMonthAgo;
-}
-
-function buildTelegramActivity(contributor: TelegramContributor) {
-    const dateCounts = new Map<string, number>();
-    for (const msg of contributor.messages) {
-        const dateKey = msg.date.slice(0, 10);
-        dateCounts.set(dateKey, (dateCounts.get(dateKey) ?? 0) + 1);
-    }
-
-    const firstDate = new Date(contributor.firstMessageDate);
-    const totalDays = Math.ceil((Date.now() - firstDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-
-    const contributions = Array.from({ length: totalDays }, (_, i) => {
-        const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
-        const key = d.toISOString().slice(0, 10);
-        return { date: d.toISOString(), count: dateCounts.get(key) ?? 0 };
-    });
-
-    const recentMessages = [...contributor.messages]
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-    const recentActivity = recentMessages.map((msg, i) => {
-        const urlMatch = msg.text.match(/https?:\/\/[^\s),]+/);
-        return {
-            id: `tg-${i}`,
-            date: new Date(msg.date).toLocaleDateString('ko-KR', {
-                year: 'numeric', month: '2-digit', day: '2-digit'
-            }).replace(/\. /g, '.').replace(/\.$/, ''),
-            type: 'telegram' as const,
-            content: extractFirstSentence(msg.text),
-            link: `https://t.me/thetickeriseth/${msg.id}`,
-            views: msg.views,
-            forwards: msg.forwards,
-            sourceUrl: urlMatch?.[0],
-        };
-    });
-
-    return { contributions, recentActivity };
 }
 
 // --- Core Team 멤버 정의 ---
@@ -184,10 +128,11 @@ export const mockMembers: TeamMember[] = rawMembers.map(member => {
     const tgContributor = findTelegramContributor(member.name);
     if (!tgContributor) return member;
 
-    const { contributions, recentActivity } = buildTelegramActivity(tgContributor);
+    const contributions = buildContributionGraph(tgContributor.messages, new Date(tgContributor.firstMessageDate));
+    const recentActivity = buildActivityLog(tgContributor, 'thetickeriseth');
     const active = isStillActive(tgContributor.lastMessageDate);
     const startDate = member.period.split(' - ')[0];
-    const endDate = active ? 'Present' : formatDateStr(tgContributor.lastMessageDate);
+    const endDate = active ? 'Present' : formatDate(tgContributor.lastMessageDate);
 
     return {
         ...member,
@@ -200,35 +145,22 @@ export const mockMembers: TeamMember[] = rawMembers.map(member => {
 
 function telegramToContributors(data: TelegramData): (TeamMember & { category: string })[] {
     return data.contributors.map((contributor, index) => {
-        const dateCounts = new Map<string, number>();
-        for (const msg of contributor.messages) {
-            const dateKey = msg.date.slice(0, 10);
-            dateCounts.set(dateKey, (dateCounts.get(dateKey) ?? 0) + 1);
-        }
+        const contributions = buildContributionGraph(contributor.messages, new Date(contributor.firstMessageDate));
 
-        const firstDate = new Date(contributor.firstMessageDate);
-        const totalDays = Math.ceil((Date.now() - firstDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-
-        const contributions = Array.from({ length: totalDays }, (_, i) => {
-            const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
-            const key = d.toISOString().slice(0, 10);
-            return { date: d.toISOString(), count: dateCounts.get(key) ?? 0 };
-        });
-
-        const recentMessages = contributor.messages
+        const recentMessages = [...contributor.messages]
             .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
         const recentActivity = recentMessages.map((msg, i) => ({
             id: `t${index}-${i}`,
             date: new Date(msg.date).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, ''),
             type: 'telegram' as const,
-            content: msg.text.slice(0, 200),
+            content: extractFirstSentence(msg.text),
             link: `https://t.me/${data.channel}/${msg.id}`,
         }));
 
         const active = isStillActive(contributor.lastMessageDate);
-        const endDate = active ? 'Present' : formatDateStr(contributor.lastMessageDate);
-        const period = `${formatDateStr(contributor.firstMessageDate)} - ${endDate}`;
+        const endDate = active ? 'Present' : formatDate(contributor.lastMessageDate);
+        const period = `${formatDate(contributor.firstMessageDate)} - ${endDate}`;
 
         return {
             id: `tg-${index}`,
@@ -285,4 +217,3 @@ export const mockContributors: (TeamMember & { category: string })[] = [
     },
     ...telegramContributors,
 ];
-
