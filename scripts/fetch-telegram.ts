@@ -8,6 +8,8 @@ import * as readline from 'readline';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
+const IS_CI = process.env.CI === 'true';
+
 const API_ID = Number(process.env.TELEGRAM_API_ID);
 const API_HASH = process.env.TELEGRAM_API_HASH ?? '';
 const SESSION_STRING = process.env.TELEGRAM_SESSION ?? '';
@@ -15,7 +17,14 @@ const CHANNEL = process.env.TELEGRAM_CHANNEL ?? 'thetickeriseth';
 
 if (!API_ID || !API_HASH) {
   console.error('Missing required env vars: TELEGRAM_API_ID, TELEGRAM_API_HASH');
-  console.error('Copy .env.example to .env.local and fill in the values.');
+  console.error(IS_CI
+    ? 'Ensure GitHub Actions secrets are configured.'
+    : 'Copy .env.example to .env.local and fill in the values.');
+  process.exit(1);
+}
+
+if (IS_CI && !SESSION_STRING) {
+  console.error('CI mode requires TELEGRAM_SESSION secret. Run locally first to generate a session string.');
   process.exit(1);
 }
 
@@ -44,12 +53,6 @@ interface ForwardedMessage {
   text: string;
   fromChannelTitle?: string;
   fromPostAuthor?: string;
-}
-
-interface UnattributedMessage {
-  id: number;
-  date: string;
-  text: string;
 }
 
 interface RawMessage {
@@ -85,34 +88,40 @@ async function main() {
     connectionRetries: 5,
   });
 
-  await client.start({
-    phoneNumber: () => prompt('Phone number (with country code, e.g. +821012345678): '),
-    phoneCode: () => prompt('Verification code (check Telegram app): '),
-    password: () => prompt('2FA password (if enabled): '),
-    onError: (err) => console.error('Auth error:', err),
-  });
+  if (IS_CI) {
+    // CI mode: connect with existing session only (no interactive prompts)
+    await client.connect();
+    console.log('Connected with existing session (CI mode).\n');
+  } else {
+    // Local mode: interactive authentication
+    await client.start({
+      phoneNumber: () => prompt('Phone number (with country code, e.g. +821012345678): '),
+      phoneCode: () => prompt('Verification code (check Telegram app): '),
+      password: () => prompt('2FA password (if enabled): '),
+      onError: (err) => console.error('Auth error:', err),
+    });
 
-  console.log('Authenticated successfully.\n');
+    console.log('Authenticated successfully.\n');
 
-  // Save session string for future runs
-  const savedSession = client.session.save() as unknown as string;
-  if (savedSession && savedSession !== SESSION_STRING) {
-    const envPath = path.resolve(process.cwd(), '.env.local');
-    let envContent = fs.readFileSync(envPath, 'utf-8');
+    // Save session string for future runs (local only)
+    const savedSession = client.session.save() as unknown as string;
+    if (savedSession && savedSession !== SESSION_STRING) {
+      const envPath = path.resolve(process.cwd(), '.env.local');
+      let envContent = fs.readFileSync(envPath, 'utf-8');
 
-    if (envContent.includes('TELEGRAM_SESSION=')) {
-      envContent = envContent.replace(/TELEGRAM_SESSION=.*/, `TELEGRAM_SESSION=${savedSession}`);
-    } else {
-      envContent += `\n# Session string (auto-saved, do not edit)\nTELEGRAM_SESSION=${savedSession}\n`;
+      if (envContent.includes('TELEGRAM_SESSION=')) {
+        envContent = envContent.replace(/TELEGRAM_SESSION=.*/, `TELEGRAM_SESSION=${savedSession}`);
+      } else {
+        envContent += `\n# Session string (auto-saved, do not edit)\nTELEGRAM_SESSION=${savedSession}\n`;
+      }
+
+      fs.writeFileSync(envPath, envContent, 'utf-8');
+      console.log('Session saved to .env.local (no login needed next time).\n');
     }
-
-    fs.writeFileSync(envPath, envContent, 'utf-8');
-    console.log('Session saved to .env.local (no login needed next time).\n');
   }
 
   const messages: RawMessage[] = [];
   const forwarded: ForwardedMessage[] = [];
-  const unattributed: UnattributedMessage[] = [];
   let count = 0;
 
   for await (const msg of client.iterMessages(CHANNEL, { limit: undefined })) {
@@ -163,7 +172,6 @@ async function main() {
 
   console.log(`\nTotal messages fetched: ${messages.length}`);
   console.log(`Forwarded messages filtered: ${forwarded.length}`);
-  console.log(`Unattributed messages (no postAuthor): ${unattributed.length}`);
 
   const grouped = new Map<string, RawMessage[]>();
   for (const msg of messages) {
@@ -205,13 +213,6 @@ async function main() {
     const forwardedPath = path.resolve(process.cwd(), 'src/data/forwarded-messages.json');
     fs.writeFileSync(forwardedPath, JSON.stringify(forwarded, null, 2), 'utf-8');
     console.log(`\nForwarded messages written to ${forwardedPath} (${forwarded.length} messages)`);
-  }
-
-  // Write unattributed messages for manual review
-  if (unattributed.length > 0) {
-    const unattributedPath = path.resolve(process.cwd(), 'src/data/unattributed-messages.json');
-    fs.writeFileSync(unattributedPath, JSON.stringify(unattributed, null, 2), 'utf-8');
-    console.log(`\nUnattributed messages written to ${unattributedPath} (${unattributed.length} messages)`);
   }
 
   await client.disconnect();
