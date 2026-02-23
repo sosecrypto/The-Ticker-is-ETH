@@ -1,16 +1,22 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { mockResearch } from '../data/researchData';
+import { mockResearch, loadResearchContent } from '../data/researchData';
 import { getAvatarFallbackUrl } from '../utils/members';
 
 const ResearchDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+    const [content, setContent] = useState<string>('');
 
     const post = useMemo(() => {
         return mockResearch.find(p => p.id === id);
+    }, [id]);
+
+    useEffect(() => {
+        if (!id) return;
+        loadResearchContent(id).then(c => setContent(c ?? ''));
     }, [id]);
 
     if (!post) {
@@ -97,7 +103,7 @@ const ResearchDetail: React.FC = () => {
                         transition={{ delay: 0.3 }}
                         className="prose prose-invert prose-brand lg:prose-xl max-w-none"
                     >
-                        <ReactMarkdown>{post.content}</ReactMarkdown>
+                        <ReactMarkdown>{content}</ReactMarkdown>
                     </motion.div>
 
                     <div className="mt-20 pt-10 border-t border-white/5 flex items-center justify-between">

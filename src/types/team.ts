@@ -14,30 +14,6 @@ export interface Activity {
     sourceUrl?: string;
 }
 
-export interface TelegramRawMessage {
-    id: number;
-    date: string;
-    text: string;
-    postAuthor: string;
-    views: number;
-    forwards: number;
-}
-
-export interface TelegramContributor {
-    name: string;
-    messageCount: number;
-    firstMessageDate: string;
-    lastMessageDate: string;
-    messages: TelegramRawMessage[];
-}
-
-export interface TelegramData {
-    channel: string;
-    fetchedAt: string;
-    totalMessages: number;
-    contributors: TelegramContributor[];
-}
-
 export interface TeamMember {
     id: string;
     name: string;

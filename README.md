@@ -30,7 +30,7 @@ src/
 │   ├── cursor/          # 커스텀 커서 (ETH 다이아몬드 + trail)
 │   ├── home/            # Hero, KoreanFlagFlow, MemberAvatarFlow
 │   └── team/            # MemberCard, ContributionGraph
-├── data/                # mockData, researchData, telegram JSON
+├── data/                # mockData, researchData, 전처리 JSON (team-enrichment, research-index/content)
 ├── layouts/             # MainLayout
 ├── pages/               # Home, About, Team, Contributors, Research, News, Events
 ├── types/               # TypeScript 타입 정의
@@ -53,6 +53,7 @@ npm run dev
 | `npm run preview` | 빌드 결과 미리보기 |
 | `npm run lint` | ESLint 실행 |
 | `npm run fetch:telegram` | Telegram 채널 데이터 수집 (로컬) |
+| `npm run preprocess:telegram` | Telegram 데이터 전처리 (team-enrichment + research-index/content 생성) |
 | `npm run fetch:news` | RSS 뉴스 피드 수집 (eth.rejamong.com) |
 
 ## Deployment
@@ -61,7 +62,7 @@ Vercel을 통한 자동 배포 (main 브랜치 push 시).
 
 ## Telegram Data Sync
 
-GitHub Actions cron이 매일 KST 09:00에 Telegram 채널 데이터와 RSS 뉴스 피드를 자동 수집하여 커밋합니다.
+GitHub Actions cron이 매일 KST 09:00에 Telegram 채널 데이터를 수집 → 전처리(청크 분리) → RSS 뉴스 피드 수집하여 커밋합니다.
 수동 실행: Actions 탭 → Sync Telegram Data → Run workflow.
 
 필요한 GitHub Secrets: `TELEGRAM_API_ID`, `TELEGRAM_API_HASH`, `TELEGRAM_SESSION`

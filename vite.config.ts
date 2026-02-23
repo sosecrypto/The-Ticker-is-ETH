@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
+    chunkSizeWarningLimit: 1100, // research-content chunk is lazy-loaded (dynamic import)
     rollupOptions: {
       output: {
         manualChunks: {

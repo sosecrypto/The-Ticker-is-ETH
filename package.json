@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "fetch:telegram": "npx tsx scripts/fetch-telegram.ts",
+    "preprocess:telegram": "npx tsx scripts/preprocess-telegram.ts",
     "fetch:news": "npx tsx scripts/fetch-news.ts"
   },
   "dependencies": {

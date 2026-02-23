@@ -1,15 +1,50 @@
-import type { TeamMember, TelegramData, TelegramContributor } from '../types/team';
-import { formatDate, isStillActive, buildContributionGraph, buildActivityLog, extractFirstSentence } from '../utils/telegram';
-import telegramData from './telegram-contributors.json';
+import type { TeamMember, Activity, Contribution } from '../types/team';
+import { formatDate, isStillActive } from '../utils/telegram';
+import rawEnrichment from './team-enrichment.json';
 
-// --- Telegram 실데이터 헬퍼 함수 ---
+// --- Enrichment JSON 타입 ---
 
-function findTelegramContributor(name: string): TelegramContributor | undefined {
+interface EnrichedContributor {
+    name: string;
+    messageCount: number;
+    firstMessageDate: string;
+    lastMessageDate: string;
+    contributionMap: Record<string, number>;
+    recentActivity: Activity[];
+}
+
+interface TeamEnrichment {
+    channel: string;
+    contributors: EnrichedContributor[];
+}
+
+const enrichmentData = rawEnrichment as unknown as TeamEnrichment;
+
+// --- Sparse contributionMap → Contribution[] 변환 ---
+
+function expandContributions(
+    map: Record<string, number>,
+    firstDate: Date,
+): Contribution[] {
+    const totalDays = Math.ceil(
+        (Date.now() - firstDate.getTime()) / (24 * 60 * 60 * 1000),
+    ) + 1;
+
+    return Array.from({ length: totalDays }, (_, i) => {
+        const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+        const key = d.toISOString().slice(0, 10);
+        return { date: d.toISOString(), count: map[key] ?? 0 };
+    });
+}
+
+// --- Enrichment 데이터 헬퍼 ---
+
+function findEnrichedContributor(name: string): EnrichedContributor | undefined {
     const nameMap: Record<string, string> = {
         'Sose': 'sose',
     };
     const tgName = nameMap[name] ?? name;
-    return (telegramData as TelegramData).contributors.find(
+    return enrichmentData.contributors.find(
         c => c.name.toLowerCase() === tgName.toLowerCase()
     );
 }
@@ -123,41 +158,28 @@ const rawMembers: TeamMember[] = [
     }
 ];
 
-// Telegram 실데이터 매핑 (활동 기간: 마지막 글 기준 1개월 이내 → Present, 초과 → 마지막 글 날짜)
+// Enrichment 데이터 매핑 (활동 기간: 마지막 글 기준 1개월 이내 → Present, 초과 → 마지막 글 날짜)
 export const mockMembers: TeamMember[] = rawMembers.map(member => {
-    const tgContributor = findTelegramContributor(member.name);
-    if (!tgContributor) return member;
+    const enriched = findEnrichedContributor(member.name);
+    if (!enriched) return member;
 
-    const contributions = buildContributionGraph(tgContributor.messages, new Date(tgContributor.firstMessageDate));
-    const recentActivity = buildActivityLog(tgContributor, 'thetickeriseth');
-    const active = isStillActive(tgContributor.lastMessageDate);
+    const contributions = expandContributions(enriched.contributionMap, new Date(enriched.firstMessageDate));
+    const active = isStillActive(enriched.lastMessageDate);
     const startDate = member.period.split(' - ')[0];
-    const endDate = active ? 'Present' : formatDate(tgContributor.lastMessageDate);
+    const endDate = active ? 'Present' : formatDate(enriched.lastMessageDate);
 
     return {
         ...member,
         contributions,
-        recentActivity,
+        recentActivity: enriched.recentActivity,
         period: `${startDate} - ${endDate}`,
         isCurrent: active,
     };
 });
 
-function telegramToContributors(data: TelegramData): (TeamMember & { category: string })[] {
-    return data.contributors.map((contributor, index) => {
-        const contributions = buildContributionGraph(contributor.messages, new Date(contributor.firstMessageDate));
-
-        const recentMessages = [...contributor.messages]
-            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-        const recentActivity = recentMessages.map((msg, i) => ({
-            id: `t${index}-${i}`,
-            date: new Date(msg.date).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, ''),
-            type: 'telegram' as const,
-            content: extractFirstSentence(msg.text),
-            link: `https://t.me/${data.channel}/${msg.id}`,
-        }));
-
+function telegramToContributors(): (TeamMember & { category: string })[] {
+    return enrichmentData.contributors.map((contributor, index) => {
+        const contributions = expandContributions(contributor.contributionMap, new Date(contributor.firstMessageDate));
         const active = isStillActive(contributor.lastMessageDate);
         const endDate = active ? 'Present' : formatDate(contributor.lastMessageDate);
         const period = `${formatDate(contributor.firstMessageDate)} - ${endDate}`;
@@ -170,12 +192,12 @@ function telegramToContributors(data: TelegramData): (TeamMember & { category: s
             isCurrent: active,
             avatarUrl: `/assets/team/${contributor.name.toLowerCase()}.jpg`,
             contributions,
-            recentActivity,
-            bio: `${data.channel} 채널에서 ${contributor.messageCount}개의 메시지를 작성한 기여자입니다.`,
+            recentActivity: contributor.recentActivity,
+            bio: `${enrichmentData.channel} 채널에서 ${contributor.messageCount}개의 메시지를 작성한 기여자입니다.`,
             memberType: 'contributor' as const,
             category: 'Content',
             social: {
-                telegram: `https://t.me/${data.channel}`,
+                telegram: `https://t.me/${enrichmentData.channel}`,
             },
         };
     });
@@ -184,7 +206,7 @@ function telegramToContributors(data: TelegramData): (TeamMember & { category: s
 // Core Team과 동일 인물이면 Core 데이터(bio/social/period)를 동기화
 const coreByName = new Map(mockMembers.map(m => [m.name.toLowerCase(), m]));
 
-const telegramContributors = telegramToContributors(telegramData as TelegramData).map(tc => {
+const telegramContributors = telegramToContributors().map(tc => {
     const core = coreByName.get(tc.name.toLowerCase());
     if (!core) return tc;
     return {
