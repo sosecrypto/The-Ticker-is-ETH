@@ -61,7 +61,7 @@ const MemberAvatarFlow: React.FC = () => {
         [...mockMembers, ...mockContributors].forEach(m => {
             if (!unique.has(m.name)) unique.set(m.name, m);
         });
-        return Array.from(unique.values()).slice(0, 15);
+        return Array.from(unique.values()).slice(0, 50);
     }, []);
 
     const angles = useMemo(() => [-90, -30, 30, 90, 150, 210], []);
