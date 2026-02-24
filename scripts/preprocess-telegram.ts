@@ -178,7 +178,7 @@ function main() {
     const avatar = `/assets/team/${contributor.name.toLowerCase()}.jpg`;
 
     for (const msg of contributor.messages) {
-      if (msg.text.length < 200) continue;
+      if (msg.text.length < 10) continue;
 
       const text = msg.text;
       const id = `tg-${msg.id}`;
