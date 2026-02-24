@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import MemberCard from '../components/team/MemberCard';
+import AnimatedNumber from '../components/common/AnimatedNumber';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Users, ChevronDown } from 'lucide-react';
 import { mockContributors } from '../data/mockData';
@@ -69,8 +70,8 @@ const Contributors: React.FC = () => {
             >
                 {[
                     { label: 'Members', value: stats.memberCount },
-                    { label: 'Contributions', value: stats.totalContributions.toLocaleString() },
-                    { label: 'Days', value: stats.days.toLocaleString() },
+                    { label: 'Contributions', value: stats.totalContributions },
+                    { label: 'Days', value: stats.days },
                 ].map((stat, i) => (
                     <motion.div
                         key={stat.label}
@@ -79,7 +80,7 @@ const Contributors: React.FC = () => {
                         transition={{ delay: 0.3 + i * 0.1 }}
                         className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center backdrop-blur-sm"
                     >
-                        <div className="text-3xl font-bold text-brand-accent">{stat.value}</div>
+                        <AnimatedNumber value={stat.value} className="text-3xl font-bold text-brand-accent" />
                         <div className="text-sm text-gray-400 mt-1">{stat.label}</div>
                     </motion.div>
                 ))}
