@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, BookOpen, Clock, ArrowRight, PenSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { mockResearch } from '../data/researchData';
 import { getAvatarFallbackUrl } from '../utils/members';
 
@@ -9,6 +10,7 @@ const Research: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState<string>('all');
     const [isAdmin, setIsAdmin] = useState(false);
+    const { t } = useTranslation('research');
 
     React.useEffect(() => {
         setIsAdmin(localStorage.getItem('isAdmin') === 'true');
@@ -35,13 +37,13 @@ const Research: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                 >
                     <div className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-sm font-medium text-brand-primary mb-4">
-                        Insights
+                        {t('badge')}
                     </div>
                     <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-brand-accent">
                         Research
                     </h1>
                     <p className="text-gray-400 max-w-xl text-lg font-light leading-relaxed">
-                        이더리움 생태계의 기술적, 경제적, 사회적 발전을 심도 있게 탐구합니다.
+                        {t('description')}
                     </p>
                 </motion.div>
 
@@ -55,7 +57,7 @@ const Research: React.FC = () => {
                             className="flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/80 text-white px-6 py-3 rounded-2xl font-bold transition-all shadow-lg shadow-brand-primary/20"
                         >
                             <PenSquare size={20} />
-                            Write Research
+                            {t('writeResearch')}
                         </Link>
                     )}
                 </motion.div>
@@ -83,7 +85,7 @@ const Research: React.FC = () => {
                     <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-brand-accent transition-colors" size={20} />
                     <input
                         type="text"
-                        placeholder="누구를 찾으시나요?"
+                        placeholder={t('common:search.researchPlaceholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-white text-lg focus:outline-none focus:border-brand-accent/50 focus:bg-white/10 transition-all font-light placeholder:text-gray-600 shadow-2xl"
@@ -169,7 +171,7 @@ const Research: React.FC = () => {
                 <div className="text-center py-32 rounded-[3rem] bg-white/[0.02] border border-dashed border-white/10">
                     <BookOpen className="mx-auto text-gray-700 mb-6" size={64} />
                     <p className="text-gray-500 text-xl font-light italic">
-                        검색 결과가 없습니다. 다시 검색해 주시겠어요?
+                        {t('noResults')}
                     </p>
                 </div>
             )}

@@ -1,23 +1,26 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Sprout, Heart } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const MissionSection: React.FC = () => {
+    const { t } = useTranslation('home');
+
     const values = [
         {
             icon: <Shield className="text-brand-accent" size={24} />,
             title: "Subtraction",
-            description: "권력을 독점하기보다 생태계로 분산시키며, 커뮤니티가 스스로 번영할 수 있는 환경을 만듭니다."
+            description: t('mission.subtraction'),
         },
         {
             icon: <Heart className="text-pink-400" size={24} />,
             title: "Public Goods",
-            description: "보조금과 기부만으로 운영되는 순수한 지원. 오직 공공재의 가치를 위해 존재합니다."
+            description: t('mission.publicGoods'),
         },
         {
             icon: <Sprout className="text-brand-primary" size={24} />,
             title: "Infinite Garden",
-            description: "정원사의 마음으로 한국 이더리움 생태계를 돌보고 성장을 돕는 무한한 정원을 가꿉니다."
+            description: t('mission.infiniteGarden'),
         },
     ];
 
@@ -31,7 +34,7 @@ const MissionSection: React.FC = () => {
                         viewport={{ once: true }}
                         className="text-brand-primary font-bold tracking-widest uppercase text-sm mb-4 block"
                     >
-                        Our Mission
+                        {t('mission.label')}
                     </motion.span>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -49,7 +52,7 @@ const MissionSection: React.FC = () => {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="text-gray-400 text-lg md:text-xl leading-relaxed"
                     >
-                        The Ticker is ETH는 이더리움 재단의 철학에 영감을 받아, 정원사의 마음으로 <br className="hidden md:block" /> 한국 이더리움 생태계의 성장을 돕는 비영리 단체입니다.
+                        {t('mission.description')}
                     </motion.p>
                 </div>
 

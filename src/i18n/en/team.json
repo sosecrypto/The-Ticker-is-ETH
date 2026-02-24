@@ -1,0 +1,32 @@
+{
+  "badge": "The Guardians",
+  "title": "Core Team",
+  "description": "Meet the dedicated individuals working to bring Ethereum closer to Korea with the spirit of the Infinite Garden.",
+  "stats": {
+    "members": "Members",
+    "contributions": "Contributions",
+    "days": "Days"
+  },
+  "sections": {
+    "current": "Current Members",
+    "alumni": "Alumni Members",
+    "noActive": "No active members found.",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "contributorBadge": "Community",
+  "contributorTitle": "Contributors",
+  "contributorDescription": "The heart of our ecosystem. Every contribution from research to translation helps the garden grow.",
+  "contributorNoResults": "No contributors found matching your criteria.",
+  "bios": {
+    "sose": "AI Vibe Coder | Web3 Native | DigitalAsset Analyst Team Lead - DeSpread | Core Team - The Ticker is ETH. Expects positive change through technological advancement. Deeply interested in public goods and AI.",
+    "jay": "Building Privacy Boost, a privacy solution at Sunnyside Labs. Main areas of interest include privacy and Layer 2 ecosystems.",
+    "sm-stack": "Building Privacy Boost, a privacy solution at Sunnyside Labs. Focused on Ethereum's technical layers including L2, AA, ZK, and privacy.",
+    "rejamong": "Blockchain developer. Curates daily Ethereum news, organizing price, protocol, and EIP trends at a glance to help the community stay informed quickly.",
+    "kuma": "A contributor deeply interested in public goods and digital sovereignty.",
+    "jenna": "Educates individuals and businesses on personal wallet-based finance. Served as lead organizer for Ethcon Korea 2023.",
+    "meenari": "Covers Ethereum ecosystem events and security issues, sharing news from global events like Devcon and Devconnect along with protocol security analysis.",
+    "100y": "Research lead at Four Pillars. Main area of interest is the intersection of traditional finance systems and on-chain."
+  },
+  "contributorBioTemplate": "A contributor who has written {{count}} messages on the {{channel}} channel."
+}

@@ -1,0 +1,32 @@
+{
+  "badge": "The Guardians",
+  "title": "Core Team",
+  "description": "Infinite Garden의 정신으로, 이더리움을 한국에 더 가까이 가져오기 위해 헌신하는 사람들을 만나보세요.",
+  "stats": {
+    "members": "Members",
+    "contributions": "Contributions",
+    "days": "Days"
+  },
+  "sections": {
+    "current": "Current Members",
+    "alumni": "Alumni Members",
+    "noActive": "활성 멤버가 없습니다.",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "contributorBadge": "Community",
+  "contributorTitle": "Contributors",
+  "contributorDescription": "리서치부터 번역까지, 모든 기여가 정원을 성장시킵니다. 우리 생태계의 심장입니다.",
+  "contributorNoResults": "조건에 맞는 기여자를 찾을 수 없습니다.",
+  "bios": {
+    "sose": "AI Vibe Coder | Web3 Native | DigitalAsset Analyst Team Lead - DeSpread | Core Team - The Ticker is ETH. 기술의 발전을 통한 세상의 긍정적인 발전을 기대합니다. Public goods, AI에 관심이 많습니다.",
+    "jay": "Sunnyside Labs에서 프라이버시 솔루션 Privacy Boost를 빌딩하고 있습니다. 주 관심 분야는 프라이버시와 레이어 2의 생태계입니다.",
+    "sm-stack": "Sunnyside Labs에서 프라이버시 솔루션 Privacy Boost를 빌딩하고 있습니다. L2부터 AA, ZK, 프라이버시 등 이더리움의 기술 레이어에 관심을 두고 있습니다.",
+    "rejamong": "블록체인 개발자. 매일 이더리움 뉴스를 큐레이션하여 가격·프로토콜·EIP 동향을 한눈에 정리하며, 커뮤니티가 빠르게 정보를 얻을 수 있도록 돕습니다.",
+    "kuma": "Public goods 와 디지털 주권에 관심이 많은 기여자입니다.",
+    "jenna": "일반인 및 기업 대상으로, 개인지갑을 주 축으로 한 금융을 교육합니다. Ethcon Korea 2023 리드 오거나이저로 활동하였습니다.",
+    "meenari": "이더리움 생태계 이벤트와 보안 이슈를 다루며, Devcon·Devconnect 등 글로벌 행사 소식과 프로토콜 보안 분석을 공유합니다.",
+    "100y": "Four Pillars에서 리서치리드 역할을 하고 있으며, 주 관심 분야는 전통금융 시스템과 온체인의 접점입니다."
+  },
+  "contributorBioTemplate": "{{channel}} 채널에서 {{count}}개의 메시지를 작성한 기여자입니다."
+}

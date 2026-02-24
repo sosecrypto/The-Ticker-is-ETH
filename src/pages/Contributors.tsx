@@ -3,6 +3,7 @@ import MemberCard from '../components/team/MemberCard';
 import AnimatedNumber from '../components/common/AnimatedNumber';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Users, ChevronDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { mockContributors } from '../data/mockData';
 import { sortMembers, getTotalContributions } from '../utils/members';
 
@@ -12,6 +13,7 @@ const Contributors: React.FC = () => {
     const [filter, setFilter] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState<SortOption>('contributions');
+    const { t } = useTranslation('team');
 
     const stats = useMemo(() => {
         const memberCount = mockContributors.length;
@@ -52,13 +54,13 @@ const Contributors: React.FC = () => {
                 className="text-center mb-16"
             >
                 <div className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-sm font-medium text-brand-primary mb-4">
-                    Community
+                    {t('contributorBadge')}
                 </div>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-brand-accent">
-                    Contributors
+                    {t('contributorTitle')}
                 </h1>
                 <p className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed font-light">
-                    The heart of our ecosystem. Every contribution from research to translation helps the garden grow.
+                    {t('contributorDescription')}
                 </p>
             </motion.div>
 
@@ -69,9 +71,9 @@ const Contributors: React.FC = () => {
                 className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mb-16"
             >
                 {[
-                    { label: 'Members', value: stats.memberCount },
-                    { label: 'Contributions', value: stats.totalContributions },
-                    { label: 'Days', value: stats.days },
+                    { label: t('stats.members'), value: stats.memberCount },
+                    { label: t('stats.contributions'), value: stats.totalContributions },
+                    { label: t('stats.days'), value: stats.days },
                 ].map((stat, i) => (
                     <motion.div
                         key={stat.label}
@@ -109,7 +111,7 @@ const Contributors: React.FC = () => {
                         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-brand-accent transition-colors" size={18} />
                         <input
                             type="text"
-                            placeholder="Search contributors..."
+                            placeholder={t('common:search.contributorPlaceholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-14 pr-6 text-white text-base focus:outline-none focus:border-brand-accent/50 focus:bg-white/10 transition-all font-light"
@@ -123,8 +125,8 @@ const Contributors: React.FC = () => {
                             onChange={(e) => setSortBy(e.target.value as SortOption)}
                             className="appearance-none w-full md:w-56 bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-6 pr-12 text-white font-light focus:outline-none focus:border-brand-accent/50 transition-all shadow-xl cursor-pointer text-sm"
                         >
-                            <option value="contributions" className="bg-brand-dark">Most Contributions</option>
-                            <option value="seniority" className="bg-brand-dark">Seniority (Oldest First)</option>
+                            <option value="contributions" className="bg-brand-dark">{t('common:sort.contributions')}</option>
+                            <option value="seniority" className="bg-brand-dark">{t('common:sort.seniority')}</option>
                         </select>
                         <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" size={16} />
                     </div>
@@ -135,7 +137,7 @@ const Contributors: React.FC = () => {
                 <div className="mb-16">
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-2.5 h-2.5 bg-green-500 rounded-full" />
-                        <h2 className="text-xl font-semibold text-white">Active <span className="text-gray-500 font-normal text-base ml-1">{activeContributors.length}</span></h2>
+                        <h2 className="text-xl font-semibold text-white">{t('sections.active')} <span className="text-gray-500 font-normal text-base ml-1">{activeContributors.length}</span></h2>
                     </div>
                     <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <AnimatePresence mode="popLayout">
@@ -151,7 +153,7 @@ const Contributors: React.FC = () => {
                 <div className="mb-16">
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-2.5 h-2.5 bg-gray-500 rounded-full" />
-                        <h2 className="text-xl font-semibold text-white">Inactive <span className="text-gray-500 font-normal text-base ml-1">{inactiveContributors.length}</span></h2>
+                        <h2 className="text-xl font-semibold text-white">{t('sections.inactive')} <span className="text-gray-500 font-normal text-base ml-1">{inactiveContributors.length}</span></h2>
                     </div>
                     <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-60">
                         <AnimatePresence mode="popLayout">
@@ -166,7 +168,7 @@ const Contributors: React.FC = () => {
             {activeContributors.length === 0 && inactiveContributors.length === 0 && (
                 <div className="text-center py-20">
                     <Users className="mx-auto text-gray-700 mb-4" size={48} />
-                    <p className="text-gray-500 text-lg italic font-light tracking-tight">No contributors found matching your criteria.</p>
+                    <p className="text-gray-500 text-lg italic font-light tracking-tight">{t('contributorNoResults')}</p>
                 </div>
             )}
         </div>

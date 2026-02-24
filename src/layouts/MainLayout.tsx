@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import EthCursorTrail from '../components/cursor/EthCursorTrail';
+import LanguageToggle from '../components/common/LanguageToggle';
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { t } = useTranslation();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -17,12 +20,12 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     }, []);
 
     const navLinks = [
-        { name: 'About', path: '/about' },
-        { name: 'Core Team', path: '/team' },
-        { name: 'Contributors', path: '/contributors' },
-        { name: 'Research', path: '/research' },
-        { name: 'News', path: '/news' },
-        { name: 'Events', path: '/events' },
+        { name: t('nav.about'), path: '/about' },
+        { name: t('nav.coreTeam'), path: '/team' },
+        { name: t('nav.contributors'), path: '/contributors' },
+        { name: t('nav.research'), path: '/research' },
+        { name: t('nav.news'), path: '/news' },
+        { name: t('nav.events'), path: '/events' },
     ];
 
     return (
@@ -41,7 +44,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     <div className="hidden md:flex gap-8 items-center">
                         {navLinks.map((link) => (
                             <Link
-                                key={link.name}
+                                key={link.path}
                                 to={link.path}
                                 className="text-sm font-medium text-gray-300 hover:text-white transition-colors relative group"
                             >
@@ -49,8 +52,9 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-accent transition-all group-hover:w-full" />
                             </Link>
                         ))}
+                        <LanguageToggle />
                         <a href="https://t.me/thetickeriseth" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 text-white px-5 py-2 rounded-full text-sm font-medium transition-colors border border-white/5">
-                            Subscribe
+                            {t('nav.subscribe')}
                         </a>
                     </div>
 
@@ -75,7 +79,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             <div className="flex flex-col p-6 gap-4">
                                 {navLinks.map((link) => (
                                     <Link
-                                        key={link.name}
+                                        key={link.path}
                                         to={link.path}
                                         onClick={() => setIsMobileMenuOpen(false)}
                                         className="text-lg font-medium text-gray-300 hover:text-white"
@@ -83,6 +87,9 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                         {link.name}
                                     </Link>
                                 ))}
+                                <div className="pt-4 border-t border-white/10">
+                                    <LanguageToggle />
+                                </div>
                             </div>
                         </motion.div>
                     )}
@@ -99,11 +106,11 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         <div className="md:col-span-2">
                             <h3 className="text-xl font-bold text-white mb-4">The ticker is ETH</h3>
                             <p className="text-gray-400 max-w-sm">
-                                A non-profit organization dedicated to delivering the latest Ethereum news and fostering the community in Korea.
+                                {t('footer.description')}
                             </p>
                         </div>
                         <div>
-                            <h4 className="text-white font-semibold mb-4">Community</h4>
+                            <h4 className="text-white font-semibold mb-4">{t('footer.community')}</h4>
                             <ul className="space-y-2 text-gray-400">
                                 <li><a href="https://x.com/TickerisETH_kr" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Twitter</a></li>
                                 <li><a href="https://t.me/thetickeriseth" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Telegram Channel</a></li>
@@ -112,18 +119,18 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             </ul>
                         </div>
                         <div>
-                            <h4 className="text-white font-semibold mb-4">Resources</h4>
+                            <h4 className="text-white font-semibold mb-4">{t('footer.resources')}</h4>
                             <ul className="space-y-2 text-gray-400">
-                                <li><Link to="/research" className="hover:text-brand-accent">Blog</Link></li>
-                                <li><Link to="/news" className="hover:text-brand-accent">News</Link></li>
-                                <li><Link to="/events" className="hover:text-brand-accent">Events</Link></li>
-                                <li><a href="https://substack.com/@tickeriseth" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Newsletter</a></li>
-                                <li><a href="https://t.me/thetickerisethchat" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Contact</a></li>
+                                <li><Link to="/research" className="hover:text-brand-accent">{t('footer.blog')}</Link></li>
+                                <li><Link to="/news" className="hover:text-brand-accent">{t('nav.news')}</Link></li>
+                                <li><Link to="/events" className="hover:text-brand-accent">{t('nav.events')}</Link></li>
+                                <li><a href="https://substack.com/@tickeriseth" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">{t('footer.newsletter')}</a></li>
+                                <li><a href="https://t.me/thetickerisethchat" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">{t('footer.contact')}</a></li>
                             </ul>
                         </div>
                     </div>
                     <div className="mt-12 pt-8 border-t border-white/5 text-center text-gray-500 text-sm">
-                        © {new Date().getFullYear()} The ticker is ETH. All rights reserved.
+                        {t('footer.copyright', { year: new Date().getFullYear() })}
                     </div>
                 </div>
             </footer>

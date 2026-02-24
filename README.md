@@ -9,6 +9,7 @@
 - **3D**: Three.js + React Three Fiber
 - **Routing**: React Router DOM 7
 - **Data**: Telegram API 기반 실데이터 매핑
+- **i18n**: react-i18next (한국어/영어 전환)
 - **Sanitization**: DOMPurify (XSS 방지)
 
 ## Features
@@ -18,6 +19,7 @@
 - Research 블로그 (작성/열람, 패스프레이즈 인증, Telegram 카테고리)
 - News 페이지 (이더리움 주간 리서치 리포트 by @r2jamong, RSS 기반)
 - Events 페이지
+- 다국어 지원 (한국어 기본, 영어 전환 — KO/EN 토글)
 - 이더리움 다이아몬드 커스텀 커서 + Trail 효과 (데스크탑)
 - Telegram 채널 메시지 기반 기여도 분석
 - Route 기반 Code-Splitting (React.lazy + Suspense)
@@ -27,9 +29,11 @@
 ```
 src/
 ├── components/
+│   ├── common/          # LanguageToggle, AnimatedNumber
 │   ├── cursor/          # 커스텀 커서 (ETH 다이아몬드 + trail)
 │   ├── home/            # Hero, KoreanFlagFlow, MemberAvatarFlow
 │   └── team/            # MemberCard, ContributionGraph
+├── i18n/                # i18n 초기화 + 번역 JSON (ko/, en/)
 ├── data/                # mockData, researchData, 전처리 JSON (team-enrichment, research-index/content)
 ├── layouts/             # MainLayout
 ├── pages/               # Home, About, Team, Contributors, Research, News, Events

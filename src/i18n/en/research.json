@@ -1,0 +1,20 @@
+{
+  "badge": "Insights",
+  "description": "In-depth exploration of the technical, economic, and social developments in the Ethereum ecosystem.",
+  "noResults": "No results found. Would you like to try a different search?",
+  "writeResearch": "Write Research",
+  "write": {
+    "backToResearch": "Back to Research",
+    "editMode": "Edit Mode",
+    "preview": "Preview",
+    "publish": "Publish",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Enter the title of your research",
+    "categoryLabel": "Category",
+    "thumbnailLabel": "Thumbnail URL",
+    "summaryLabel": "Summary",
+    "summaryPlaceholder": "Summarize the key points in one line",
+    "contentLabel": "Content (Markdown)",
+    "contentPlaceholder": "Write your content using Markdown format..."
+  }
+}

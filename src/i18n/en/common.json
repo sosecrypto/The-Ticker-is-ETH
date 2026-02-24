@@ -1,0 +1,51 @@
+{
+  "nav": {
+    "about": "About",
+    "coreTeam": "Core Team",
+    "contributors": "Contributors",
+    "research": "Research",
+    "news": "News",
+    "events": "Events",
+    "subscribe": "Subscribe"
+  },
+  "footer": {
+    "description": "A non-profit organization dedicated to delivering the latest Ethereum news and fostering the community in Korea.",
+    "community": "Community",
+    "resources": "Resources",
+    "blog": "Blog",
+    "newsletter": "Newsletter",
+    "contact": "Contact",
+    "copyright": "© {{year}} The ticker is ETH. All rights reserved."
+  },
+  "sort": {
+    "contributions": "Most Contributions",
+    "seniority": "Seniority (Oldest First)"
+  },
+  "search": {
+    "placeholder": "Search by name or role",
+    "researchPlaceholder": "Search research...",
+    "contributorPlaceholder": "Search contributors..."
+  },
+  "noResults": "No results found.",
+  "loadMore": "Load More ({{count}} remaining)",
+  "viewProfile": "View Profile & Activity Log",
+  "recentActivity": "Recent Activity",
+  "contributions": "contributions",
+  "backToTeam": "Back to Team",
+  "backToContributors": "Back to Contributors",
+  "memberNotFound": "Member not found",
+  "membership": "Membership",
+  "contributionPeriod": "Contribution Period",
+  "activeCore": "Active Core",
+  "activeContributor": "Active Contributor",
+  "alumni": "Alumni",
+  "contributionPulse": "Contribution Pulse",
+  "totalMessages": "{{count}} Total messages",
+  "recentContributions": "Recent Contributions",
+  "messagesInWeeks": "{{count}} messages in {{weeks}} weeks",
+  "viewOnTelegram": "View on Telegram",
+  "total": "Total",
+  "last30d": "Last 30d",
+  "last14d": "Last 14d",
+  "visitWebsite": "Visit Website"
+}

@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Github, Twitter, MessageCircle, PenTool, ArrowLeft, Eye, Share2, ExternalLink, Linkedin, Send, Globe } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import ContributionGraph from '../components/team/ContributionGraph';
 import { mockMembers, mockContributors } from '../data/mockData';
 import { getAvatarFallbackUrl, getTotalContributions } from '../utils/members';
@@ -17,6 +18,7 @@ function extractDomain(url: string): string {
 
 const MemberDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+    const { t } = useTranslation();
 
     const member = [...mockMembers, ...mockContributors].find(m => m.id === id);
 
@@ -24,9 +26,9 @@ const MemberDetail: React.FC = () => {
         return (
             <div className="min-h-screen pt-28 pb-20 px-6 container mx-auto text-white">
                 <Link to="/team" className="inline-flex items-center text-gray-400 hover:text-white mb-8 transition-colors">
-                    <ArrowLeft size={20} className="mr-2" /> Back to Team
+                    <ArrowLeft size={20} className="mr-2" /> {t('backToTeam')}
                 </Link>
-                <div className="text-center text-xl font-light">Member not found</div>
+                <div className="text-center text-xl font-light">{t('memberNotFound')}</div>
             </div>
         );
     }
@@ -41,8 +43,9 @@ const MemberDetail: React.FC = () => {
     };
 
     const backLink = member.memberType === 'core' ? '/team' : '/contributors';
-    const backLabel = member.memberType === 'core' ? 'Back to Team' : 'Back to Contributors';
+    const backLabel = member.memberType === 'core' ? t('backToTeam') : t('backToContributors');
     const totalMessages = member.recentActivity.length;
+    const bioKey = `team:bios.${member.name.toLowerCase()}`;
 
     const now = Date.now();
     const DAY_MS = 24 * 60 * 60 * 1000;
@@ -114,20 +117,20 @@ const MemberDetail: React.FC = () => {
 
                         <div className="space-y-4 text-sm text-gray-400 mb-8 border-t border-white/5 pt-8">
                             <div className="flex justify-between">
-                                <span>Membership</span>
+                                <span>{t('membership')}</span>
                                 <span className={member.isCurrent ? "text-green-400 font-medium" : "text-gray-500"}>
-                                    {member.isCurrent ? (member.memberType === 'core' ? "Active Core" : "Active Contributor") : "Alumni"}
+                                    {member.isCurrent ? (member.memberType === 'core' ? t('activeCore') : t('activeContributor')) : t('alumni')}
                                 </span>
                             </div>
                             <div className="flex justify-between">
-                                <span>Contribution Period</span>
+                                <span>{t('contributionPeriod')}</span>
                                 <span className="text-white">{member.period}</span>
                             </div>
                         </div>
 
                         <div className="bg-white/5 rounded-2xl p-4 mb-8">
                             <p className="text-gray-300 text-sm leading-relaxed italic">
-                                "{member.bio}"
+                                "{t(bioKey, { defaultValue: member.bio })}"
                             </p>
                         </div>
 
@@ -135,15 +138,15 @@ const MemberDetail: React.FC = () => {
                         <div className="grid grid-cols-3 gap-3">
                             <div className="bg-white/5 rounded-xl p-3 text-center">
                                 <div className="text-xl font-bold text-white">{totalMessages}</div>
-                                <div className="text-[10px] text-gray-500 mt-1">Total</div>
+                                <div className="text-[10px] text-gray-500 mt-1">{t('total')}</div>
                             </div>
                             <div className="bg-white/5 rounded-xl p-3 text-center">
                                 <div className="text-xl font-bold text-brand-accent">{last30}</div>
-                                <div className="text-[10px] text-gray-500 mt-1">Last 30d</div>
+                                <div className="text-[10px] text-gray-500 mt-1">{t('last30d')}</div>
                             </div>
                             <div className="bg-white/5 rounded-xl p-3 text-center">
                                 <div className="text-xl font-bold text-brand-primary">{last14}</div>
-                                <div className="text-[10px] text-gray-500 mt-1">Last 14d</div>
+                                <div className="text-[10px] text-gray-500 mt-1">{t('last14d')}</div>
                             </div>
                         </div>
                     </motion.div>
@@ -160,10 +163,10 @@ const MemberDetail: React.FC = () => {
                     >
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-bold flex items-center gap-2 text-white">
-                                Contribution Pulse
+                                {t('contributionPulse')}
                             </h3>
                             <span className="text-xs font-semibold text-brand-accent bg-brand-accent/10 px-3 py-1 rounded-full uppercase tracking-widest">
-                                {totalMessages} Total messages
+                                {t('totalMessages', { count: totalMessages })}
                             </span>
                         </div>
                         <ContributionGraph data={member.contributions} />
@@ -172,9 +175,9 @@ const MemberDetail: React.FC = () => {
                     {/* Activity Log */}
                     <div>
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold text-white">Recent Contributions</h3>
+                            <h3 className="text-xl font-bold text-white">{t('recentContributions')}</h3>
                             <span className="text-xs text-gray-500">
-                                {getTotalContributions(member.contributions)} messages in {Math.ceil(member.contributions.length / 7)} weeks
+                                {t('messagesInWeeks', { count: getTotalContributions(member.contributions), weeks: Math.ceil(member.contributions.length / 7) })}
                             </span>
                         </div>
                         <div className="max-h-[640px] overflow-y-auto pr-1 space-y-3">
@@ -235,7 +238,7 @@ const MemberDetail: React.FC = () => {
                                                         rel="noopener noreferrer"
                                                         className="text-[11px] text-brand-accent/70 hover:text-brand-accent transition-colors"
                                                     >
-                                                        View on Telegram &rarr;
+                                                        {t('viewOnTelegram')} &rarr;
                                                     </a>
                                                 )}
                                             </div>

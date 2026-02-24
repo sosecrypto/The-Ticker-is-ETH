@@ -3,6 +3,7 @@ import type { TeamMember } from '../../types/team';
 import ContributionGraph from './ContributionGraph';
 import { Github, Twitter, Send, Linkedin, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { getAvatarFallbackUrl, getTotalContributions } from '../../utils/members';
 
 interface MemberCardProps {
@@ -10,6 +11,9 @@ interface MemberCardProps {
 }
 
 const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
+    const { t } = useTranslation();
+    const bioKey = `team:bios.${member.name.toLowerCase()}`;
+
     return (
         <motion.div
             layout
@@ -70,14 +74,14 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
             </div>
 
             <p className="text-gray-400 text-sm mb-6 line-clamp-2">
-                {member.bio}
+                {t(bioKey, { defaultValue: member.bio })}
             </p>
 
             <div className="mb-4">
                 <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Recent Activity</span>
+                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('recentActivity')}</span>
                     <span className="text-xs text-brand-accent">
-                        {getTotalContributions(member.contributions)} contributions
+                        {getTotalContributions(member.contributions)} {t('contributions')}
                     </span>
                 </div>
                 <ContributionGraph data={member.contributions} />
@@ -87,7 +91,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
                 to={member.memberType === 'core' ? `/team/${member.id}` : `/contributors/${member.id}`}
                 className="block w-full text-center py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm font-medium text-white transition-colors border border-transparent hover:border-white/10"
             >
-                View Profile & Activity Log
+                {t('viewProfile')}
             </Link>
         </motion.div>
     );

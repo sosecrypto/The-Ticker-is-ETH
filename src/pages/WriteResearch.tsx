@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Send, Eye, PenLine } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 
 const WriteResearch: React.FC = () => {
     const navigate = useNavigate();
     const [previewMode, setPreviewMode] = useState(false);
+    const { t } = useTranslation('research');
 
     React.useEffect(() => {
         const isAdmin = localStorage.getItem('isAdmin') === 'true';
@@ -37,7 +39,7 @@ const WriteResearch: React.FC = () => {
                         className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
                     >
                         <ArrowLeft size={20} className="transition-transform group-hover:-translate-x-1" />
-                        Back to Research
+                        {t('write.backToResearch')}
                     </Link>
                     <div className="flex gap-4">
                         <button
@@ -48,14 +50,14 @@ const WriteResearch: React.FC = () => {
                                 }`}
                         >
                             {previewMode ? <PenLine size={18} /> : <Eye size={18} />}
-                            {previewMode ? 'Edit Mode' : 'Preview'}
+                            {previewMode ? t('write.editMode') : t('write.preview')}
                         </button>
                         <button
                             onClick={handlePublish}
                             className="flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/80 text-white px-8 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/20"
                         >
                             <Send size={18} />
-                            Publish
+                            {t('write.publish')}
                         </button>
                     </div>
                 </div>
@@ -68,10 +70,10 @@ const WriteResearch: React.FC = () => {
                         onSubmit={handlePublish}
                     >
                         <div className="space-y-4">
-                            <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">Title</label>
+                            <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">{t('write.titleLabel')}</label>
                             <input
                                 type="text"
-                                placeholder="연구의 제목을 입력해 주세요"
+                                placeholder={t('write.titlePlaceholder')}
                                 value={formData.title}
                                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                                 className="w-full bg-white/5 border border-white/10 rounded-2xl p-6 text-2xl font-bold focus:outline-none focus:border-brand-accent/50 focus:bg-white/10 transition-all placeholder:text-gray-700"
@@ -81,7 +83,7 @@ const WriteResearch: React.FC = () => {
 
                         <div className="grid md:grid-cols-2 gap-8">
                             <div className="space-y-4">
-                                <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">Category</label>
+                                <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">{t('write.categoryLabel')}</label>
                                 <select
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
@@ -94,7 +96,7 @@ const WriteResearch: React.FC = () => {
                                 </select>
                             </div>
                             <div className="space-y-4">
-                                <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">Thumbnail URL</label>
+                                <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">{t('write.thumbnailLabel')}</label>
                                 <input
                                     type="text"
                                     value={formData.thumbnailUrl}
@@ -105,9 +107,9 @@ const WriteResearch: React.FC = () => {
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">Summary</label>
+                            <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">{t('write.summaryLabel')}</label>
                             <textarea
-                                placeholder="연구의 핵심 내용을 한 줄로 요약해 주세요"
+                                placeholder={t('write.summaryPlaceholder')}
                                 value={formData.summary}
                                 onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
                                 className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 min-h-[100px] text-gray-300 font-light focus:outline-none focus:border-brand-accent/50 transition-all"
@@ -116,9 +118,9 @@ const WriteResearch: React.FC = () => {
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">Content (Markdown)</label>
+                            <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">{t('write.contentLabel')}</label>
                             <textarea
-                                placeholder="Markdown 형식을 사용하여 내용을 작성하세요..."
+                                placeholder={t('write.contentPlaceholder')}
                                 value={formData.content}
                                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                                 className="w-full bg-white/5 border border-white/10 rounded-2xl p-6 min-h-[500px] text-gray-100 font-mono text-lg focus:outline-none focus:border-brand-accent/50 transition-all leading-relaxed"
