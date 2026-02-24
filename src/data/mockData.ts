@@ -85,7 +85,7 @@ const rawMembers: TeamMember[] = [
         period: '2024.11.04 - Present',
         isCurrent: true,
         avatarUrl: '/assets/team/sm-stack.jpg',
-        bio: '블록체인 엔지니어 & 리서처. Encode Club 해커톤 우승, Account Abstraction 전문가. 이더리움 코어 프로토콜과 EIP를 분석하며 차기 업그레이드의 기술적 방향성을 전달합니다.',
+        bio: 'Sunnyside Labs에서 프라이버시 솔루션 Privacy Boost를 빌딩하고 있습니다. L2부터 AA, ZK, 프라이버시 등 이더리움의 기술 레이어에 관심을 두고 있습니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com/organ_mo', github: 'https://github.com/sm-stack', linkedin: 'https://www.linkedin.com/in/seungmin-jeon-4ab159171/' },
         contributions: [],
@@ -178,14 +178,15 @@ export const mockMembers: TeamMember[] = rawMembers.map(member => {
 });
 
 function telegramToContributors(): (TeamMember & { category: string })[] {
-    return enrichmentData.contributors.map((contributor, index) => {
+    return enrichmentData.contributors.map((contributor) => {
+        const slug = contributor.name.toLowerCase().replace(/\s+/g, '-');
         const contributions = expandContributions(contributor.contributionMap, new Date(contributor.firstMessageDate));
         const active = isStillActive(contributor.lastMessageDate);
         const endDate = active ? 'Present' : formatDate(contributor.lastMessageDate);
         const period = `${formatDate(contributor.firstMessageDate)} - ${endDate}`;
 
         return {
-            id: `tg-${index}`,
+            id: `tg-${slug}`,
             name: contributor.name,
             role: 'Content Creator',
             period,
