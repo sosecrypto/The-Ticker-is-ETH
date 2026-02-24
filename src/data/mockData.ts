@@ -201,7 +201,7 @@ function telegramToContributors(): (TeamMember & { category: string })[] {
     });
 }
 
-// Core Team 멤버가 컨트리뷰터에도 포함될 때, 고정된 Core 정보를 동기화
+// Core Team 멤버가 컨트리뷰터에도 포함될 때, bio/social/avatar만 동기화 (period/isCurrent는 텔레그램 활동 기준 유지)
 const telegramContributors = telegramToContributors().map(tc => {
     const core = coreByName.get(tc.name.toLowerCase());
     if (!core) return tc;
@@ -209,8 +209,6 @@ const telegramContributors = telegramToContributors().map(tc => {
         ...tc,
         bio: core.bio,
         social: core.social,
-        period: core.period,
-        isCurrent: core.isCurrent,
         avatarUrl: core.avatarUrl,
     };
 });
