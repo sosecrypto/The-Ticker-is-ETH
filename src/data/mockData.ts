@@ -158,29 +158,24 @@ const rawMembers: TeamMember[] = [
     }
 ];
 
-// Enrichment 데이터 매핑 (활동 기간: 마지막 글 기준 1개월 이내 → Present, 초과 → 마지막 글 날짜)
+// Enrichment 데이터 매핑 (contributions/recentActivity만 반영, period/isCurrent는 원본 고정)
 export const mockMembers: TeamMember[] = rawMembers.map(member => {
     const enriched = findEnrichedContributor(member.name);
     if (!enriched) return member;
 
     const contributions = expandContributions(enriched.contributionMap, new Date(enriched.firstMessageDate));
-    const active = isStillActive(enriched.lastMessageDate);
-    const startDate = member.period.split(' - ')[0];
-    const endDate = active ? 'Present' : formatDate(enriched.lastMessageDate);
 
     return {
         ...member,
         contributions,
         recentActivity: enriched.recentActivity,
-        period: `${startDate} - ${endDate}`,
-        isCurrent: active,
     };
 });
 
-const coreNames = new Set(rawMembers.map(m => m.name.toLowerCase()));
+const coreByName = new Map(rawMembers.map(m => [m.name.toLowerCase(), m]));
 
 function telegramToContributors(): (TeamMember & { category: string })[] {
-    return enrichmentData.contributors.filter(c => !coreNames.has(c.name.toLowerCase())).map((contributor) => {
+    return enrichmentData.contributors.map((contributor) => {
         const slug = contributor.name.toLowerCase().replace(/\s+/g, '-');
         const contributions = expandContributions(contributor.contributionMap, new Date(contributor.firstMessageDate));
         const active = isStillActive(contributor.lastMessageDate);
@@ -206,7 +201,19 @@ function telegramToContributors(): (TeamMember & { category: string })[] {
     });
 }
 
-const telegramContributors = telegramToContributors();
+// Core Team 멤버가 컨트리뷰터에도 포함될 때, 고정된 Core 정보를 동기화
+const telegramContributors = telegramToContributors().map(tc => {
+    const core = coreByName.get(tc.name.toLowerCase());
+    if (!core) return tc;
+    return {
+        ...tc,
+        bio: core.bio,
+        social: core.social,
+        period: core.period,
+        isCurrent: core.isCurrent,
+        avatarUrl: core.avatarUrl,
+    };
+});
 
 export const mockContributors: (TeamMember & { category: string })[] = [
     {
