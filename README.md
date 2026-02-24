@@ -14,7 +14,7 @@
 ## Features
 
 - Hero 섹션 (멤버 아바타 애니메이션)
-- Core Team / Contributors 프로필 (소셜 링크, 기여 히트맵)
+- Core Team / Contributors 프로필 (소셜 링크, 기여 히트맵, Stats 배너)
 - Research 블로그 (작성/열람, 패스프레이즈 인증, Telegram 카테고리)
 - News 페이지 (이더리움 주간 리서치 리포트 by @r2jamong, RSS 기반)
 - Events 페이지

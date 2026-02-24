@@ -3,7 +3,7 @@ import MemberCard from '../components/team/MemberCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Users, ChevronDown } from 'lucide-react';
 import { mockMembers } from '../data/mockData';
-import { sortMembers } from '../utils/members';
+import { sortMembers, getTotalContributions } from '../utils/members';
 
 type SortOption = 'contributions' | 'seniority';
 
@@ -20,6 +20,17 @@ const Team: React.FC = () => {
         );
         return sortMembers(filtered, sortBy);
     }, [searchQuery, sortBy]);
+
+    const stats = useMemo(() => {
+        const memberCount = mockMembers.length;
+        const totalContributions = mockMembers.reduce((sum, m) => sum + getTotalContributions(m.contributions), 0);
+        const earliest = mockMembers.reduce((min, m) => {
+            const start = new Date(m.period.split(' - ')[0].replace(/\./g, '-')).getTime();
+            return start < min ? start : min;
+        }, Infinity);
+        const days = Math.floor((Date.now() - earliest) / 86400000);
+        return { memberCount, totalContributions, days };
+    }, []);
 
     const alumniMembers = useMemo(() => {
         const filtered = mockMembers.filter(member =>
@@ -47,6 +58,30 @@ const Team: React.FC = () => {
                 <p className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
                     Meet the dedicated individuals working to bringing Ethereum closer to Korea with the spirit of the Infinite Garden.
                 </p>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mb-16"
+            >
+                {[
+                    { label: 'Members', value: stats.memberCount },
+                    { label: 'Contributions', value: stats.totalContributions.toLocaleString() },
+                    { label: 'Days', value: stats.days.toLocaleString() },
+                ].map((stat, i) => (
+                    <motion.div
+                        key={stat.label}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 + i * 0.1 }}
+                        className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center backdrop-blur-sm"
+                    >
+                        <div className="text-3xl font-bold text-brand-accent">{stat.value}</div>
+                        <div className="text-sm text-gray-400 mt-1">{stat.label}</div>
+                    </motion.div>
+                ))}
             </motion.div>
 
             <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-16">
