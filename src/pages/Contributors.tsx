@@ -17,7 +17,7 @@ const Contributors: React.FC = () => {
         return ['all', ...Array.from(new Set(cats))];
     }, []);
 
-    const filteredContributors = useMemo(() => {
+    const { activeContributors, inactiveContributors } = useMemo(() => {
         const filtered = mockContributors.filter(member => {
             const matchesFilter = filter === 'all' || member.category === filter;
             const matchesSearch =
@@ -25,7 +25,11 @@ const Contributors: React.FC = () => {
                 member.role.toLowerCase().includes(searchQuery.toLowerCase());
             return matchesFilter && matchesSearch;
         });
-        return sortMembers(filtered, sortBy);
+        const sorted = sortMembers(filtered, sortBy);
+        return {
+            activeContributors: sorted.filter(c => c.isCurrent),
+            inactiveContributors: sorted.filter(c => !c.isCurrent),
+        };
     }, [filter, searchQuery, sortBy]);
 
     return (
@@ -91,18 +95,39 @@ const Contributors: React.FC = () => {
                 </div>
             </div>
 
-            <motion.div
-                layout
-                className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-            >
-                <AnimatePresence mode="popLayout">
-                    {filteredContributors.map((c) => (
-                        <MemberCard key={c.id} member={c} />
-                    ))}
-                </AnimatePresence>
-            </motion.div>
+            {activeContributors.length > 0 && (
+                <div className="mb-16">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-2.5 h-2.5 bg-green-500 rounded-full" />
+                        <h2 className="text-xl font-semibold text-white">Active <span className="text-gray-500 font-normal text-base ml-1">{activeContributors.length}</span></h2>
+                    </div>
+                    <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <AnimatePresence mode="popLayout">
+                            {activeContributors.map((c) => (
+                                <MemberCard key={c.id} member={c} />
+                            ))}
+                        </AnimatePresence>
+                    </motion.div>
+                </div>
+            )}
 
-            {filteredContributors.length === 0 && (
+            {inactiveContributors.length > 0 && (
+                <div className="mb-16">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-2.5 h-2.5 bg-gray-500 rounded-full" />
+                        <h2 className="text-xl font-semibold text-white">Inactive <span className="text-gray-500 font-normal text-base ml-1">{inactiveContributors.length}</span></h2>
+                    </div>
+                    <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-60">
+                        <AnimatePresence mode="popLayout">
+                            {inactiveContributors.map((c) => (
+                                <MemberCard key={c.id} member={c} />
+                            ))}
+                        </AnimatePresence>
+                    </motion.div>
+                </div>
+            )}
+
+            {activeContributors.length === 0 && inactiveContributors.length === 0 && (
                 <div className="text-center py-20">
                     <Users className="mx-auto text-gray-700 mb-4" size={48} />
                     <p className="text-gray-500 text-lg italic font-light tracking-tight">No contributors found matching your criteria.</p>
