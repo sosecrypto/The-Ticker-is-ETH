@@ -3,6 +3,12 @@
   "description": "In-depth exploration of the technical, economic, and social developments in the Ethereum ecosystem.",
   "noResults": "No results found. Would you like to try a different search?",
   "writeResearch": "Write Research",
+  "detail": {
+    "notFound": "Post not found",
+    "backToResearch": "Back to Research",
+    "read": "read",
+    "share": "Share"
+  },
   "write": {
     "backToResearch": "Back to Research",
     "editMode": "Edit Mode",

@@ -2,11 +2,13 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Share2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { mockResearch, loadResearchContent } from '../data/researchData';
 import { getAvatarFallbackUrl } from '../utils/members';
 
 const ResearchDetail: React.FC = () => {
+    const { t } = useTranslation('research');
     const { id } = useParams<{ id: string }>();
     const [content, setContent] = useState<string>('');
 
@@ -23,8 +25,8 @@ const ResearchDetail: React.FC = () => {
         return (
             <div className="min-h-screen flex items-center justify-center text-white">
                 <div className="text-center">
-                    <h1 className="text-4xl font-bold mb-4">Post not found</h1>
-                    <Link to="/research" className="text-brand-primary hover:underline">Back to Research</Link>
+                    <h1 className="text-4xl font-bold mb-4">{t('detail.notFound')}</h1>
+                    <Link to="/research" className="text-brand-primary hover:underline">{t('detail.backToResearch')}</Link>
                 </div>
             </div>
         );
@@ -61,13 +63,13 @@ const ResearchDetail: React.FC = () => {
                                 className="inline-flex items-center gap-2 text-brand-primary mb-6 hover:text-white transition-colors group"
                             >
                                 <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
-                                Back to Research
+                                {t('detail.backToResearch')}
                             </Link>
                             <div className="flex items-center gap-3 mb-6">
                                 <span className="px-3 py-1 rounded-full bg-brand-primary/20 backdrop-blur-md border border-white/10 text-xs font-bold text-brand-primary uppercase">
                                     {post.category}
                                 </span>
-                                <span className="text-gray-400 text-sm">{post.readTime} read</span>
+                                <span className="text-gray-400 text-sm">{post.readTime} {t('detail.read')}</span>
                             </div>
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
                                 {post.title}
@@ -110,7 +112,7 @@ const ResearchDetail: React.FC = () => {
                         <div className="flex items-center gap-4">
                             <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 transition-colors">
                                 <Share2 size={18} />
-                                Share
+                                {t('detail.share')}
                             </button>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-gray-500">

@@ -2,10 +2,12 @@ import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Send, Linkedin, Mail, Twitter } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import ethLogoCustom from '../../assets/eth-logo-custom.png';
 import MemberAvatarFlow from './MemberAvatarFlow';
 
 const Hero: React.FC = () => {
+    const { t } = useTranslation('home');
     const containerRef = useRef<HTMLDivElement>(null);
     // ... rest of imports
     const { scrollYProgress } = useScroll({
@@ -33,7 +35,7 @@ const Hero: React.FC = () => {
                     className="max-w-4xl"
                 >
                     <span className="text-xs font-medium uppercase tracking-[0.4em] text-gray-500 mb-6 block">
-                        KOREA ETHEREUM COMMUNITY
+                        {t('hero.badge')}
                     </span>
 
                     <h1 className="text-5xl md:text-7xl lg:text-[100px] font-black mb-10 tracking-[-0.04em] leading-[0.9] uppercase italic text-white">
@@ -66,7 +68,7 @@ const Hero: React.FC = () => {
                     <div className="flex justify-center mb-0">
                         <Link to="/about" className="group relative px-12 py-4 bg-transparent border border-white/10 rounded-full overflow-hidden transition-all duration-500 hover:border-white/40 inline-block">
                             <span className="relative z-10 text-xs font-bold tracking-[0.3em] uppercase transition-colors duration-500 group-hover:text-white">
-                                Learn More
+                                {t('hero.learnMore')}
                             </span>
                             <div className="absolute inset-0 bg-white/5 translate-y-full transition-transform duration-500 group-hover:translate-y-0" />
                         </Link>
@@ -114,7 +116,7 @@ const Hero: React.FC = () => {
                 transition={{ delay: 1.5 }}
                 className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-white/20"
             >
-                <span className="text-[9px] uppercase tracking-[0.4em] font-bold">Explore</span>
+                <span className="text-[9px] uppercase tracking-[0.4em] font-bold">{t('hero.explore')}</span>
                 <div className="w-[1px] h-12 bg-gradient-to-b from-white/20 to-transparent" />
             </motion.div>
         </div>

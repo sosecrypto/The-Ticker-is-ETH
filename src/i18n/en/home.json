@@ -6,5 +6,22 @@
     "subtraction": "Rather than monopolizing power, we distribute it to the ecosystem, creating an environment where the community can thrive on its own.",
     "publicGoods": "Operated purely through grants and donations. We exist solely for the value of public goods.",
     "infiniteGarden": "With a gardener's heart, we tend to and nurture the infinite garden of Korea's Ethereum ecosystem."
+  },
+  "hero": {
+    "badge": "KOREA ETHEREUM COMMUNITY",
+    "learnMore": "Learn More",
+    "explore": "Explore"
+  },
+  "cta": {
+    "title": "Join the Collective.",
+    "description": "Whether you're a researcher, developer, or storyteller, help us build the definitive Ethereum resource for Korea.",
+    "contributor": "Become a Contributor",
+    "github": "Explore our GitHub"
+  },
+  "updates": {
+    "badge": "Stay Informed",
+    "title": "Latest from the Frontier",
+    "viewAll": "View all updates",
+    "readArticle": "Read Article"
   }
 }

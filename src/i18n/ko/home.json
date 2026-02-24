@@ -6,5 +6,22 @@
     "subtraction": "권력을 독점하기보다 생태계로 분산시키며, 커뮤니티가 스스로 번영할 수 있는 환경을 만듭니다.",
     "publicGoods": "보조금과 기부만으로 운영되는 순수한 지원. 오직 공공재의 가치를 위해 존재합니다.",
     "infiniteGarden": "정원사의 마음으로 한국 이더리움 생태계를 돌보고 성장을 돕는 무한한 정원을 가꿉니다."
+  },
+  "hero": {
+    "badge": "KOREA ETHEREUM COMMUNITY",
+    "learnMore": "Learn More",
+    "explore": "Explore"
+  },
+  "cta": {
+    "title": "함께 만들어 가요.",
+    "description": "연구자, 개발자, 스토리텔러 — 누구든 환영합니다. 한국 이더리움 생태계의 핵심 리소스를 함께 만들어 주세요.",
+    "contributor": "기여자 되기",
+    "github": "GitHub 둘러보기"
+  },
+  "updates": {
+    "badge": "Stay Informed",
+    "title": "최신 소식",
+    "viewAll": "모든 업데이트 보기",
+    "readArticle": "아티클 읽기"
   }
 }

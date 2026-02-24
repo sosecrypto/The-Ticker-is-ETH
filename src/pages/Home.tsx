@@ -3,8 +3,10 @@ import Hero from '../components/home/Hero';
 import MissionSection from '../components/home/MissionSection';
 import UpdatesSection from '../components/home/UpdatesSection';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const Home: React.FC = () => {
+    const { t } = useTranslation('home');
     return (
         <div className="bg-brand-dark">
             <Hero />
@@ -25,17 +27,17 @@ const Home: React.FC = () => {
                             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
                             <div className="relative z-10">
                                 <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tight">
-                                    Join the Collective.
+                                    {t('cta.title')}
                                 </h2>
                                 <p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-                                    Whether you're a researcher, developer, or storyteller, help us build the definitive Ethereum resource for Korea.
+                                    {t('cta.description')}
                                 </p>
                                 <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
                                     <button className="px-10 py-5 bg-white text-black font-bold rounded-full hover:bg-gray-100 transition-all hover:scale-105">
-                                        Become a Contributor
+                                        {t('cta.contributor')}
                                     </button>
                                     <button className="px-10 py-5 bg-black/20 text-white font-bold rounded-full border border-white/20 hover:bg-black/30 transition-all backdrop-blur-md">
-                                        Explore our GitHub
+                                        {t('cta.github')}
                                     </button>
                                 </div>
                             </div>

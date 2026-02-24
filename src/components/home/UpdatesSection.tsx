@@ -2,11 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { mockResearch } from '../../data/researchData';
 
 const latestUpdates = mockResearch.slice(0, 3);
 
 const UpdatesSection: React.FC = () => {
+    const { t } = useTranslation('home');
     return (
         <section className="py-24 bg-brand-dark/50">
             <div className="container mx-auto px-6">
@@ -17,12 +19,12 @@ const UpdatesSection: React.FC = () => {
                             whileInView={{ opacity: 1 }}
                             className="text-brand-accent font-semibold text-sm uppercase tracking-wider mb-2 block"
                         >
-                            Stay Informed
+                            {t('updates.badge')}
                         </motion.span>
-                        <h2 className="text-3xl md:text-4xl font-bold text-white">Latest from the Frontier</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold text-white">{t('updates.title')}</h2>
                     </div>
                     <Link to="/research" className="flex items-center gap-2 text-brand-primary hover:text-brand-accent transition-colors font-semibold group">
-                        View all updates <ArrowUpRight size={20} className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
+                        {t('updates.viewAll')} <ArrowUpRight size={20} className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>
 
@@ -70,7 +72,7 @@ const UpdatesSection: React.FC = () => {
                                     {item.summary}
                                 </p>
                                 <Link to={`/research/${item.id}`} className="text-sm font-bold text-white flex items-center gap-2 group/btn">
-                                    Read Article <ArrowUpRight size={16} className="text-brand-primary group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                                    {t('updates.readArticle')} <ArrowUpRight size={16} className="text-brand-primary group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
                                 </Link>
                             </div>
                         </motion.div>

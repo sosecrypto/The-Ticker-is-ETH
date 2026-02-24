@@ -47,5 +47,22 @@
   "total": "Total",
   "last30d": "Last 30d",
   "last14d": "Last 14d",
-  "visitWebsite": "Visit Website"
+  "visitWebsite": "Visit Website",
+  "admin": {
+    "title": "Admin Access",
+    "enterPassphrase": "Enter the passphrase to access research tools.",
+    "authSuccess": "Authentication successful. Redirecting...",
+    "passphrasePlaceholder": "Passphrase",
+    "incorrectPassphrase": "Incorrect passphrase",
+    "authorize": "Authorize",
+    "welcome": "Welcome",
+    "notice": "Authorized personnel only. All access attempts are logged."
+  },
+  "newsDetail": {
+    "notFound": "Report not found",
+    "backToNews": "Back to News",
+    "by": "by",
+    "allReports": "← All Reports",
+    "viewOriginal": "View Original"
+  }
 }

@@ -47,5 +47,22 @@
   "total": "Total",
   "last30d": "Last 30d",
   "last14d": "Last 14d",
-  "visitWebsite": "웹사이트 방문"
+  "visitWebsite": "웹사이트 방문",
+  "admin": {
+    "title": "관리자 접근",
+    "enterPassphrase": "연구 도구에 접근하려면 비밀번호를 입력하세요.",
+    "authSuccess": "인증 성공. 이동 중...",
+    "passphrasePlaceholder": "비밀번호",
+    "incorrectPassphrase": "비밀번호가 올바르지 않습니다",
+    "authorize": "인증",
+    "welcome": "환영합니다",
+    "notice": "권한이 있는 인원만 접근 가능합니다. 모든 접근 시도가 기록됩니다."
+  },
+  "newsDetail": {
+    "notFound": "리포트를 찾을 수 없습니다",
+    "backToNews": "뉴스로 돌아가기",
+    "by": "작성자",
+    "allReports": "← 모든 리포트",
+    "viewOriginal": "원본 보기"
+  }
 }

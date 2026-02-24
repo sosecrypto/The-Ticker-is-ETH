@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const AdminLogin: React.FC = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [passphrase, setPassphrase] = useState('');
     const [error, setError] = useState(false);
@@ -38,9 +40,9 @@ const AdminLogin: React.FC = () => {
                         <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 ${isSuccess ? 'bg-green-500/20 text-green-500' : 'bg-brand-primary/10 text-brand-primary'}`}>
                             {isSuccess ? <ShieldCheck size={32} /> : <Lock size={32} />}
                         </div>
-                        <h1 className="text-3xl font-bold text-white mb-2">Admin Access</h1>
+                        <h1 className="text-3xl font-bold text-white mb-2">{t('admin.title')}</h1>
                         <p className="text-gray-400 font-light">
-                            {isSuccess ? 'Authentication successful. Redirecting...' : 'Enter the passphrase to access research tools.'}
+                            {isSuccess ? t('admin.authSuccess') : t('admin.enterPassphrase')}
                         </p>
                     </div>
 
@@ -48,7 +50,7 @@ const AdminLogin: React.FC = () => {
                         <div className="relative">
                             <input
                                 type="password"
-                                placeholder="Passphrase"
+                                placeholder={t('admin.passphrasePlaceholder')}
                                 value={passphrase}
                                 onChange={(e) => setPassphrase(e.target.value)}
                                 className={`w-full bg-white/5 border rounded-2xl py-4 px-6 text-white text-lg focus:outline-none transition-all placeholder:text-gray-600 ${error ? 'border-red-500/50 bg-red-500/5' : 'border-white/10 focus:border-brand-accent/50 focus:bg-white/10'}`}
@@ -61,7 +63,7 @@ const AdminLogin: React.FC = () => {
                                     className="absolute -bottom-6 left-2 flex items-center gap-1.5 text-red-500 text-xs font-medium"
                                 >
                                     <AlertCircle size={14} />
-                                    <span>Incorrect passphrase</span>
+                                    <span>{t('admin.incorrectPassphrase')}</span>
                                 </motion.div>
                             )}
                         </div>
@@ -71,14 +73,14 @@ const AdminLogin: React.FC = () => {
                             disabled={isSuccess}
                             className={`w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-bold transition-all ${isSuccess ? 'bg-green-500 text-white' : 'bg-brand-primary hover:bg-brand-primary/80 text-white shadow-lg shadow-brand-primary/20'}`}
                         >
-                            {isSuccess ? 'Welcome' : 'Authorize'}
+                            {isSuccess ? t('admin.welcome') : t('admin.authorize')}
                             {!isSuccess && <ArrowRight size={20} />}
                         </button>
                     </form>
                 </div>
 
                 <p className="text-center text-gray-600 text-xs mt-8">
-                    Authorized personnel only. All access attempts are logged.
+                    {t('admin.notice')}
                 </p>
             </motion.div>
         </div>

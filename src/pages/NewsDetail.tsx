@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, ExternalLink } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import DOMPurify from 'dompurify';
 import type { NewsFeedData } from '../types/news';
 import newsFeedData from '../data/news-feed.json';
@@ -19,13 +20,15 @@ const ALLOWED_TAGS = [
 
 const ALLOWED_ATTR = ['href', 'target', 'rel', 'src', 'alt', 'id', 'class'];
 
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
-}
-
 const NewsDetail: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const { id } = useParams<{ id: string }>();
+
+  const formatDate = (dateStr: string): string => {
+    const date = new Date(dateStr);
+    const locale = i18n.language === 'ko' ? 'ko-KR' : 'en-US';
+    return date.toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' });
+  };
   const item = feed.items.find((i) => i.id === id);
 
   useEffect(() => {
@@ -39,9 +42,9 @@ const NewsDetail: React.FC = () => {
     return (
       <div className="min-h-screen pt-28 pb-20 px-6 container mx-auto">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Report not found</h1>
+          <h1 className="text-2xl font-bold text-white mb-4">{t('newsDetail.notFound')}</h1>
           <Link to="/news" className="text-brand-accent hover:underline">
-            Back to News
+            {t('newsDetail.backToNews')}
           </Link>
         </div>
       </div>
@@ -66,7 +69,7 @@ const NewsDetail: React.FC = () => {
           className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors mb-8"
         >
           <ArrowLeft size={16} />
-          Back to News
+          {t('newsDetail.backToNews')}
         </Link>
 
         {/* Header */}
@@ -77,7 +80,7 @@ const NewsDetail: React.FC = () => {
               <Calendar size={14} />
               {formatDate(item.published)}
             </span>
-            <span>by {item.author}</span>
+            <span>{t('newsDetail.by')} {item.author}</span>
           </div>
         </div>
 
@@ -93,7 +96,7 @@ const NewsDetail: React.FC = () => {
             to="/news"
             className="text-sm text-gray-400 hover:text-white transition-colors"
           >
-            &larr; All Reports
+            {t('newsDetail.allReports')}
           </Link>
           <a
             href={item.link}
@@ -102,7 +105,7 @@ const NewsDetail: React.FC = () => {
             className="inline-flex items-center gap-2 text-sm text-brand-accent hover:underline"
           >
             <ExternalLink size={14} />
-            View Original
+            {t('newsDetail.viewOriginal')}
           </a>
         </div>
       </motion.div>
