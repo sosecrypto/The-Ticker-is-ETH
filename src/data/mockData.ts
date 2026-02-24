@@ -177,8 +177,10 @@ export const mockMembers: TeamMember[] = rawMembers.map(member => {
     };
 });
 
+const coreNames = new Set(rawMembers.map(m => m.name.toLowerCase()));
+
 function telegramToContributors(): (TeamMember & { category: string })[] {
-    return enrichmentData.contributors.map((contributor) => {
+    return enrichmentData.contributors.filter(c => !coreNames.has(c.name.toLowerCase())).map((contributor) => {
         const slug = contributor.name.toLowerCase().replace(/\s+/g, '-');
         const contributions = expandContributions(contributor.contributionMap, new Date(contributor.firstMessageDate));
         const active = isStillActive(contributor.lastMessageDate);
@@ -204,21 +206,7 @@ function telegramToContributors(): (TeamMember & { category: string })[] {
     });
 }
 
-// Core Team과 동일 인물이면 Core 데이터(bio/social/period)를 동기화
-const coreByName = new Map(mockMembers.map(m => [m.name.toLowerCase(), m]));
-
-const telegramContributors = telegramToContributors().map(tc => {
-    const core = coreByName.get(tc.name.toLowerCase());
-    if (!core) return tc;
-    return {
-        ...tc,
-        bio: core.bio,
-        social: core.social,
-        period: core.period,
-        isCurrent: core.isCurrent,
-        avatarUrl: core.avatarUrl,
-    };
-});
+const telegramContributors = telegramToContributors();
 
 export const mockContributors: (TeamMember & { category: string })[] = [
     {
