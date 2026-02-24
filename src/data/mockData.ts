@@ -218,8 +218,8 @@ export const mockContributors: (TeamMember & { category: string })[] = [
         id: 'gen-1',
         name: 'Gen',
         role: 'Contributor',
-        period: '2024.01.01 - Present',
-        isCurrent: true,
+        period: '2026.01.24 - Present',
+        isCurrent: false,
         avatarUrl: '/assets/contributors/gen.jpg',
         contributions: Array.from({ length: 140 }, (_, i) => ({
             date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
