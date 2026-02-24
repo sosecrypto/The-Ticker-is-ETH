@@ -231,5 +231,22 @@ export const mockContributors: (TeamMember & { category: string })[] = [
         category: 'Content',
         social: { website: 'https://maily.so/asthedaysgoby' },
     },
+    {
+        id: 'bosul-mun-1',
+        name: 'Bosul Mun',
+        role: 'Contributor',
+        period: '2026.02.24 - Present',
+        isCurrent: true,
+        avatarUrl: '/assets/contributors/bosul-mun.jpg',
+        contributions: Array.from({ length: 1 }, (_, i) => ({
+            date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
+            count: 0,
+        })),
+        recentActivity: [],
+        bio: 'Ethereum Foundation의 geth 팀에서 개발자로 일하고 있습니다. 관심 분야는 L1 스케일링 및 p2p network입니다.',
+        memberType: 'contributor' as const,
+        category: 'Content',
+        social: { twitter: 'https://x.com/1004yukichan' },
+    },
     ...telegramContributors,
 ];
