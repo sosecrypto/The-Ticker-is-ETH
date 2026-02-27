@@ -110,6 +110,8 @@ const Research: React.FC = () => {
                                     <img
                                         src={item.thumbnailUrl}
                                         alt={item.title}
+                                        loading="lazy"
+                                        decoding="async"
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     />
                                 ) : (
@@ -144,6 +146,10 @@ const Research: React.FC = () => {
                                             <img
                                                 src={item.authorAvatar}
                                                 alt={item.author}
+                                                loading="lazy"
+                                                decoding="async"
+                                                width={20}
+                                                height={20}
                                                 className="w-5 h-5 rounded-full object-cover"
                                                 onError={(e) => {
                                                     (e.target as HTMLImageElement).src = getAvatarFallbackUrl(item.author, 20);

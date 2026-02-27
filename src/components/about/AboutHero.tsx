@@ -20,6 +20,7 @@ const AboutHero: React.FC = () => {
                 <img
                     src="/assets/about/hero-bg.png"
                     alt=""
+                    decoding="async"
                     className="w-full h-full object-cover opacity-40"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/40 via-brand-dark/50 to-brand-dark" />

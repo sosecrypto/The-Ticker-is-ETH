@@ -69,6 +69,10 @@ const Home: React.FC = () => {
                                         <img
                                             src={member.avatarUrl}
                                             alt={member.name}
+                                            loading="lazy"
+                                            decoding="async"
+                                            width={56}
+                                            height={56}
                                             className="w-full h-full object-cover"
                                         />
                                     </div>

@@ -87,6 +87,8 @@ const EventCard: React.FC<{ event: EventItem; index: number; upcoming?: boolean 
                     <img
                         src={event.image}
                         alt={event.title}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-auto block opacity-90 hover:opacity-100 transition-opacity duration-300"
                     />
                     <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-brand-surface to-transparent" />

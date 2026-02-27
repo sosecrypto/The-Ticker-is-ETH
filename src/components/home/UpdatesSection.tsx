@@ -44,6 +44,8 @@ const UpdatesSection: React.FC = () => {
                                     <img
                                         src={item.thumbnailUrl}
                                         alt={item.title}
+                                        loading="lazy"
+                                        decoding="async"
                                         className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
                                     />
                                 ) : (

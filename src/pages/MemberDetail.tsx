@@ -85,6 +85,9 @@ const MemberDetail: React.FC = () => {
                             <img
                                 src={member.avatarUrl || getAvatarFallbackUrl(member.name, 128)}
                                 alt={member.name}
+                                width={128}
+                                height={128}
+                                decoding="async"
                                 className="w-full h-full rounded-full object-cover border-4 border-brand-dark shadow-2xl"
                                 onError={(e) => {
                                     (e.target as HTMLImageElement).src = getAvatarFallbackUrl(member.name, 128);
