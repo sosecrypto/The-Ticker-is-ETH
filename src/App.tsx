@@ -1,6 +1,8 @@
 import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
+import ErrorBoundary from './components/common/ErrorBoundary';
+import { PageSkeleton } from './components/common/Skeleton';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const About = React.lazy(() => import('./pages/About'));
@@ -21,34 +23,30 @@ const ScrollToTop: React.FC = () => {
   return null;
 };
 
-const PageSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
-  </div>
-);
-
 function App() {
   return (
     <Router>
       <ScrollToTop />
       <MainLayout>
-        <Suspense fallback={<PageSpinner />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/team/:id" element={<MemberDetail />} />
-            <Route path="/contributors" element={<Contributors />} />
-            <Route path="/contributors/:id" element={<MemberDetail />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/news/:id" element={<NewsDetail />} />
-            <Route path="/research" element={<Research />} />
-            <Route path="/research/:id" element={<ResearchDetail />} />
-            <Route path="/research/write" element={<WriteResearch />} />
-            <Route path="/admin" element={<AdminLogin />} />
-          </Routes>
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={<PageSkeleton />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/team/:id" element={<MemberDetail />} />
+              <Route path="/contributors" element={<Contributors />} />
+              <Route path="/contributors/:id" element={<MemberDetail />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/news" element={<News />} />
+              <Route path="/news/:id" element={<NewsDetail />} />
+              <Route path="/research" element={<Research />} />
+              <Route path="/research/:id" element={<ResearchDetail />} />
+              <Route path="/research/write" element={<WriteResearch />} />
+              <Route path="/admin" element={<AdminLogin />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
       </MainLayout>
     </Router>
   );
