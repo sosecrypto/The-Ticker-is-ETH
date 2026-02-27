@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
@@ -19,6 +19,18 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // ESC key closes mobile menu
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
+        if (e.key === 'Escape' && isMobileMenuOpen) {
+            setIsMobileMenuOpen(false);
+        }
+    }, [isMobileMenuOpen]);
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [handleKeyDown]);
+
     const navLinks = [
         { name: t('nav.about'), path: '/about' },
         { name: t('nav.coreTeam'), path: '/team' },
@@ -30,13 +42,22 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     return (
         <div className="min-h-screen flex flex-col bg-brand-dark overflow-x-hidden cursor-none-desktop">
+            {/* Skip Navigation */}
+            <a
+                href="#main-content"
+                className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-brand-primary focus:text-white focus:rounded-lg focus:outline-none"
+            >
+                Skip to main content
+            </a>
+
             <EthCursorTrail />
             <nav
+                aria-label="Main navigation"
                 className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-brand-dark/80 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent py-6'
                     }`}
             >
                 <div className="container mx-auto px-6 flex justify-between items-center">
-                    <Link to="/" className="flex items-center gap-2.5">
+                    <Link to="/" className="flex items-center gap-2.5" aria-label="Home">
                         <img
                             src="/assets/ticker-eth-logo.svg"
                             alt="The Ticker is ETH"
@@ -53,22 +74,24 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             <Link
                                 key={link.path}
                                 to={link.path}
-                                className="text-sm font-medium text-gray-300 hover:text-white transition-colors relative group"
+                                className="text-sm font-medium text-gray-300 hover:text-white focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-dark rounded transition-colors relative group"
                             >
                                 {link.name}
                                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-accent transition-all group-hover:w-full" />
                             </Link>
                         ))}
                         <LanguageToggle />
-                        <a href="https://t.me/thetickeriseth" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 text-white px-5 py-2 rounded-full text-sm font-medium transition-colors border border-white/5">
+                        <a href="https://t.me/thetickeriseth" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 text-white px-5 py-2 rounded-full text-sm font-medium transition-colors border border-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent">
                             {t('nav.subscribe')}
                         </a>
                     </div>
 
                     {/* Mobile Nav Button */}
                     <button
-                        className="md:hidden text-white"
+                        className="md:hidden text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent rounded"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-expanded={isMobileMenuOpen}
+                        aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
                     >
                         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
@@ -82,14 +105,16 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
                             className="md:hidden bg-brand-dark/95 backdrop-blur-xl border-t border-white/5 overflow-hidden"
+                            role="menu"
                         >
                             <div className="flex flex-col p-6 gap-4">
                                 {navLinks.map((link) => (
                                     <Link
                                         key={link.path}
                                         to={link.path}
+                                        role="menuitem"
                                         onClick={() => setIsMobileMenuOpen(false)}
-                                        className="text-lg font-medium text-gray-300 hover:text-white"
+                                        className="text-lg font-medium text-gray-300 hover:text-white focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent rounded"
                                     >
                                         {link.name}
                                     </Link>
@@ -103,11 +128,11 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </AnimatePresence>
             </nav>
 
-            <main className="flex-grow pt-20">
+            <main id="main-content" className="flex-grow pt-20" role="main">
                 {children}
             </main>
 
-            <footer className="bg-black/50 border-t border-white/5 py-12">
+            <footer className="bg-black/50 border-t border-white/5 py-12" role="contentinfo">
                 <div className="container mx-auto px-6">
                     <div className="grid md:grid-cols-4 gap-8">
                         <div className="md:col-span-2">
@@ -122,20 +147,20 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         <div>
                             <h4 className="text-white font-semibold mb-4">{t('footer.community')}</h4>
                             <ul className="space-y-2 text-gray-400">
-                                <li><a href="https://x.com/TickerisETH_kr" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Twitter</a></li>
-                                <li><a href="https://t.me/thetickeriseth" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Telegram Channel</a></li>
-                                <li><a href="https://t.me/thetickerisethchat" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">Telegram Chat</a></li>
-                                <li><a href="https://linkedin.com/company/the-ticker-is-eth/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">LinkedIn</a></li>
+                                <li><a href="https://x.com/TickerisETH_kr" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent focus-visible:text-brand-accent focus-visible:outline-none">Twitter</a></li>
+                                <li><a href="https://t.me/thetickeriseth" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent focus-visible:text-brand-accent focus-visible:outline-none">Telegram Channel</a></li>
+                                <li><a href="https://t.me/thetickerisethchat" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent focus-visible:text-brand-accent focus-visible:outline-none">Telegram Chat</a></li>
+                                <li><a href="https://linkedin.com/company/the-ticker-is-eth/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent focus-visible:text-brand-accent focus-visible:outline-none">LinkedIn</a></li>
                             </ul>
                         </div>
                         <div>
                             <h4 className="text-white font-semibold mb-4">{t('footer.resources')}</h4>
                             <ul className="space-y-2 text-gray-400">
-                                <li><Link to="/research" className="hover:text-brand-accent">{t('footer.blog')}</Link></li>
-                                <li><Link to="/news" className="hover:text-brand-accent">{t('nav.news')}</Link></li>
-                                <li><Link to="/events" className="hover:text-brand-accent">{t('nav.events')}</Link></li>
-                                <li><a href="https://substack.com/@tickeriseth" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">{t('footer.newsletter')}</a></li>
-                                <li><a href="https://t.me/thetickerisethchat" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent">{t('footer.contact')}</a></li>
+                                <li><Link to="/research" className="hover:text-brand-accent focus-visible:text-brand-accent focus-visible:outline-none">{t('footer.blog')}</Link></li>
+                                <li><Link to="/news" className="hover:text-brand-accent focus-visible:text-brand-accent focus-visible:outline-none">{t('nav.news')}</Link></li>
+                                <li><Link to="/events" className="hover:text-brand-accent focus-visible:text-brand-accent focus-visible:outline-none">{t('nav.events')}</Link></li>
+                                <li><a href="https://substack.com/@tickeriseth" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent focus-visible:text-brand-accent focus-visible:outline-none">{t('footer.newsletter')}</a></li>
+                                <li><a href="https://t.me/thetickerisethchat" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent focus-visible:text-brand-accent focus-visible:outline-none">{t('footer.contact')}</a></li>
                             </ul>
                         </div>
                     </div>
