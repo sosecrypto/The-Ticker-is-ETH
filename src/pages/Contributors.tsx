@@ -6,6 +6,7 @@ import { Search, Users, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { mockContributors } from '../data/mockData';
 import { sortMembers, getTotalContributions } from '../utils/members';
+import usePageMeta from '../hooks/usePageMeta';
 
 type SortOption = 'contributions' | 'seniority';
 
@@ -14,6 +15,7 @@ const Contributors: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState<SortOption>('contributions');
     const { t } = useTranslation('team');
+    usePageMeta({ title: 'Contributors', description: 'The Ticker is ETH 기여자 목록' });
 
     const stats = useMemo(() => {
         const memberCount = mockContributors.length;

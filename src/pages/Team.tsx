@@ -6,6 +6,7 @@ import { Search, Users, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { mockMembers } from '../data/mockData';
 import { sortMembers, getTotalContributions } from '../utils/members';
+import usePageMeta from '../hooks/usePageMeta';
 
 type SortOption = 'contributions' | 'seniority';
 
@@ -13,6 +14,7 @@ const Team: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState<SortOption>('contributions');
     const { t } = useTranslation('team');
+    usePageMeta({ title: 'Core Team', description: 'The Ticker is ETH 코어팀 멤버' });
 
     const currentMembers = useMemo(() => {
         const filtered = mockMembers.filter(member =>

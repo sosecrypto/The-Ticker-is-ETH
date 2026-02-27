@@ -7,9 +7,11 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, MessageCircle } from 'lucide-react';
 import { mockMembers, mockContributors } from '../data/mockData';
+import usePageMeta from '../hooks/usePageMeta';
 
 const Home: React.FC = () => {
     const { t } = useTranslation('home');
+    usePageMeta({ title: '', description: '한국 이더리움 커뮤니티 비영리 단체 The Ticker is ETH' });
 
     const allMembers = useMemo(() => {
         const coreNames = new Set(mockMembers.map(m => m.name.toLowerCase()));

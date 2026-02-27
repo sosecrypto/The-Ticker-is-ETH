@@ -6,12 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { mockResearch } from '../data/researchData';
 import { getAvatarFallbackUrl } from '../utils/members';
 import EthThumbnail from '../components/shared/EthThumbnail';
+import usePageMeta from '../hooks/usePageMeta';
 
 const Research: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState<string>('all');
     const [isAdmin, setIsAdmin] = useState(false);
     const { t } = useTranslation('research');
+    usePageMeta({ title: 'Research', description: '이더리움 리서치 및 분석 아티클' });
 
     React.useEffect(() => {
         setIsAdmin(localStorage.getItem('isAdmin') === 'true');

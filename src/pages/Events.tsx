@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import usePageMeta from '../hooks/usePageMeta';
 
 interface EventItem {
     id: number;
@@ -130,6 +131,7 @@ const EventCard: React.FC<{ event: EventItem; index: number; upcoming?: boolean 
 
 const Events: React.FC = () => {
     const { t } = useTranslation('events');
+    usePageMeta({ title: 'Events', description: 'Ethcon Korea 및 이더리움 이벤트' });
 
     return (
         <div className="min-h-screen pt-28 pb-20 px-6 container mx-auto">
