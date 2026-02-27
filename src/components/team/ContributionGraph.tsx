@@ -127,7 +127,7 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({ data }) => {
             {/* Tooltip */}
             {tooltip && (
                 <div
-                    className="absolute pointer-events-none z-50 px-2.5 py-1.5 rounded-lg text-[11px] text-gray-200 bg-[#1a1a2e] border border-white/10 whitespace-nowrap shadow-lg"
+                    className="absolute pointer-events-none z-50 px-2.5 py-1.5 rounded-lg text-[11px] text-gray-200 bg-brand-surface-light border border-white/10 whitespace-nowrap shadow-lg"
                     style={{
                         left: tooltip.x,
                         top: tooltip.y,

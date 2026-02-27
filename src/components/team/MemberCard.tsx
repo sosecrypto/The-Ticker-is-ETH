@@ -67,7 +67,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
                         </a>
                     )}
                     {member.social.telegram && (
-                        <a href={member.social.telegram} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#26A5E4] transition-colors">
+                        <a href={member.social.telegram} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-social-telegram transition-colors">
                             <Send size={18} />
                         </a>
                     )}
