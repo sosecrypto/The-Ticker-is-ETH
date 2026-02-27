@@ -1,6 +1,7 @@
 import type { TeamMember, Activity, Contribution } from '../types/team';
 import { formatDate, isStillActive } from '../utils/telegram';
 import rawEnrichment from './team-enrichment.json';
+import rawCoreTeam from './team-core.json';
 
 // --- Enrichment JSON 타입 ---
 
@@ -49,143 +50,13 @@ function findEnrichedContributor(name: string): EnrichedContributor | undefined 
     );
 }
 
-// --- Core Team 멤버 정의 ---
+// --- Core Team 멤버 (JSON에서 로드) ---
 
-const rawMembers: TeamMember[] = [
-    {
-        id: '1',
-        name: 'Sose',
-        role: 'Core Team',
-        period: '2024.11.01 - Present',
-        isCurrent: true,
-        avatarUrl: '/assets/team/sose.jpg',
-        bio: 'AI Vibe Coder | Web3 Native | DigitalAsset Analyst Team Lead - DeSpread | Core Team - The Ticker is ETH. 기술의 발전을 통한 세상의 긍정적인 발전을 기대합니다. Public goods, AI에 관심이 많습니다.',
-        memberType: 'core',
-        social: { twitter: 'https://x.com/sosecrypto_kr', github: 'https://github.com/sumsun-dev', linkedin: 'https://www.linkedin.com/in/%EC%83%81%ED%98%84-%EC%97%84-5a03b628a/', telegram: 'https://t.me/crypto_offroad' },
-        highlights: [
-            { title: 'The Ticker is ETH 창립' },
-            { title: 'The Ticker is ETH 웹사이트 구축' },
-        ],
-        contributions: [],
-        recentActivity: [],
-    },
-    {
-        id: '2',
-        name: 'Jay',
-        role: 'Core Team',
-        period: '2024.11.20 - Present',
-        isCurrent: true,
-        avatarUrl: '/assets/team/jay.jpg',
-        bio: 'Sunnyside Labs에서 프라이버시 솔루션 Privacy Boost를 빌딩하고 있습니다. 주 관심 분야는 프라이버시와 레이어 2의 생태계입니다.',
-        memberType: 'core',
-        social: { twitter: 'https://x.com/jaymayday_eth', linkedin: 'https://www.linkedin.com/in/jaesuk-jang/' },
-        highlights: [
-            { title: 'The Ticker is ETH 창립멤버' },
-            { title: 'Octant Epoch 9 선정' },
-        ],
-        contributions: [],
-        recentActivity: [],
-    },
-    {
-        id: '3',
-        name: 'sm-stack',
-        role: 'Core Team',
-        period: '2024.11.04 - Present',
-        isCurrent: true,
-        avatarUrl: '/assets/team/sm-stack.jpg',
-        bio: 'Sunnyside Labs에서 프라이버시 솔루션 Privacy Boost를 빌딩하고 있습니다. L2부터 AA, ZK, 프라이버시 등 이더리움의 기술 레이어에 관심을 두고 있습니다.',
-        memberType: 'core',
-        social: { twitter: 'https://x.com/organ_mo', github: 'https://github.com/sm-stack', linkedin: 'https://www.linkedin.com/in/seungmin-jeon-4ab159171/' },
-        highlights: [
-            { title: 'The Ticker is ETH 창립멤버' },
-        ],
-        contributions: [],
-        recentActivity: [],
-    },
-    {
-        id: '4',
-        name: 'Rejamong',
-        role: 'Core Team',
-        period: '2024.12.13 - Present',
-        isCurrent: true,
-        avatarUrl: '/assets/team/rejamong.jpg',
-        bio: '블록체인 개발자. 매일 이더리움 뉴스를 큐레이션하여 가격·프로토콜·EIP 동향을 한눈에 정리하며, 커뮤니티가 빠르게 정보를 얻을 수 있도록 돕습니다.',
-        memberType: 'core',
-        social: { twitter: 'https://x.com/r2Jamong', telegram: 'https://t.me/rejamong' },
-        highlights: [
-            { title: 'The Ticker is ETH 창립멤버' },
-            { title: 'eth.rejamong 웹사이트 구축' },
-        ],
-        contributions: [],
-        recentActivity: [],
-    },
-    {
-        id: '5',
-        name: 'Kuma',
-        role: 'Core Team',
-        period: '2024.11.05 - Present',
-        isCurrent: true,
-        avatarUrl: '/assets/team/kuma.jpg',
-        bio: 'Public goods 와 디지털 주권에 관심이 많은 기여자입니다.',
-        memberType: 'core',
-        social: { twitter: 'https://x.com/kuma_hada', telegram: 'https://t.me/optimism_kr', linkedin: 'https://www.linkedin.com/in/hada-kang-b0b70295/' },
-        highlights: [
-            { title: 'The Ticker is ETH 창립멤버' },
-        ],
-        contributions: [],
-        recentActivity: [],
-    },
-    {
-        id: '6',
-        name: 'Jenna',
-        role: 'Core Team',
-        period: '2024.12.23 - Present',
-        isCurrent: true,
-        avatarUrl: '/assets/team/jenna.jpg',
-        bio: '일반인 및 기업 대상으로, 개인지갑을 주 축으로 한 금융을 교육합니다. Ethcon Korea 2023 리드 오거나이저로 활동하였습니다.',
-        memberType: 'core',
-        social: { twitter: 'https://x.com/Pepe_Jenna', linkedin: 'https://www.linkedin.com/in/%EC%9E%AC%EC%9B%90-%EB%B0%95-bb1982179/' },
-        highlights: [
-            { title: 'The Ticker is ETH 창립멤버' },
-            { title: 'Ethcon Korea' },
-        ],
-        contributions: [],
-        recentActivity: [],
-    },
-    {
-        id: '7',
-        name: 'Meenari',
-        role: 'Core Team',
-        period: '2024.11.12 - 2025.11.04',
-        isCurrent: false,
-        avatarUrl: '/assets/team/meenari.jpg',
-        bio: '이더리움 생태계 이벤트와 보안 이슈를 다루며, Devcon·Devconnect 등 글로벌 행사 소식과 프로토콜 보안 분석을 공유합니다.',
-        memberType: 'core',
-        social: { twitter: 'https://x.com/dani_jee' },
-        highlights: [
-            { title: 'The Ticker is ETH 창립멤버' },
-            { title: 'Ethcon Korea' },
-        ],
-        contributions: [],
-        recentActivity: [],
-    },
-    {
-        id: '8',
-        name: '100y',
-        role: 'Core Team',
-        period: '2025.09.01 - 2026.02.03',
-        isCurrent: false,
-        avatarUrl: '/assets/team/100y.jpg',
-        bio: 'Four Pillars에서 리서치리드 역할을 하고 있으며, 주 관심 분야는 전통금융 시스템과 온체인의 접점입니다.',
-        memberType: 'core',
-        social: { twitter: 'https://x.com/100y_eth', telegram: 'https://t.me/hodl100y' },
-        highlights: [
-            { title: 'The Ticker is ETH 1기 코어팀' },
-        ],
-        contributions: [],
-        recentActivity: [],
-    }
-];
+const rawMembers: TeamMember[] = (rawCoreTeam as Array<Omit<TeamMember, 'contributions' | 'recentActivity'>>).map(m => ({
+    ...m,
+    contributions: [],
+    recentActivity: [],
+}));
 
 // Enrichment 데이터 매핑 (contributions/recentActivity만 반영, period/isCurrent는 원본 고정)
 export const mockMembers: TeamMember[] = rawMembers.map(member => {
