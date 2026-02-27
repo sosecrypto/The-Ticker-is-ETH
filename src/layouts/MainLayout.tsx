@@ -36,8 +36,15 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     }`}
             >
                 <div className="container mx-auto px-6 flex justify-between items-center">
-                    <Link to="/" className="text-xl font-black tracking-[-0.02em] text-white uppercase italic">
-                        The Ticker <span className="text-brand-accent">is ETH</span>
+                    <Link to="/" className="flex items-center gap-2.5">
+                        <img
+                            src="/assets/ticker-eth-logo.svg"
+                            alt="The Ticker is ETH"
+                            className="h-6 md:h-7 w-auto"
+                        />
+                        <span className="text-lg md:text-xl font-black tracking-[-0.02em] text-white uppercase italic">
+                            The Ticker <span className="text-brand-accent">is ETH</span>
+                        </span>
                     </Link>
 
                     {/* Desktop Nav */}
@@ -104,7 +111,10 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <div className="container mx-auto px-6">
                     <div className="grid md:grid-cols-4 gap-8">
                         <div className="md:col-span-2">
-                            <h3 className="text-xl font-bold text-white mb-4">The ticker is ETH</h3>
+                            <div className="flex items-center gap-3 mb-4">
+                                <img src="/assets/ticker-eth-logo.svg" alt="The Ticker is ETH" className="h-8 w-auto" />
+                                <h3 className="text-xl font-bold text-white">The ticker is ETH</h3>
+                            </div>
                             <p className="text-gray-400 max-w-sm">
                                 {t('footer.description')}
                             </p>

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Send, Linkedin, Mail, Twitter } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import ethLogoCustom from '../../assets/eth-logo-custom.png';
 import MemberAvatarFlow from './MemberAvatarFlow';
 
 const Hero: React.FC = () => {
@@ -79,7 +78,7 @@ const Hero: React.FC = () => {
             {/* Custom Logo Image with Parallax and Animation - Restored Size */}
             <motion.div
                 style={{ y }}
-                className="relative w-full max-w-lg mt-12 lg:mt-16 aspect-[1/1.1] min-h-[400px] flex items-center justify-center pointer-events-none select-none px-6"
+                className="relative w-full max-w-sm mt-12 lg:mt-16 aspect-[506/878] min-h-[350px] flex items-center justify-center pointer-events-none select-none px-6"
             >
                 {/* Member Avatar Flow Animation Overlay - Behind the Logo */}
                 <div className="absolute inset-0 z-10 flex items-center justify-center">
@@ -94,12 +93,12 @@ const Hero: React.FC = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 1.2, ease: "easeOut" }}
-                        src={ethLogoCustom}
-                        alt="Ethereum Custom Logo"
+                        src="/assets/ticker-eth-logo.svg"
+                        alt="The Ticker is ETH"
                         className="w-full h-auto object-contain mx-auto relative mix-blend-screen"
                         style={{
-                            maskImage: 'radial-gradient(ellipse 90% 90% at 50% 50%, black 70%, transparent 100%)',
-                            WebkitMaskImage: 'radial-gradient(ellipse 90% 90% at 50% 50%, black 70%, transparent 100%)',
+                            maskImage: 'radial-gradient(ellipse 85% 85% at 50% 45%, black 65%, transparent 100%)',
+                            WebkitMaskImage: 'radial-gradient(ellipse 85% 85% at 50% 45%, black 65%, transparent 100%)',
                         }}
                     />
                 </div>

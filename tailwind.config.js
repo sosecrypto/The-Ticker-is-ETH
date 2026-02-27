@@ -9,8 +9,8 @@ export default {
             colors: {
                 brand: {
                     dark: '#050508', // Deep Navy/Black
-                    primary: '#3C4CA8', // Ethereum Blue
-                    accent: '#A086FC', // Glowing Purple
+                    primary: '#2D5FBF', // Ethereum Blue
+                    accent: '#629FFF', // Sky Blue
                     light: '#F5F5FA',
                 }
             },
