@@ -30,6 +30,7 @@ function extractDomain(url: string): string {
 const MemberDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { t } = useTranslation();
+    const [now] = React.useState(() => Date.now());
 
     const member = [...mockMembers, ...mockContributors].find(m => m.id === id);
 
@@ -58,7 +59,6 @@ const MemberDetail: React.FC = () => {
     const totalMessages = member.recentActivity.length;
     const bioKey = `team:bios.${member.name.toLowerCase()}`;
 
-    const now = Date.now();
     const DAY_MS = 24 * 60 * 60 * 1000;
     const last14 = member.contributions
         .filter(c => now - new Date(c.date).getTime() <= 14 * DAY_MS)

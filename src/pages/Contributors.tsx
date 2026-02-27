@@ -17,6 +17,7 @@ const Contributors: React.FC = () => {
     const { t } = useTranslation('team');
     usePageMeta({ title: 'Contributors', description: 'The Ticker is ETH 기여자 목록' });
 
+    const [now] = useState(() => Date.now());
     const stats = useMemo(() => {
         const memberCount = mockContributors.length;
         const totalContributions = mockContributors.reduce((sum, m) => sum + getTotalContributions(m.contributions), 0);
@@ -24,9 +25,9 @@ const Contributors: React.FC = () => {
             const start = new Date(m.period.split(' - ')[0].replace(/\./g, '-')).getTime();
             return start < min ? start : min;
         }, Infinity);
-        const days = Math.floor((Date.now() - earliest) / 86400000);
+        const days = Math.floor((now - earliest) / 86400000);
         return { memberCount, totalContributions, days };
-    }, []);
+    }, [now]);
 
     const categories = useMemo(() => {
         const cats = mockContributors.map(c => c.category);
