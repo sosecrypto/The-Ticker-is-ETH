@@ -57,6 +57,11 @@ function isTouchDevice(): boolean {
   );
 }
 
+function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 // --- Component ---
 const EthCursorTrail: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -203,7 +208,7 @@ const EthCursorTrail: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isTouchDevice()) {
+    if (isTouchDevice() || prefersReducedMotion()) {
       isTouchRef.current = true;
       return;
     }
@@ -216,19 +221,30 @@ const EthCursorTrail: React.FC = () => {
       mouseRef.current.y = e.clientY;
     };
 
+    // Page Visibility API: pause RAF when tab is hidden
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafRef.current);
+      } else {
+        rafRef.current = requestAnimationFrame(animate);
+      }
+    };
+
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('click', handleClick, { passive: true });
+    document.addEventListener('visibilitychange', handleVisibility);
     rafRef.current = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('click', handleClick);
+      document.removeEventListener('visibilitychange', handleVisibility);
       cancelAnimationFrame(rafRef.current);
     };
   }, [initPool, animate, handleClick]);
 
-  // Don't render on touch devices
-  if (typeof window !== 'undefined' && isTouchDevice()) {
+  // Don't render on touch devices or when reduced motion is preferred
+  if (typeof window !== 'undefined' && (isTouchDevice() || prefersReducedMotion())) {
     return null;
   }
 
