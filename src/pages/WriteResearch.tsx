@@ -18,7 +18,7 @@ const WriteResearch: React.FC = () => {
     }, [navigate]);
     const [formData, setFormData] = useState({
         title: '',
-        category: 'Technical',
+        category: 'Research',
         summary: '',
         content: '',
         thumbnailUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=2832'
@@ -84,16 +84,9 @@ const WriteResearch: React.FC = () => {
                         <div className="grid md:grid-cols-2 gap-8">
                             <div className="space-y-4">
                                 <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">{t('write.categoryLabel')}</label>
-                                <select
-                                    value={formData.category}
-                                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-brand-accent/50 transition-all appearance-none cursor-pointer"
-                                >
-                                    <option value="Technical" className="bg-brand-dark">Technical</option>
-                                    <option value="Economic" className="bg-brand-dark">Economic</option>
-                                    <option value="Social" className="bg-brand-dark">Social</option>
-                                    <option value="Governance" className="bg-brand-dark">Governance</option>
-                                </select>
+                                <div className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white">
+                                    Research
+                                </div>
                             </div>
                             <div className="space-y-4">
                                 <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">{t('write.thumbnailLabel')}</label>

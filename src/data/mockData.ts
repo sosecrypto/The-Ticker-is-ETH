@@ -62,6 +62,10 @@ const rawMembers: TeamMember[] = [
         bio: 'AI Vibe Coder | Web3 Native | DigitalAsset Analyst Team Lead - DeSpread | Core Team - The Ticker is ETH. 기술의 발전을 통한 세상의 긍정적인 발전을 기대합니다. Public goods, AI에 관심이 많습니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com/sosecrypto_kr', github: 'https://github.com/sumsun-dev', linkedin: 'https://www.linkedin.com/in/%EC%83%81%ED%98%84-%EC%97%84-5a03b628a/', telegram: 'https://t.me/crypto_offroad' },
+        highlights: [
+            { title: 'The Ticker is ETH 창립' },
+            { title: 'The Ticker is ETH 웹사이트 구축' },
+        ],
         contributions: [],
         recentActivity: [],
     },
@@ -75,6 +79,10 @@ const rawMembers: TeamMember[] = [
         bio: 'Sunnyside Labs에서 프라이버시 솔루션 Privacy Boost를 빌딩하고 있습니다. 주 관심 분야는 프라이버시와 레이어 2의 생태계입니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com/jaymayday_eth', linkedin: 'https://www.linkedin.com/in/jaesuk-jang/' },
+        highlights: [
+            { title: 'The Ticker is ETH 창립멤버' },
+            { title: 'Octant Epoch 9 선정' },
+        ],
         contributions: [],
         recentActivity: [],
     },
@@ -88,6 +96,9 @@ const rawMembers: TeamMember[] = [
         bio: 'Sunnyside Labs에서 프라이버시 솔루션 Privacy Boost를 빌딩하고 있습니다. L2부터 AA, ZK, 프라이버시 등 이더리움의 기술 레이어에 관심을 두고 있습니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com/organ_mo', github: 'https://github.com/sm-stack', linkedin: 'https://www.linkedin.com/in/seungmin-jeon-4ab159171/' },
+        highlights: [
+            { title: 'The Ticker is ETH 창립멤버' },
+        ],
         contributions: [],
         recentActivity: [],
     },
@@ -101,6 +112,10 @@ const rawMembers: TeamMember[] = [
         bio: '블록체인 개발자. 매일 이더리움 뉴스를 큐레이션하여 가격·프로토콜·EIP 동향을 한눈에 정리하며, 커뮤니티가 빠르게 정보를 얻을 수 있도록 돕습니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com/r2Jamong', telegram: 'https://t.me/rejamong' },
+        highlights: [
+            { title: 'The Ticker is ETH 창립멤버' },
+            { title: 'eth.rejamong 웹사이트 구축' },
+        ],
         contributions: [],
         recentActivity: [],
     },
@@ -114,6 +129,9 @@ const rawMembers: TeamMember[] = [
         bio: 'Public goods 와 디지털 주권에 관심이 많은 기여자입니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com/kuma_hada', telegram: 'https://t.me/optimism_kr', linkedin: 'https://www.linkedin.com/in/hada-kang-b0b70295/' },
+        highlights: [
+            { title: 'The Ticker is ETH 창립멤버' },
+        ],
         contributions: [],
         recentActivity: [],
     },
@@ -127,6 +145,10 @@ const rawMembers: TeamMember[] = [
         bio: '일반인 및 기업 대상으로, 개인지갑을 주 축으로 한 금융을 교육합니다. Ethcon Korea 2023 리드 오거나이저로 활동하였습니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com/Pepe_Jenna', linkedin: 'https://www.linkedin.com/in/%EC%9E%AC%EC%9B%90-%EB%B0%95-bb1982179/' },
+        highlights: [
+            { title: 'The Ticker is ETH 창립멤버' },
+            { title: 'Ethcon Korea' },
+        ],
         contributions: [],
         recentActivity: [],
     },
@@ -140,6 +162,10 @@ const rawMembers: TeamMember[] = [
         bio: '이더리움 생태계 이벤트와 보안 이슈를 다루며, Devcon·Devconnect 등 글로벌 행사 소식과 프로토콜 보안 분석을 공유합니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com/dani_jee' },
+        highlights: [
+            { title: 'The Ticker is ETH 창립멤버' },
+            { title: 'Ethcon Korea' },
+        ],
         contributions: [],
         recentActivity: [],
     },
@@ -153,6 +179,9 @@ const rawMembers: TeamMember[] = [
         bio: 'Four Pillars에서 리서치리드 역할을 하고 있으며, 주 관심 분야는 전통금융 시스템과 온체인의 접점입니다.',
         memberType: 'core',
         social: { twitter: 'https://x.com/100y_eth', telegram: 'https://t.me/hodl100y' },
+        highlights: [
+            { title: 'The Ticker is ETH 1기 코어팀' },
+        ],
         contributions: [],
         recentActivity: [],
     }
@@ -191,7 +220,7 @@ function telegramToContributors(): (TeamMember & { category: string })[] {
             avatarUrl: `/assets/team/${contributor.name.toLowerCase()}.jpg`,
             contributions,
             recentActivity: contributor.recentActivity,
-            bio: `${enrichmentData.channel} 채널에서 ${contributor.messageCount}개의 메시지를 작성한 기여자입니다.`,
+            bio: `${enrichmentData.channel} 채널에서 ${Math.round(contributor.messageCount)}개의 메시지를 작성한 기여자입니다.`,
             memberType: 'contributor' as const,
             category: 'Content',
             social: {
@@ -210,6 +239,7 @@ const telegramContributors = telegramToContributors().map(tc => {
         bio: core.bio,
         social: core.social,
         avatarUrl: core.avatarUrl,
+        highlights: core.highlights,
     };
 });
 

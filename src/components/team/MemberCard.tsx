@@ -2,6 +2,17 @@ import { motion } from 'framer-motion';
 import type { TeamMember } from '../../types/team';
 import ContributionGraph from './ContributionGraph';
 import { Github, Twitter, Send, Linkedin, Globe } from 'lucide-react';
+
+const EthIcon: React.FC<{ size?: number; className?: string }> = ({ size = 12, className }) => (
+    <svg width={size} height={size} viewBox="0 0 256 417" className={className} fill="none">
+        <path d="M127.961 0l-2.795 9.5v275.668l2.795 2.79 127.962-75.638z" fill="#828384" />
+        <path d="M127.962 0L0 212.32l127.962 75.639V154.158z" fill="#8C8C8C" />
+        <path d="M127.961 312.187l-1.575 1.92v98.199l1.575 4.601L256 236.587z" fill="#646464" />
+        <path d="M127.962 416.905v-104.72L0 236.585z" fill="#8C8C8C" />
+        <path d="M127.961 287.958l127.96-75.637-127.96-58.162z" fill="#393939" />
+        <path d="M0 212.32l127.96 75.638v-133.8z" fill="#545454" />
+    </svg>
+);
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getAvatarFallbackUrl, getTotalContributions } from '../../utils/members';
@@ -73,9 +84,31 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
                 </div>
             </div>
 
-            <p className="text-gray-400 text-sm mb-6 line-clamp-2">
+            <p className="text-gray-400 text-sm mb-4 line-clamp-2">
                 {t(bioKey, { defaultValue: member.bio })}
             </p>
+
+            {member.highlights && member.highlights.length > 0 && (
+                <div className="mb-4 space-y-1">
+                    {member.highlights.map((h, i) => (
+                        <div key={i} className="flex items-center gap-1.5">
+                            <EthIcon size={12} className="flex-shrink-0 opacity-80" />
+                            {h.url ? (
+                                <a
+                                    href={h.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-xs text-gray-400 hover:text-white transition-colors truncate"
+                                >
+                                    {h.title}
+                                </a>
+                            ) : (
+                                <span className="text-xs text-gray-400 truncate">{h.title}</span>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
 
             <div className="mb-4">
                 <div className="flex justify-between items-center mb-2">

@@ -1,11 +1,14 @@
 {
   "mission": {
-    "label": "Our Mission",
-    "title": "Nurturing the <white>Infinite Garden</white> <br /> in <accent>Korea</accent>.",
-    "description": "The Ticker is ETH is a non-profit organization inspired by the Ethereum Foundation's philosophy, nurturing the growth of Korea's Ethereum ecosystem with a gardener's heart.",
-    "subtraction": "Rather than monopolizing power, we distribute it to the ecosystem, creating an environment where the community can thrive on its own.",
-    "publicGoods": "Operated purely through grants and donations. We exist solely for the value of public goods.",
-    "infiniteGarden": "With a gardener's heart, we tend to and nurture the infinite garden of Korea's Ethereum ecosystem."
+    "label": "Public Good",
+    "title": "A <accent>Public Good</accent> <br />for Korea's Ethereum Ecosystem.",
+    "description": "The Ticker is ETH is a non-profit group building public goods for Korea's Ethereum ecosystem through research, news curation, and community events.",
+    "communityDrivenTitle": "Community-Driven",
+    "communityDriven": "Diverse Ethereum builders in Korea share their insights and research. Anyone can become a contributor, and the community builds it together.",
+    "builderEcosystemTitle": "Builder Ecosystem",
+    "builderEcosystem": "We deliver the latest trends and news from Ethereum protocol, L2, and infrastructure builders. We serve as a bridge connecting Korean developers to the global ecosystem.",
+    "initiativeTitle": "Initiative",
+    "initiative": "We plan and execute diverse initiatives — meetups, study groups, hackathons — together with the community. A platform that turns ideas into reality."
   },
   "hero": {
     "badge": "KOREA ETHEREUM COMMUNITY",
@@ -13,14 +16,14 @@
     "explore": "Explore"
   },
   "cta": {
-    "title": "Join the Collective.",
-    "description": "Whether you're a researcher, developer, or storyteller, help us build the definitive Ethereum resource for Korea.",
+    "title": "Build the Public Good Together.",
+    "description": "Write research, curate news, plan events, contribute code.\nYour insights become a public good for Korea's Ethereum ecosystem.",
     "contributor": "Become a Contributor",
-    "github": "Explore our GitHub"
+    "telegram": "Subscribe to Telegram"
   },
   "updates": {
-    "badge": "Stay Informed",
-    "title": "Latest from the Frontier",
+    "badge": "From the Builders",
+    "title": "Latest Insights from Builders",
     "viewAll": "View all updates",
     "readArticle": "Read Article"
   }

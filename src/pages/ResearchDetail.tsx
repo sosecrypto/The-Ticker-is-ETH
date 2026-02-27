@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { mockResearch, loadResearchContent } from '../data/researchData';
 import { getAvatarFallbackUrl } from '../utils/members';
+import EthThumbnail from '../components/shared/EthThumbnail';
 
 const ResearchDetail: React.FC = () => {
     const { t } = useTranslation('research');
@@ -43,11 +44,7 @@ const ResearchDetail: React.FC = () => {
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#1B2838] via-[#1a2744] to-[#0e1621] flex items-center justify-center">
-                        <svg viewBox="0 0 240 240" className="w-32 h-32 opacity-20">
-                            <path d="M120 0C53.7 0 0 53.7 0 120s53.7 120 120 120 120-53.7 120-120S186.3 0 120 0zm55.6 82.1L155.2 174c-2.6 11.7-9.4 14.6-19 9.1l-26.4-19.4-12.7 12.2c-1.4 1.4-2.6 2.6-5.3 2.6l1.9-26.7 48.8-44.1c2.1-1.9-.5-2.9-3.3-1.1l-60.3 38-26-8.1c-5.6-1.8-5.8-5.6 1.2-8.4l101.7-39.2c4.7-1.7 8.8 1.1 7.3 8.2z" fill="#26A5E4"/>
-                        </svg>
-                    </div>
+                    <EthThumbnail articleId={post.id} />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-transparent" />
 
@@ -69,6 +66,11 @@ const ResearchDetail: React.FC = () => {
                                 <span className="px-3 py-1 rounded-full bg-brand-primary/20 backdrop-blur-md border border-white/10 text-xs font-bold text-brand-primary uppercase">
                                     {post.category}
                                 </span>
+                                {'forwardedFrom' in post && post.forwardedFrom && (
+                                    <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs text-gray-300">
+                                        via {post.forwardedFrom === 'Unknown' ? t('forwardedFromUnknown') : post.forwardedFrom}
+                                    </span>
+                                )}
                                 <span className="text-gray-400 text-sm">{post.readTime} {t('detail.read')}</span>
                             </div>
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">

@@ -1,18 +1,49 @@
 {
-  "badge": "Vision & Philosophy",
-  "heroDescription": "A story of people who plant seeds and tend gardens for the healthy growth of Korea's Ethereum ecosystem, practicing the values of Ethereum.",
+  "badge": "Public Good",
+  "heroTitle": "A <accent>Public Good</accent> <br />for Korea's Ethereum Ecosystem.",
+  "heroDescription": "A non-profit group helping grow Korea's Ethereum ecosystem.",
   "whoWeAre": "Who we are",
-  "whoWeAreDescription": "<bold>The Ticker is ETH</bold> is a non-profit organization established to help grow Korea's Ethereum ecosystem, inspired by the philosophy of the Ethereum Foundation (EF).",
-  "philosophyBox": "We don't see Ethereum merely as technology, but as an <accent>Infinite Garden</accent> that anyone can cultivate and grow. We nurture the ecosystem with a gardener's heart.",
-  "philosophy": "Philosophy",
-  "subtraction": "Subtraction",
-  "subtractionSubtitle": "The Philosophy of Less",
-  "subtractionDescription": "Rather than monopolizing power, we distribute it to the ecosystem. We support communities to create value on their own and build environments that can thrive without us.",
-  "stewardship": "Stewardship",
-  "stewardshipSubtitle": "Guardians of Value",
-  "stewardshipDescription": "We serve as stewards protecting the soul of Ethereum — decentralization and openness. We prioritize long-term sustainability over short-term gains.",
-  "publicGoods": "Public Goods",
-  "publicGoodsSubtitle": "Support for the Commons",
-  "publicGoodsDescription": "We operate solely through grants and donations. No token, no hidden agenda. Pure support for public goods is our only driving force.",
-  "poeticQuote": "\"For an Ethereum forest that will flourish for decades to come, we plant a <seed>small seed</seed>.\""
+  "whoWeAreDescription": "<bold>The Ticker is ETH</bold> is a non-profit group founded in 2024, building public goods for Korea's Ethereum ecosystem through research, news curation, and community events.",
+  "philosophyBox": "Our mission is to gather and spread builders' insights, creating <accent>public goods</accent> for Korea's Ethereum ecosystem. Led by the community, existing for the community, and growing with the community.",
+  "philosophy": "Core Values",
+  "publicGoods": "Public Good",
+  "publicGoodsSubtitle": "Value of the Commons",
+  "publicGoodsDescription": "Operated solely through grants and donations, all research and educational materials are freely available. No token, no hidden agenda — we exist purely for the value of public goods.",
+  "communityDriven": "Community-Driven",
+  "communityDrivenSubtitle": "Led by the Community",
+  "communityDrivenDescription": "Anyone can become a contributor, and the community builds it together. We support community-led events and provide open-source resources to create an environment that grows together.",
+  "builderEcosystem": "Builder Ecosystem",
+  "builderEcosystemSubtitle": "Builder Ecosystem",
+  "builderEcosystemDescription": "We deliver the latest trends and news from Ethereum protocol, L2, and infrastructure builders. We serve as a bridge connecting Korean developers to the global ecosystem.",
+  "poeticQuote": "\"A public good is not built by one person.<br />The community <seed>builds together, nurtures together, and grows together</seed>.\"",
+
+  "impact": {
+    "badge": "Our Impact",
+    "title": "Our Journey in Numbers",
+    "contributors": "Contributors",
+    "content": "Content",
+    "views": "Total Views",
+    "days": "Days Running"
+  },
+  "teamPreview": {
+    "badge": "Our Team",
+    "title": "The People Behind It",
+    "description": "Team members and contributors voluntarily building for Korea's Ethereum ecosystem.",
+    "viewAll": "View All Contributors"
+  },
+  "community": {
+    "badge": "Community",
+    "title": "Community Proven",
+    "octant": "Octant Epoch 9 Selected",
+    "octantDescription": "Selected for Ethereum's public goods funding program Epoch 9, recognized for community value.",
+    "days": "Days Running",
+    "daysUnit": "days",
+    "daysDescription": "Consistently sharing Ethereum ecosystem insights every day since November 2024.",
+    "github": "Open Source Project",
+    "githubDescription": "All code and research published on GitHub for full transparency."
+  },
+  "cta": {
+    "contribute": "Become a Contributor",
+    "telegram": "Join Telegram"
+  }
 }

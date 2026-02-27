@@ -2,6 +2,17 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Github, Twitter, MessageCircle, PenTool, ArrowLeft, Eye, Share2, ExternalLink, Linkedin, Send, Globe } from 'lucide-react';
+
+const EthIcon: React.FC<{ size?: number; className?: string }> = ({ size = 12, className }) => (
+    <svg width={size} height={size} viewBox="0 0 256 417" className={className} fill="none">
+        <path d="M127.961 0l-2.795 9.5v275.668l2.795 2.79 127.962-75.638z" fill="#828384" />
+        <path d="M127.962 0L0 212.32l127.962 75.639V154.158z" fill="#8C8C8C" />
+        <path d="M127.961 312.187l-1.575 1.92v98.199l1.575 4.601L256 236.587z" fill="#646464" />
+        <path d="M127.962 416.905v-104.72L0 236.585z" fill="#8C8C8C" />
+        <path d="M127.961 287.958l127.96-75.637-127.96-58.162z" fill="#393939" />
+        <path d="M0 212.32l127.96 75.638v-133.8z" fill="#545454" />
+    </svg>
+);
 import { useTranslation } from 'react-i18next';
 import ContributionGraph from '../components/team/ContributionGraph';
 import { mockMembers, mockContributors } from '../data/mockData';
@@ -133,6 +144,35 @@ const MemberDetail: React.FC = () => {
                                 "{t(bioKey, { defaultValue: member.bio })}"
                             </p>
                         </div>
+
+                        {/* Highlight Contributions */}
+                        {member.highlights && member.highlights.length > 0 && (
+                            <div className="mb-8 border-t border-white/5 pt-6">
+                                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                                    <EthIcon size={12} className="opacity-80" />
+                                    {t('highlights')}
+                                </h4>
+                                <div className="space-y-2">
+                                    {member.highlights.map((h, i) => (
+                                        <div key={i} className="flex items-start gap-2">
+                                            <EthIcon size={14} className="mt-0.5 flex-shrink-0 opacity-70" />
+                                            {h.url ? (
+                                                <a
+                                                    href={h.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-sm text-gray-300 hover:text-white transition-colors leading-snug"
+                                                >
+                                                    {h.title}
+                                                </a>
+                                            ) : (
+                                                <span className="text-sm text-gray-300 leading-snug">{h.title}</span>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Contribution Stats */}
                         <div className="grid grid-cols-3 gap-3">

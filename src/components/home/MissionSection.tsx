@@ -1,26 +1,26 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Sprout, Heart } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { Users, Globe, Rocket } from 'lucide-react';
+import { useTranslation, Trans } from 'react-i18next';
 
 const MissionSection: React.FC = () => {
     const { t } = useTranslation('home');
 
     const values = [
         {
-            icon: <Shield className="text-brand-accent" size={24} />,
-            title: "Subtraction",
-            description: t('mission.subtraction'),
+            icon: <Users className="text-brand-accent" size={24} />,
+            title: t('mission.communityDrivenTitle'),
+            description: t('mission.communityDriven'),
         },
         {
-            icon: <Heart className="text-pink-400" size={24} />,
-            title: "Public Goods",
-            description: t('mission.publicGoods'),
+            icon: <Globe className="text-brand-primary" size={24} />,
+            title: t('mission.builderEcosystemTitle'),
+            description: t('mission.builderEcosystem'),
         },
         {
-            icon: <Sprout className="text-brand-primary" size={24} />,
-            title: "Infinite Garden",
-            description: t('mission.infiniteGarden'),
+            icon: <Rocket className="text-pink-400" size={24} />,
+            title: t('mission.initiativeTitle'),
+            description: t('mission.initiative'),
         },
     ];
 
@@ -43,7 +43,14 @@ const MissionSection: React.FC = () => {
                         transition={{ duration: 0.8 }}
                         className="text-3xl md:text-5xl font-bold mb-8 leading-tight"
                     >
-                        Nurturing the <span className="text-white">Infinite Garden</span> <br /> in <span className="text-brand-accent">Korea</span>.
+                        <Trans
+                            i18nKey="home:mission.title"
+                            components={{
+                                white: <span className="text-white" />,
+                                accent: <span className="text-brand-accent" />,
+                                br: <br />,
+                            }}
+                        />
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}

@@ -9,7 +9,7 @@
     "subscribe": "Subscribe"
   },
   "footer": {
-    "description": "A non-profit organization dedicated to delivering the latest Ethereum news and fostering the community in Korea.",
+    "description": "A non-profit group helping grow Korea's Ethereum ecosystem through research, news curation, community events, and education.",
     "community": "Community",
     "resources": "Resources",
     "blog": "Blog",
@@ -34,6 +34,7 @@
   "backToTeam": "Back to Team",
   "backToContributors": "Back to Contributors",
   "memberNotFound": "Member not found",
+  "highlights": "Highlight Contributions",
   "membership": "Membership",
   "contributionPeriod": "Contribution Period",
   "activeCore": "Active Core",

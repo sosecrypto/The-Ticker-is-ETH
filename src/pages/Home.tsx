@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import Hero from '../components/home/Hero';
 import MissionSection from '../components/home/MissionSection';
 import UpdatesSection from '../components/home/UpdatesSection';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { ArrowRight, MessageCircle } from 'lucide-react';
+import { mockMembers, mockContributors } from '../data/mockData';
 
 const Home: React.FC = () => {
     const { t } = useTranslation('home');
+
+    const allMembers = useMemo(() => {
+        const coreNames = new Set(mockMembers.map(m => m.name.toLowerCase()));
+        const uniqueContributors = mockContributors.filter(
+            c => !coreNames.has(c.name.toLowerCase()),
+        );
+        return [...mockMembers, ...uniqueContributors].slice(0, 20);
+    }, []);
+
     return (
         <div className="bg-brand-dark">
             <Hero />
@@ -20,32 +32,78 @@ const Home: React.FC = () => {
                 <MissionSection />
                 <UpdatesSection />
 
-                {/* CTA Section */}
-                <section className="py-24 px-6">
-                    <div className="container mx-auto max-w-5xl">
-                        <div className="bg-gradient-to-br from-brand-primary to-brand-accent rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
-                            <div className="relative z-10">
-                                <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tight">
-                                    {t('cta.title')}
-                                </h2>
-                                <p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-                                    {t('cta.description')}
-                                </p>
-                                <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-                                    <button className="px-10 py-5 bg-white text-black font-bold rounded-full hover:bg-gray-100 transition-all hover:scale-105">
-                                        {t('cta.contributor')}
-                                    </button>
-                                    <button className="px-10 py-5 bg-black/20 text-white font-bold rounded-full border border-white/20 hover:bg-black/30 transition-all backdrop-blur-md">
-                                        {t('cta.github')}
-                                    </button>
-                                </div>
-                            </div>
+                {/* CTA Section — Team Preview Style */}
+                <section className="py-24 px-6 relative overflow-hidden">
+                    <div className="absolute top-1/2 left-0 -translate-y-1/2 w-64 h-64 bg-brand-primary/5 rounded-full blur-[100px]" />
+                    <div className="container mx-auto max-w-3xl relative z-10 text-center">
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight"
+                        >
+                            {t('cta.title')}
+                        </motion.h2>
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.15 }}
+                            className="text-gray-400 font-light mb-10 max-w-xl mx-auto leading-relaxed whitespace-pre-line"
+                        >
+                            {t('cta.description')}
+                        </motion.p>
 
-                            {/* Decorative orbs */}
-                            <div className="absolute -top-24 -left-24 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
-                            <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-brand-dark/20 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
+                        {/* Member Avatars */}
+                        <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
+                            {allMembers.map((member, idx) => (
+                                <motion.div
+                                    key={member.id}
+                                    initial={{ opacity: 0, scale: 0.5 }}
+                                    whileInView={{ opacity: 1, scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: idx * 0.04, duration: 0.35 }}
+                                    className="group relative"
+                                >
+                                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-white/5 ring-2 ring-transparent group-hover:ring-brand-primary/50 group-hover:-translate-y-2 transition-all duration-300">
+                                        <img
+                                            src={member.avatarUrl}
+                                            alt={member.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                        <span className="text-[10px] text-gray-400 bg-brand-dark/90 px-2 py-0.5 rounded">{member.name}</span>
+                                    </div>
+                                </motion.div>
+                            ))}
                         </div>
+
+                        {/* CTA Buttons */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.4 }}
+                            className="flex flex-col sm:flex-row gap-3 justify-center items-center"
+                        >
+                            <Link
+                                to="/contributors"
+                                className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-brand-primary to-brand-accent text-white font-medium text-sm hover:shadow-lg hover:shadow-brand-primary/20 transition-all"
+                            >
+                                {t('cta.contributor')}
+                                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                            <a
+                                href="https://t.me/thetickeriseth"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group inline-flex items-center gap-2 px-7 py-3 rounded-full border border-white/10 text-gray-300 font-medium text-sm hover:border-brand-primary/40 hover:text-white transition-all"
+                            >
+                                <MessageCircle size={16} />
+                                {t('cta.telegram')}
+                            </a>
+                        </motion.div>
                     </div>
                 </section>
             </motion.div>

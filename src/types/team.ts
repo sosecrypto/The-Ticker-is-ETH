@@ -32,4 +32,8 @@ export interface TeamMember {
         linkedin?: string;
         website?: string;
     };
+    highlights?: {
+        title: string;
+        url?: string;
+    }[];
 }

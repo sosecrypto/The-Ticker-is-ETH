@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { Suspense, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 
 const Home = React.lazy(() => import('./pages/Home'));
@@ -15,6 +15,12 @@ const ResearchDetail = React.lazy(() => import('./pages/ResearchDetail'));
 const WriteResearch = React.lazy(() => import('./pages/WriteResearch'));
 const AdminLogin = React.lazy(() => import('./pages/AdminLogin'));
 
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+};
+
 const PageSpinner = () => (
   <div className="min-h-screen flex items-center justify-center">
     <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
@@ -24,6 +30,7 @@ const PageSpinner = () => (
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <MainLayout>
         <Suspense fallback={<PageSpinner />}>
           <Routes>

@@ -62,6 +62,8 @@ interface RawMessage {
   postAuthor: string;
   views: number;
   forwards: number;
+  forwarded: boolean;
+  forwardedFrom?: string;
 }
 
 interface ContributorData {
@@ -128,27 +130,45 @@ async function main() {
     if (!(msg instanceof Api.Message)) continue;
     if (!msg.message) continue;
 
-    // Collect forwarded messages separately
     const fwdFrom = (msg as Api.Message & { fwdFrom?: { fromName?: string; postAuthor?: string } }).fwdFrom;
+    const dateStr = new Date(msg.date * 1000).toISOString();
+
     if (fwdFrom) {
+      // Collect forwarded messages for review
       forwarded.push({
         id: msg.id,
-        date: new Date(msg.date * 1000).toISOString(),
+        date: dateStr,
         text: msg.message.slice(0, 4096),
         fromChannelTitle: fwdFrom.fromName,
         fromPostAuthor: fwdFrom.postAuthor,
       });
+
+      // Also include in main messages array with forwarded flag
+      const forwardedFrom = fwdFrom.postAuthor ?? fwdFrom.fromName ?? 'Unknown';
+      const channelPostAuthor = (msg as Api.Message & { postAuthor?: string }).postAuthor;
+      const postAuthor = channelPostAuthor
+        ? (AUTHOR_ALIASES[channelPostAuthor] ?? channelPostAuthor)
+        : 'Kuma';
+
+      messages.push({
+        id: msg.id,
+        date: dateStr,
+        text: msg.message.slice(0, 4096),
+        postAuthor,
+        views: (msg as Api.Message & { views?: number }).views ?? 0,
+        forwards: (msg as Api.Message & { forwards?: number }).forwards ?? 0,
+        forwarded: true,
+        forwardedFrom,
+      });
+
+      count++;
+      if (count % 100 === 0) {
+        console.log(`  Fetched ${count} messages...`);
+      }
       continue;
     }
 
     const rawAuthor = (msg as Api.Message & { postAuthor?: string }).postAuthor;
-    const dateStr = new Date(msg.date * 1000).toISOString();
-
-    // Separate unattributed messages (no postAuthor)
-    if (!rawAuthor) {
-      // Auto-attribute: all unattributed messages assigned to Kuma
-      // TODO: revisit attribution logic later
-    }
 
     // Apply alias mapping, with fallback for signature-inferred author
     const postAuthor = rawAuthor
@@ -162,6 +182,7 @@ async function main() {
       postAuthor,
       views: (msg as Api.Message & { views?: number }).views ?? 0,
       forwards: (msg as Api.Message & { forwards?: number }).forwards ?? 0,
+      forwarded: false,
     });
 
     count++;
@@ -170,8 +191,8 @@ async function main() {
     }
   }
 
-  console.log(`\nTotal messages fetched: ${messages.length}`);
-  console.log(`Forwarded messages filtered: ${forwarded.length}`);
+  const originalCount = messages.filter((m) => !m.forwarded).length;
+  console.log(`\nTotal messages fetched: ${messages.length} (original: ${originalCount}, forwarded: ${forwarded.length})`);
 
   const grouped = new Map<string, RawMessage[]>();
   for (const msg of messages) {
@@ -183,9 +204,12 @@ async function main() {
   const contributors: ContributorData[] = Array.from(grouped.entries())
     .map(([name, msgs]) => {
       const sorted = msgs.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      // Forwarded messages count as 0.5 contribution each
+      const originalCount = msgs.filter((m) => !m.forwarded).length;
+      const forwardedCount = msgs.filter((m) => m.forwarded).length;
       return {
         name,
-        messageCount: msgs.length,
+        messageCount: Math.round((originalCount + forwardedCount * 0.5) * 10) / 10,
         firstMessageDate: sorted[0].date,
         lastMessageDate: sorted[sorted.length - 1].date,
         messages: sorted,

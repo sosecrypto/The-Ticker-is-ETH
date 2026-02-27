@@ -2,6 +2,13 @@
   "badge": "Insights",
   "description": "In-depth exploration of the technical, economic, and social developments in the Ethereum ecosystem.",
   "noResults": "No results found. Would you like to try a different search?",
+  "categories": {
+    "all": "All",
+    "Short": "Short",
+    "Forwarded": "Forwarded",
+    "Research": "Research"
+  },
+  "forwardedFromUnknown": "Undisclosed",
   "writeResearch": "Write Research",
   "detail": {
     "notFound": "Post not found",

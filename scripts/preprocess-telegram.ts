@@ -10,6 +10,8 @@ interface RawMessage {
   postAuthor: string;
   views: number;
   forwards: number;
+  forwarded?: boolean;
+  forwardedFrom?: string;
 }
 
 interface RawContributor {
@@ -63,6 +65,7 @@ interface ResearchArticle {
   authorAvatar: string;
   date: string;
   category: string;
+  forwardedFrom?: string;
   summary: string;
   content: string;
   thumbnailUrl: string;
@@ -189,18 +192,27 @@ function main() {
       const readTime = `${Math.max(1, Math.round(text.length / 500))} min`;
       const date = formatDate(msg.date);
 
-      index.push({
+      const category = msg.forwarded ? 'Forwarded' : 'Short';
+      const summary = text.slice(0, 200).replace(/\n+/g, ' ').trim();
+
+      const entry: Omit<ResearchArticle, 'content'> = {
         id,
         title,
         author: contributor.name,
         authorId: '',
         authorAvatar: avatar,
         date,
-        category: 'Telegram',
-        summary: text.slice(0, 200).replace(/\n+/g, ' ').trim(),
+        category,
+        summary,
         thumbnailUrl: '',
         readTime,
-      });
+      };
+
+      if (msg.forwarded && msg.forwardedFrom) {
+        entry.forwardedFrom = msg.forwardedFrom;
+      }
+
+      index.push(entry);
 
       contentMap[id] = formatTelegramToMarkdown(text);
     }

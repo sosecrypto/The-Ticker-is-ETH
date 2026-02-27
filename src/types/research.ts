@@ -4,7 +4,8 @@ export interface ResearchItem {
     author: string;
     authorId: string;
     date: string;
-    category: 'Technical' | 'Social' | 'Economic' | 'Governance' | 'Telegram';
+    category: 'Short' | 'Forwarded' | 'Research';
+    forwardedFrom?: string;
     summary: string;
     content: string;
     thumbnailUrl: string;
