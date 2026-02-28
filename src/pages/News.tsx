@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Calendar, ExternalLink, ArrowRight, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { NewsFeedData } from '../types/news';
 import newsFeedData from '../data/news-feed.json';
+import usePageMeta from '../hooks/usePageMeta';
 
 const feed = newsFeedData as NewsFeedData;
 const ITEMS_PER_PAGE = 5;
@@ -12,6 +13,7 @@ const ITEMS_PER_PAGE = 5;
 const News: React.FC = () => {
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const { t, i18n } = useTranslation('news');
+  usePageMeta({ title: 'News', description: '이더리움 생태계 최신 뉴스' });
   const visibleItems = feed.items.slice(0, visibleCount);
   const hasMore = visibleCount < feed.items.length;
 
@@ -20,11 +22,6 @@ const News: React.FC = () => {
     const locale = i18n.language === 'ko' ? 'ko-KR' : 'en-US';
     return date.toLocaleDateString(locale, { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, '');
   };
-
-  useEffect(() => {
-    document.title = 'News — The Ticker is ETH';
-    return () => { document.title = 'The Ticker is ETH'; };
-  }, []);
 
   return (
     <div className="min-h-screen pt-28 pb-20 px-6 container mx-auto">

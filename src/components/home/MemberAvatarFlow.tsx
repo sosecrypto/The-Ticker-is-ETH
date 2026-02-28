@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { mockMembers, mockContributors } from '../../data/mockData';
 
@@ -56,6 +56,16 @@ const AvatarParticle: React.FC<{
 };
 
 const MemberAvatarFlow: React.FC = () => {
+    const [reducedMotion, setReducedMotion] = useState(false);
+
+    useEffect(() => {
+        const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+        setReducedMotion(mq.matches);
+        const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
+
     const allAvatars = useMemo(() => {
         const unique = new Map();
         [...mockMembers, ...mockContributors].forEach(m => {
@@ -89,6 +99,8 @@ const MemberAvatarFlow: React.FC = () => {
             angle: angles[i % 6]
         }));
     }, [allAvatars, angles]);
+
+    if (reducedMotion) return null;
 
     return (
         /* Enforce a large square viewport that remains centered on the logo */

@@ -14,7 +14,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #050508;
+  @apply bg-brand-dark;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -67,8 +67,7 @@
 }
 
 .news-content a {
-  color: #A086FC;
-  text-decoration: none;
+  @apply text-eth-purple no-underline;
 }
 
 .news-content a:hover {
@@ -92,10 +91,7 @@
 }
 
 .news-content blockquote {
-  border-left: 3px solid #A086FC;
-  padding-left: 1rem;
-  color: #9ca3af;
-  margin: 1rem 0;
+  @apply border-l-[3px] border-eth-purple pl-4 text-brand-muted my-4;
 }
 
 /* News table styles — scrollable wrapper with fade hint on mobile */
@@ -161,7 +157,7 @@
 }
 
 .news-content em {
-  color: #9ca3af;
+  @apply text-brand-muted;
 }
 
 /* Custom Ethereum cursor - hide default on desktop */

@@ -18,7 +18,7 @@ const Hero: React.FC = () => {
     const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
     return (
-        <div ref={containerRef} className="relative min-h-screen flex flex-col items-center justify-start overflow-hidden bg-[#050505] text-white pt-24 lg:pt-32">
+        <div ref={containerRef} className="relative min-h-screen flex flex-col items-center justify-start overflow-hidden bg-brand-dark text-white pt-24 lg:pt-32">
             {/* Background Effects: Deep Premium Atmosphere */}
             <div className="absolute inset-0 pointer-events-none">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] bg-brand-primary/10 rounded-full blur-[160px] opacity-20" />
@@ -104,7 +104,7 @@ const Hero: React.FC = () => {
                 </div>
 
                 {/* Bottom Shadow Fade - Deeply recessed to avoid any clipping */}
-                <div className="absolute inset-x-0 -bottom-20 h-40 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent -z-10" />
+                <div className="absolute inset-x-0 -bottom-20 h-40 bg-gradient-to-t from-brand-dark via-brand-dark/20 to-transparent -z-10" />
             </motion.div>
 
 

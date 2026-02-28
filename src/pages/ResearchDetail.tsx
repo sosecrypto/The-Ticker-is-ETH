@@ -41,6 +41,7 @@ const ResearchDetail: React.FC = () => {
                     <img
                         src={post.thumbnailUrl}
                         alt={post.title}
+                        decoding="async"
                         className="w-full h-full object-cover"
                     />
                 ) : (
@@ -81,6 +82,9 @@ const ResearchDetail: React.FC = () => {
                                     <img
                                         src={post.authorAvatar}
                                         alt={post.author}
+                                        decoding="async"
+                                        width={40}
+                                        height={40}
                                         className="w-10 h-10 rounded-full object-cover border-2 border-white/10"
                                         onError={(e) => {
                                             (e.target as HTMLImageElement).src = getAvatarFallbackUrl(post.author, 40);

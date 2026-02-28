@@ -6,6 +6,7 @@ import { Search, Users, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { mockContributors } from '../data/mockData';
 import { sortMembers, getTotalContributions } from '../utils/members';
+import usePageMeta from '../hooks/usePageMeta';
 
 type SortOption = 'contributions' | 'seniority';
 
@@ -14,7 +15,9 @@ const Contributors: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState<SortOption>('contributions');
     const { t } = useTranslation('team');
+    usePageMeta({ title: 'Contributors', description: 'The Ticker is ETH 기여자 목록' });
 
+    const [now] = useState(() => Date.now());
     const stats = useMemo(() => {
         const memberCount = mockContributors.length;
         const totalContributions = mockContributors.reduce((sum, m) => sum + getTotalContributions(m.contributions), 0);
@@ -22,9 +25,9 @@ const Contributors: React.FC = () => {
             const start = new Date(m.period.split(' - ')[0].replace(/\./g, '-')).getTime();
             return start < min ? start : min;
         }, Infinity);
-        const days = Math.floor((Date.now() - earliest) / 86400000);
+        const days = Math.floor((now - earliest) / 86400000);
         return { memberCount, totalContributions, days };
-    }, []);
+    }, [now]);
 
     const categories = useMemo(() => {
         const cats = mockContributors.map(c => c.category);

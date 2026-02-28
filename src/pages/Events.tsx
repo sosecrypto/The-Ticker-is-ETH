@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import usePageMeta from '../hooks/usePageMeta';
 
 interface EventItem {
     id: number;
@@ -87,9 +88,11 @@ const EventCard: React.FC<{ event: EventItem; index: number; upcoming?: boolean 
                     <img
                         src={event.image}
                         alt={event.title}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-auto block opacity-90 hover:opacity-100 transition-opacity duration-300"
                     />
-                    <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-brand-surface to-transparent" />
                 </div>
             )}
 
@@ -128,6 +131,7 @@ const EventCard: React.FC<{ event: EventItem; index: number; upcoming?: boolean 
 
 const Events: React.FC = () => {
     const { t } = useTranslation('events');
+    usePageMeta({ title: 'Events', description: 'Ethcon Korea 및 이더리움 이벤트' });
 
     return (
         <div className="min-h-screen pt-28 pb-20 px-6 container mx-auto">

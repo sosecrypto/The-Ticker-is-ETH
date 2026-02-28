@@ -38,6 +38,10 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
                         <img
                             src={member.avatarUrl || getAvatarFallbackUrl(member.name)}
                             alt={member.name}
+                            loading="lazy"
+                            decoding="async"
+                            width={64}
+                            height={64}
                             className="w-16 h-16 rounded-full object-cover border-2 border-transparent group-hover:border-brand-accent transition-colors"
                             onError={(e) => {
                                 (e.target as HTMLImageElement).src = getAvatarFallbackUrl(member.name);
@@ -67,7 +71,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
                         </a>
                     )}
                     {member.social.telegram && (
-                        <a href={member.social.telegram} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#26A5E4] transition-colors">
+                        <a href={member.social.telegram} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-social-telegram transition-colors">
                             <Send size={18} />
                         </a>
                     )}
