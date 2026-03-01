@@ -90,7 +90,9 @@ const WriteResearch: React.FC = () => {
             }
 
             const publishedEntry = await res.json() as Record<string, unknown>;
-            navigate(`/research/${publishedEntry.id}`, { state: { publishedEntry } });
+            navigate(`/research/${publishedEntry.id}`, {
+                state: { publishedEntry, publishedContent: formData.content },
+            });
         } catch (err) {
             setPublishError(err instanceof Error ? err.message : 'Unknown error');
         } finally {

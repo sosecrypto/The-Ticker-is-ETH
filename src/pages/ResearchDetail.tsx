@@ -62,8 +62,13 @@ const ResearchDetail: React.FC = () => {
 
     useEffect(() => {
         if (!id) return;
+        const state = location.state as { publishedContent?: string } | null;
+        if (state?.publishedContent) {
+            setContent(state.publishedContent);
+            return;
+        }
         loadResearchContent(id).then(c => setContent(c ?? ''));
-    }, [id]);
+    }, [id, location.state]);
 
     if (!post) {
         return (

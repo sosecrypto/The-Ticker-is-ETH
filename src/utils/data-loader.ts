@@ -43,6 +43,8 @@ export async function loadArticleContent(id: string): Promise<string | undefined
   try {
     const res = await fetch(`/api/research/content/${encodeURIComponent(id)}`);
     if (!res.ok) return undefined;
+    const contentType = res.headers.get('content-type') ?? '';
+    if (contentType.includes('text/html')) return undefined;
     return await res.text();
   } catch {
     return undefined;
