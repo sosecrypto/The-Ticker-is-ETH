@@ -42,7 +42,7 @@ const ResearchDetail: React.FC = () => {
                 throw new Error(data.error || 'Delete failed');
             }
 
-            navigate('/research');
+            navigate('/research', { state: { deletedId: id } });
         } catch (err) {
             setDeleteError(err instanceof Error ? err.message : t('detail.deleteError'));
         } finally {
