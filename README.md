@@ -1,6 +1,8 @@
 # The Ticker is ETH
 
-한국 이더리움 커뮤니티 비영리 단체 웹사이트.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+한국 이더리움 커뮤니티를 위한 퍼블릭 굿즈 웹사이트.
 
 ## Tech Stack
 
@@ -70,3 +72,15 @@ GitHub Actions cron이 매일 KST 09:00에 Telegram 채널 데이터를 수집 �
 수동 실행: Actions 탭 → Sync Telegram Data → Run workflow.
 
 필요한 GitHub Secrets: `TELEGRAM_API_ID`, `TELEGRAM_API_HASH`, `TELEGRAM_SESSION`
+
+## Contributing
+
+기여를 환영합니다! [CONTRIBUTING.md](./CONTRIBUTING.md)를 읽어주세요.
+
+- 버그 발견 시 → [Bug Report](https://github.com/sumsun-dev/The-Ticker-is-ETH/issues/new?template=bug_report.md)
+- 기능 제안 → [Feature Request](https://github.com/sumsun-dev/The-Ticker-is-ETH/issues/new?template=feature_request.md)
+- `good first issue` 라벨이 붙은 이슈는 처음 기여하기 좋은 작업입니다.
+
+## License
+
+[MIT](./LICENSE)
