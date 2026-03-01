@@ -1,18 +1,5 @@
 [
   {
-    "id": "research-20260301-8241a39d",
-    "title": "EL Headliner, 각 클라이언트의 입장을 알아보자",
-    "author": "Bosul Mun",
-    "authorId": "bosul-mun",
-    "date": "2026.03.01",
-    "category": "Research",
-    "summary": "",
-    "content": "",
-    "thumbnailUrl": "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=2832",
-    "readTime": "2 min",
-    "authorAvatar": "/assets/contributors/bosul-mun.jpg"
-  },
-  {
     "id": "tg-1183",
     "title": "비탈릭의 계정 추상화 비전",
     "author": "sm-stack",
