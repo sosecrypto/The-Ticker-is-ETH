@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Send, Eye, PenLine, Loader2, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { mockMembers, mockContributors } from '../data/mockData';
+import MarkdownToolbar from '../components/editor/MarkdownToolbar';
 
 interface AuthorOption {
     name: string;
@@ -17,6 +18,7 @@ const WriteResearch: React.FC = () => {
     const [isPublishing, setIsPublishing] = useState(false);
     const [publishError, setPublishError] = useState('');
     const { t } = useTranslation('research');
+    const contentRef = useRef<HTMLTextAreaElement>(null);
 
     React.useEffect(() => {
         const isAdmin = localStorage.getItem('isAdmin') === 'true';
@@ -160,7 +162,7 @@ const WriteResearch: React.FC = () => {
                                 </div>
                             </div>
                             <div className="space-y-4">
-                                <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">Author</label>
+                                <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">{t('write.authorLabel')}</label>
                                 <div className="relative">
                                     <select
                                         value={selectedAuthor.name}
@@ -201,7 +203,13 @@ const WriteResearch: React.FC = () => {
 
                         <div className="space-y-4">
                             <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">{t('write.contentLabel')}</label>
+                            <MarkdownToolbar
+                                textareaRef={contentRef}
+                                value={formData.content}
+                                onChange={(content) => setFormData({ ...formData, content })}
+                            />
                             <textarea
+                                ref={contentRef}
                                 placeholder={t('write.contentPlaceholder')}
                                 value={formData.content}
                                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}

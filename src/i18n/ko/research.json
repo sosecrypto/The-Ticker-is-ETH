@@ -9,7 +9,7 @@
     "Research": "리서치"
   },
   "forwardedFromUnknown": "미공개",
-  "writeResearch": "Write Research",
+  "writeResearch": "글쓰기",
   "detail": {
     "notFound": "게시글을 찾을 수 없습니다",
     "backToResearch": "리서치로 돌아가기",
@@ -17,17 +17,18 @@
     "share": "공유"
   },
   "write": {
-    "backToResearch": "Back to Research",
-    "editMode": "Edit Mode",
-    "preview": "Preview",
-    "publish": "Publish",
-    "titleLabel": "Title",
-    "titlePlaceholder": "연구의 제목을 입력해 주세요",
-    "categoryLabel": "Category",
-    "thumbnailLabel": "Thumbnail URL",
-    "summaryLabel": "Summary",
-    "summaryPlaceholder": "연구의 핵심 내용을 한 줄로 요약해 주세요",
-    "contentLabel": "Content (Markdown)",
-    "contentPlaceholder": "Markdown 형식을 사용하여 내용을 작성하세요..."
+    "backToResearch": "돌아가기",
+    "editMode": "편집",
+    "preview": "미리보기",
+    "publish": "발행",
+    "titleLabel": "제목",
+    "titlePlaceholder": "글의 제목을 입력하세요",
+    "categoryLabel": "카테고리",
+    "authorLabel": "작성자",
+    "thumbnailLabel": "썸네일 URL",
+    "summaryLabel": "요약",
+    "summaryPlaceholder": "핵심 내용을 한 줄로 요약하세요",
+    "contentLabel": "본문",
+    "contentPlaceholder": "마크다운으로 글을 작성하세요..."
   }
 }

@@ -9,7 +9,7 @@
     "Research": "Research"
   },
   "forwardedFromUnknown": "Undisclosed",
-  "writeResearch": "Write Research",
+  "writeResearch": "Write",
   "detail": {
     "notFound": "Post not found",
     "backToResearch": "Back to Research",
@@ -18,16 +18,17 @@
   },
   "write": {
     "backToResearch": "Back to Research",
-    "editMode": "Edit Mode",
+    "editMode": "Edit",
     "preview": "Preview",
     "publish": "Publish",
     "titleLabel": "Title",
-    "titlePlaceholder": "Enter the title of your research",
+    "titlePlaceholder": "Enter the title",
     "categoryLabel": "Category",
+    "authorLabel": "Author",
     "thumbnailLabel": "Thumbnail URL",
     "summaryLabel": "Summary",
     "summaryPlaceholder": "Summarize the key points in one line",
-    "contentLabel": "Content (Markdown)",
-    "contentPlaceholder": "Write your content using Markdown format..."
+    "contentLabel": "Content",
+    "contentPlaceholder": "Write your content using Markdown..."
   }
 }
