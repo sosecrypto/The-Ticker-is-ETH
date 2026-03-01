@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Lock, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Lock, ArrowRight, ShieldCheck, AlertCircle, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -9,20 +9,37 @@ const AdminLogin: React.FC = () => {
     const navigate = useNavigate();
     const [passphrase, setPassphrase] = useState('');
     const [error, setError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Simple passphrase check for demonstration
-        if (passphrase === 'ethkr') {
-            localStorage.setItem('isAdmin', 'true');
-            setIsSuccess(true);
-            setTimeout(() => {
-                navigate('/research');
-            }, 1500);
-        } else {
+        if (isLoading || isSuccess) return;
+
+        setIsLoading(true);
+        setError(false);
+
+        try {
+            const res = await fetch('/api/auth/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: passphrase }),
+            });
+
+            if (res.ok) {
+                sessionStorage.setItem('publishKey', passphrase);
+                localStorage.setItem('isAdmin', 'true');
+                setIsSuccess(true);
+                setTimeout(() => navigate('/research'), 1500);
+            } else {
+                setError(true);
+                setTimeout(() => setError(false), 2000);
+            }
+        } catch {
             setError(true);
             setTimeout(() => setError(false), 2000);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -70,11 +87,11 @@ const AdminLogin: React.FC = () => {
 
                         <button
                             type="submit"
-                            disabled={isSuccess}
-                            className={`w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-bold transition-all ${isSuccess ? 'bg-green-500 text-white' : 'bg-brand-primary hover:bg-brand-primary/80 text-white shadow-lg shadow-brand-primary/20'}`}
+                            disabled={isSuccess || isLoading}
+                            className={`w-full flex items-center justify-center gap-2 py-4 rounded-2xl font-bold transition-all ${isSuccess ? 'bg-green-500 text-white' : 'bg-brand-primary hover:bg-brand-primary/80 text-white shadow-lg shadow-brand-primary/20'} ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                         >
-                            {isSuccess ? t('admin.welcome') : t('admin.authorize')}
-                            {!isSuccess && <ArrowRight size={20} />}
+                            {isSuccess ? t('admin.welcome') : isLoading ? '' : t('admin.authorize')}
+                            {isLoading ? <Loader2 size={20} className="animate-spin" /> : !isSuccess && <ArrowRight size={20} />}
                         </button>
                     </form>
                 </div>

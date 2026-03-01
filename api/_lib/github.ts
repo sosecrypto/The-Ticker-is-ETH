@@ -1,0 +1,85 @@
+const GITHUB_API = 'https://api.github.com';
+
+function getEnv(key: string): string {
+  const value = process.env[key];
+  if (!value) throw new Error(`Missing environment variable: ${key}`);
+  return value;
+}
+
+function headers(): Record<string, string> {
+  return {
+    Authorization: `Bearer ${getEnv('GITHUB_PAT')}`,
+    Accept: 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json',
+  };
+}
+
+function repoUrl(path: string): string {
+  const owner = getEnv('GITHUB_REPO_OWNER');
+  const repo = getEnv('GITHUB_REPO_NAME');
+  return `${GITHUB_API}/repos/${owner}/${repo}/contents/${path}`;
+}
+
+export interface GitHubFileResponse {
+  sha: string;
+  content: string;
+  encoding: string;
+  download_url: string;
+}
+
+export async function getFileContent(path: string): Promise<GitHubFileResponse> {
+  const res = await fetch(repoUrl(path), { headers: headers() });
+  if (!res.ok) {
+    throw new Error(`GitHub GET ${path}: ${res.status} ${res.statusText}`);
+  }
+  return res.json() as Promise<GitHubFileResponse>;
+}
+
+export async function createFile(
+  path: string,
+  content: string,
+  message: string,
+): Promise<void> {
+  const body = JSON.stringify({
+    message,
+    content: Buffer.from(content, 'utf-8').toString('base64'),
+    branch: 'main',
+  });
+  const res = await fetch(repoUrl(path), {
+    method: 'PUT',
+    headers: headers(),
+    body,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`GitHub PUT (create) ${path}: ${res.status} - ${text}`);
+  }
+}
+
+export async function updateFile(
+  path: string,
+  content: string,
+  sha: string,
+  message: string,
+): Promise<void> {
+  const body = JSON.stringify({
+    message,
+    content: Buffer.from(content, 'utf-8').toString('base64'),
+    sha,
+    branch: 'main',
+  });
+  const res = await fetch(repoUrl(path), {
+    method: 'PUT',
+    headers: headers(),
+    body,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`GitHub PUT (update) ${path}: ${res.status} - ${text}`);
+  }
+}
+
+export async function getRawContent(path: string): Promise<string> {
+  const file = await getFileContent(path);
+  return Buffer.from(file.content, 'base64').toString('utf-8');
+}

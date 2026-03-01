@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Send, Eye, PenLine } from 'lucide-react';
+import { ArrowLeft, Send, Eye, PenLine, Loader2, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
+import { mockMembers, mockContributors } from '../data/mockData';
+
+interface AuthorOption {
+    name: string;
+    avatarUrl: string;
+}
 
 const WriteResearch: React.FC = () => {
     const navigate = useNavigate();
     const [previewMode, setPreviewMode] = useState(false);
+    const [isPublishing, setIsPublishing] = useState(false);
+    const [publishError, setPublishError] = useState('');
     const { t } = useTranslation('research');
 
     React.useEffect(() => {
@@ -16,18 +24,74 @@ const WriteResearch: React.FC = () => {
             navigate('/research');
         }
     }, [navigate]);
+
+    const authors = useMemo<AuthorOption[]>(() => {
+        const seen = new Set<string>();
+        const result: AuthorOption[] = [];
+        const allPeople = [...mockMembers, ...mockContributors];
+        for (const person of allPeople) {
+            const key = person.name.toLowerCase();
+            if (seen.has(key)) continue;
+            seen.add(key);
+            result.push({ name: person.name, avatarUrl: person.avatarUrl });
+        }
+        return result.sort((a, b) => a.name.localeCompare(b.name));
+    }, []);
+
+    const [selectedAuthor, setSelectedAuthor] = useState<AuthorOption>(
+        () => authors[0] ?? { name: '', avatarUrl: '' },
+    );
+
     const [formData, setFormData] = useState({
         title: '',
         category: 'Research',
         summary: '',
         content: '',
-        thumbnailUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=2832'
+        thumbnailUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=2832',
     });
 
-    const handlePublish = (e: React.FormEvent) => {
+    const handlePublish = async (e: React.FormEvent) => {
         e.preventDefault();
-        alert('Research published! (Simulated - in a real app, this would be sent to a server)');
-        navigate('/research');
+        if (isPublishing) return;
+
+        const password = sessionStorage.getItem('publishKey');
+        if (!password) {
+            setPublishError('Session expired. Please re-authenticate.');
+            setTimeout(() => navigate('/admin'), 2000);
+            return;
+        }
+
+        setIsPublishing(true);
+        setPublishError('');
+
+        try {
+            const res = await fetch('/api/research/publish', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    password,
+                    title: formData.title,
+                    author: selectedAuthor.name,
+                    authorAvatar: selectedAuthor.avatarUrl,
+                    category: formData.category,
+                    summary: formData.summary,
+                    content: formData.content,
+                    thumbnailUrl: formData.thumbnailUrl,
+                }),
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || 'Publish failed');
+            }
+
+            const { id } = await res.json() as { id: string };
+            navigate(`/research/${id}`);
+        } catch (err) {
+            setPublishError(err instanceof Error ? err.message : 'Unknown error');
+        } finally {
+            setIsPublishing(false);
+        }
     };
 
     return (
@@ -54,13 +118,20 @@ const WriteResearch: React.FC = () => {
                         </button>
                         <button
                             onClick={handlePublish}
-                            className="flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/80 text-white px-8 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/20"
+                            disabled={isPublishing}
+                            className={`flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/80 text-white px-8 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/20 ${isPublishing ? 'opacity-70 cursor-not-allowed' : ''}`}
                         >
-                            <Send size={18} />
-                            {t('write.publish')}
+                            {isPublishing ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                            {isPublishing ? 'Publishing...' : t('write.publish')}
                         </button>
                     </div>
                 </div>
+
+                {publishError && (
+                    <div className="mb-8 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                        {publishError}
+                    </div>
+                )}
 
                 {!previewMode ? (
                     <motion.form
@@ -81,11 +152,29 @@ const WriteResearch: React.FC = () => {
                             />
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-8">
+                        <div className="grid md:grid-cols-3 gap-8">
                             <div className="space-y-4">
                                 <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">{t('write.categoryLabel')}</label>
                                 <div className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white">
                                     Research
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">Author</label>
+                                <div className="relative">
+                                    <select
+                                        value={selectedAuthor.name}
+                                        onChange={(e) => {
+                                            const found = authors.find(a => a.name === e.target.value);
+                                            if (found) setSelectedAuthor(found);
+                                        }}
+                                        className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white appearance-none cursor-pointer focus:outline-none focus:border-brand-accent/50 transition-all"
+                                    >
+                                        {authors.map(a => (
+                                            <option key={a.name} value={a.name} className="bg-gray-900">{a.name}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                                 </div>
                             </div>
                             <div className="space-y-4">
@@ -133,7 +222,8 @@ const WriteResearch: React.FC = () => {
                                     {formData.category}
                                 </span>
                                 <h1 className="text-4xl md:text-5xl font-bold text-white mt-6 mb-4">{formData.title || 'No Title'}</h1>
-                                <p className="text-xl text-gray-400 font-light italic">{formData.summary || 'No Summary'}</p>
+                                <p className="text-sm text-gray-400 mt-2">by {selectedAuthor.name}</p>
+                                <p className="text-xl text-gray-400 font-light italic mt-4">{formData.summary || 'No Summary'}</p>
                             </div>
                             <div className="prose prose-invert prose-brand lg:prose-xl max-w-none">
                                 <ReactMarkdown>{formData.content || '_No content yet. Start writing..._'}</ReactMarkdown>
