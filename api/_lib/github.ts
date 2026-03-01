@@ -79,6 +79,27 @@ export async function updateFile(
   }
 }
 
+export async function deleteFile(
+  path: string,
+  sha: string,
+  message: string,
+): Promise<void> {
+  const body = JSON.stringify({
+    message,
+    sha,
+    branch: 'main',
+  });
+  const res = await fetch(repoUrl(path), {
+    method: 'DELETE',
+    headers: headers(),
+    body,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`GitHub DELETE ${path}: ${res.status} - ${text}`);
+  }
+}
+
 export async function getRawContent(path: string): Promise<string> {
   const file = await getFileContent(path);
   return Buffer.from(file.content, 'base64').toString('utf-8');

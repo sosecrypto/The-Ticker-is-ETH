@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, Share2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Share2, Trash2, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { mockResearch, loadResearchContent } from '../data/researchData';
@@ -11,7 +11,43 @@ import EthThumbnail from '../components/shared/EthThumbnail';
 const ResearchDetail: React.FC = () => {
     const { t } = useTranslation('research');
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [content, setContent] = useState<string>('');
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [deleteError, setDeleteError] = useState('');
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+    const handleDelete = async () => {
+        if (!window.confirm(t('detail.deleteConfirm'))) return;
+
+        const password = sessionStorage.getItem('publishKey');
+        if (!password) {
+            navigate('/admin');
+            return;
+        }
+
+        setIsDeleting(true);
+        setDeleteError('');
+
+        try {
+            const res = await fetch('/api/research/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password, id }),
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || 'Delete failed');
+            }
+
+            navigate('/research');
+        } catch (err) {
+            setDeleteError(err instanceof Error ? err.message : t('detail.deleteError'));
+        } finally {
+            setIsDeleting(false);
+        }
+    };
 
     const post = useMemo(() => {
         return mockResearch.find(p => p.id === id);
@@ -114,12 +150,28 @@ const ResearchDetail: React.FC = () => {
                         <ReactMarkdown>{content}</ReactMarkdown>
                     </motion.div>
 
+                    {deleteError && (
+                        <div className="mt-8 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                            {deleteError}
+                        </div>
+                    )}
+
                     <div className="mt-20 pt-10 border-t border-white/5 flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 transition-colors">
                                 <Share2 size={18} />
                                 {t('detail.share')}
                             </button>
+                            {isAdmin && (
+                                <button
+                                    onClick={handleDelete}
+                                    disabled={isDeleting}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors border border-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {isDeleting ? <Loader2 size={18} className="animate-spin" /> : <Trash2 size={18} />}
+                                    {isDeleting ? t('detail.deleting') : t('detail.delete')}
+                                </button>
+                            )}
                         </div>
                         <div className="flex items-center gap-2 text-sm text-gray-500">
                             ID: {post.id}

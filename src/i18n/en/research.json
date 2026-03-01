@@ -14,7 +14,11 @@
     "notFound": "Post not found",
     "backToResearch": "Back to Research",
     "read": "read",
-    "share": "Share"
+    "share": "Share",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this article? This action cannot be undone.",
+    "deleting": "Deleting...",
+    "deleteError": "Failed to delete. Please try again."
   },
   "write": {
     "backToResearch": "Back to Research",
