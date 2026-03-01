@@ -3,6 +3,23 @@ import { useFrame } from '@react-three/fiber';
 import { MeshTransmissionMaterial, PerspectiveCamera, Float } from '@react-three/drei';
 import * as THREE from 'three';
 
+const GlassMaterial: React.FC<{ color?: string }> = ({ color = "#ffffff" }) => (
+    <MeshTransmissionMaterial
+        backside
+        samples={16}
+        thickness={1.5}
+        roughness={0.05}
+        transmission={1}
+        ior={2.4}
+        chromaticAberration={0.15}
+        anisotropy={0.3}
+        distortion={0.1}
+        distortionScale={0.2}
+        temporalDistortion={0.05}
+        color={color}
+    />
+);
+
 interface Ethereum3DLogoProps {
     glowIntensity?: number;
 }
@@ -31,23 +48,6 @@ const Ethereum3DLogo: React.FC<Ethereum3DLogoProps> = ({ glowIntensity = 1 }) =>
         groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, groupRef.current.rotation.y + targetX, 0.05);
         groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -targetY, 0.05);
     });
-
-    const GlassMaterial = ({ color = "#ffffff" }: { color?: string }) => (
-        <MeshTransmissionMaterial
-            backside
-            samples={16}
-            thickness={1.5}
-            roughness={0.05}
-            transmission={1}
-            ior={2.4} // Diamond-like refraction
-            chromaticAberration={0.15}
-            anisotropy={0.3}
-            distortion={0.1}
-            distortionScale={0.2}
-            temporalDistortion={0.05}
-            color={color}
-        />
-    );
 
     return (
         <group>

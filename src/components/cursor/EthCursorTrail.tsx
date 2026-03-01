@@ -71,6 +71,7 @@ const EthCursorTrail: React.FC = () => {
   const mouseRef = useRef({ x: -100, y: -100 });
   const lastSpawnRef = useRef(0);
   const rafRef = useRef(0);
+  const animateRef = useRef<((now: number) => void) | null>(null);
   const isTouchRef = useRef(true);
 
   const initPool = useCallback(() => {
@@ -127,73 +128,76 @@ const EthCursorTrail: React.FC = () => {
     clickPoolRef.current = clickPool;
   }, []);
 
-  const animate = useCallback((now: number) => {
-    const { x, y } = mouseRef.current;
-    const cursor = cursorRef.current;
-    const pool = poolRef.current;
-    const clickPool = clickPoolRef.current;
+  // Store animate in a ref to avoid circular dependency
+  useEffect(() => {
+    animateRef.current = (now: number) => {
+      const { x, y } = mouseRef.current;
+      const cursor = cursorRef.current;
+      const pool = poolRef.current;
+      const clickPool = clickPoolRef.current;
 
-    // Update cursor position
-    if (cursor) {
-      cursor.style.transform = `translate3d(${x - CURSOR_SIZE / 2}px, ${y - CURSOR_SIZE / 2}px, 0)`;
-    }
-
-    // Spawn new trail particle
-    if (now - lastSpawnRef.current > SPAWN_INTERVAL) {
-      lastSpawnRef.current = now;
-      const inactive = pool.find((p) => !p.active);
-      if (inactive) {
-        inactive.active = true;
-        inactive.born = now;
-        inactive.x = x;
-        inactive.y = y;
-      }
-    }
-
-    // Update trail particles
-    for (const p of pool) {
-      if (!p.active || !p.el) continue;
-
-      const age = now - p.born;
-      if (age >= LIFETIME) {
-        p.active = false;
-        p.el.style.opacity = '0';
-        continue;
+      // Update cursor position
+      if (cursor) {
+        cursor.style.transform = `translate3d(${x - CURSOR_SIZE / 2}px, ${y - CURSOR_SIZE / 2}px, 0)`;
       }
 
-      const progress = age / LIFETIME;
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const opacity = 1 - eased;
-      const scale = 1 - 0.7 * eased;
-      const rotation = progress * 30;
-
-      p.el.style.opacity = String(opacity);
-      p.el.style.transform = `translate3d(${p.x - PARTICLE_SIZE / 2}px, ${p.y - PARTICLE_SIZE / 2}px, 0) scale(${scale}) rotate(${rotation}deg)`;
-    }
-
-    // Update click particles (Taegeuk)
-    for (const cp of clickPool) {
-      if (!cp.active || !cp.el) continue;
-
-      const age = now - cp.born;
-      if (age >= CLICK_LIFETIME) {
-        cp.active = false;
-        cp.el.style.opacity = '0';
-        continue;
+      // Spawn new trail particle
+      if (now - lastSpawnRef.current > SPAWN_INTERVAL) {
+        lastSpawnRef.current = now;
+        const inactive = pool.find((p) => !p.active);
+        if (inactive) {
+          inactive.active = true;
+          inactive.born = now;
+          inactive.x = x;
+          inactive.y = y;
+        }
       }
 
-      const progress = age / CLICK_LIFETIME;
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const opacity = (1 - eased) * 0.8;
-      const scale = 0.3 + eased * 1.2;
-      const rotation = progress * 360;
-      const drift = eased * 30;
+      // Update trail particles
+      for (const p of pool) {
+        if (!p.active || !p.el) continue;
 
-      cp.el.style.opacity = String(opacity);
-      cp.el.style.transform = `translate3d(${cp.x - CLICK_SIZE / 2}px, ${cp.y - CLICK_SIZE / 2 - drift}px, 0) scale(${scale}) rotate(${rotation}deg)`;
-    }
+        const age = now - p.born;
+        if (age >= LIFETIME) {
+          p.active = false;
+          p.el.style.opacity = '0';
+          continue;
+        }
 
-    rafRef.current = requestAnimationFrame(animate);
+        const progress = age / LIFETIME;
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const opacity = 1 - eased;
+        const scale = 1 - 0.7 * eased;
+        const rotation = progress * 30;
+
+        p.el.style.opacity = String(opacity);
+        p.el.style.transform = `translate3d(${p.x - PARTICLE_SIZE / 2}px, ${p.y - PARTICLE_SIZE / 2}px, 0) scale(${scale}) rotate(${rotation}deg)`;
+      }
+
+      // Update click particles (Taegeuk)
+      for (const cp of clickPool) {
+        if (!cp.active || !cp.el) continue;
+
+        const age = now - cp.born;
+        if (age >= CLICK_LIFETIME) {
+          cp.active = false;
+          cp.el.style.opacity = '0';
+          continue;
+        }
+
+        const progress = age / CLICK_LIFETIME;
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const opacity = (1 - eased) * 0.8;
+        const scale = 0.3 + eased * 1.2;
+        const rotation = progress * 360;
+        const drift = eased * 30;
+
+        cp.el.style.opacity = String(opacity);
+        cp.el.style.transform = `translate3d(${cp.x - CLICK_SIZE / 2}px, ${cp.y - CLICK_SIZE / 2 - drift}px, 0) scale(${scale}) rotate(${rotation}deg)`;
+      }
+
+      rafRef.current = requestAnimationFrame(animateRef.current!);
+    };
   }, []);
 
   const handleClick = useCallback((e: MouseEvent) => {
@@ -221,19 +225,23 @@ const EthCursorTrail: React.FC = () => {
       mouseRef.current.y = e.clientY;
     };
 
+    const startAnimate = (now: number) => {
+      animateRef.current?.(now);
+    };
+
     // Page Visibility API: pause RAF when tab is hidden
     const handleVisibility = () => {
       if (document.hidden) {
         cancelAnimationFrame(rafRef.current);
       } else {
-        rafRef.current = requestAnimationFrame(animate);
+        rafRef.current = requestAnimationFrame(startAnimate);
       }
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('click', handleClick, { passive: true });
     document.addEventListener('visibilitychange', handleVisibility);
-    rafRef.current = requestAnimationFrame(animate);
+    rafRef.current = requestAnimationFrame(startAnimate);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -241,7 +249,7 @@ const EthCursorTrail: React.FC = () => {
       document.removeEventListener('visibilitychange', handleVisibility);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [initPool, animate, handleClick]);
+  }, [initPool, handleClick]);
 
   // Don't render on touch devices or when reduced motion is preferred
   if (typeof window !== 'undefined' && (isTouchDevice() || prefersReducedMotion())) {

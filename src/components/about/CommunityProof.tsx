@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Award, Calendar, Github } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -9,9 +9,12 @@ const LAUNCH_DATE = new Date('2024-11-01');
 const CommunityProof: React.FC = () => {
     const { t } = useTranslation('about');
 
+    const [now] = useState(() => Date.now());
+    useEffect(() => { /* captured Date.now() once on mount */ }, []);
+
     const daysSinceLaunch = useMemo(
-        () => Math.floor((Date.now() - LAUNCH_DATE.getTime()) / (24 * 60 * 60 * 1000)),
-        [],
+        () => Math.floor((now - LAUNCH_DATE.getTime()) / (24 * 60 * 60 * 1000)),
+        [now],
     );
 
     const proofs = [

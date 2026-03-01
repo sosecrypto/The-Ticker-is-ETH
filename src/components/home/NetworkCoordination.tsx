@@ -4,36 +4,33 @@ import { CatmullRomCurve3, Vector3 } from 'three';
 import * as THREE from 'three';
 import Ethereum3DLogo from './Ethereum3DLogo';
 
+// Pre-compute deterministic path data outside component
+function createPaths(count: number): CatmullRomCurve3[] {
+    const results: CatmullRomCurve3[] = [];
+    for (let i = 0; i < count; i++) {
+        const h = (n: number) => (((n * 2654435761) >>> 0) / 4294967296) - 0.5;
+        const start = new Vector3(0, 0, 0);
+        const end = new Vector3(
+            h(i * 3) * 12,
+            h(i * 3 + 1) * 10,
+            (h(i * 3 + 2) - 0.5) * 8,
+        );
+        const mid = new Vector3().lerpVectors(start, end, 0.5);
+        mid.add(new Vector3(
+            h(i * 3 + 10) * 3,
+            h(i * 3 + 11) * 3,
+            h(i * 3 + 12) * 3,
+        ));
+        results.push(new CatmullRomCurve3([start, mid, end]));
+    }
+    return results;
+}
 
 const NetworkCoordination: React.FC = () => {
     const [glowIntensity, setGlowIntensity] = useState(1);
-
-    // Create random paths radiating from central logo
-    const paths = useMemo(() => {
-        const count = 6; // Reduced for a cleaner look
-        return Array.from({ length: count }, () => {
-            const start = new Vector3(0, 0, 0);
-            const end = new Vector3(
-                (Math.random() - 0.5) * 12,
-                (Math.random() - 0.5) * 10,
-                (Math.random() - 1.0) * 8
-            );
-
-            // Middle control point for curve
-            const mid = new Vector3().lerpVectors(start, end, 0.5);
-            mid.add(new Vector3(
-                (Math.random() - 0.5) * 3,
-                (Math.random() - 0.5) * 3,
-                (Math.random() - 0.5) * 3
-            ));
-
-            return new CatmullRomCurve3([start, mid, end]);
-        });
-    }, []);
-
+    const paths = useMemo(() => createPaths(6), []);
 
     useFrame(() => {
-        // Slowly decay glow intensity back to base level
         if (glowIntensity > 1) {
             setGlowIntensity(prev => THREE.MathUtils.lerp(prev, 1, 0.05));
         }

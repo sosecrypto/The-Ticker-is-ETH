@@ -2,6 +2,13 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { mockMembers, mockContributors } from '../../data/mockData';
 
+// Pre-generate deterministic pseudo-random values for particle animation
+function seededValue(i: number): { delay: number; duration: number } {
+    const hash = ((i * 2654435761) >>> 0) / 4294967296;
+    const hash2 = (((i + 7) * 2654435761) >>> 0) / 4294967296;
+    return { delay: hash * 8, duration: 6 + hash2 * 4 };
+}
+
 const AvatarParticle: React.FC<{
     avatarUrl: string;
     name: string;
@@ -56,11 +63,12 @@ const AvatarParticle: React.FC<{
 };
 
 const MemberAvatarFlow: React.FC = () => {
-    const [reducedMotion, setReducedMotion] = useState(false);
+    const [reducedMotion, setReducedMotion] = useState(
+        () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    );
 
     useEffect(() => {
         const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-        setReducedMotion(mq.matches);
         const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
         mq.addEventListener('change', handler);
         return () => mq.removeEventListener('change', handler);
@@ -90,14 +98,17 @@ const MemberAvatarFlow: React.FC = () => {
     }, [angles]);
 
     const particles = useMemo(() => {
-        return allAvatars.map((member, i) => ({
-            id: member.id + i,
-            avatarUrl: member.avatarUrl,
-            name: member.name,
-            delay: Math.random() * 8,
-            duration: 6 + Math.random() * 4,
-            angle: angles[i % 6]
-        }));
+        return allAvatars.map((member, i) => {
+            const seed = seededValue(i);
+            return {
+                id: member.id + i,
+                avatarUrl: member.avatarUrl,
+                name: member.name,
+                delay: seed.delay,
+                duration: seed.duration,
+                angle: angles[i % 6],
+            };
+        });
     }, [allAvatars, angles]);
 
     if (reducedMotion) return null;

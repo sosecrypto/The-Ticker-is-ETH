@@ -93,12 +93,16 @@ const KoreanFlagFlow: React.FC = () => {
     }, []);
 
     const particles = useMemo(() => {
-        return Array.from({ length: 12 }, (_, i) => ({
-            id: i,
-            pathId: i % 8,
-            delay: Math.random() * 8, // More spread out
-            duration: 4 + Math.random() * 4
-        }));
+        return Array.from({ length: 12 }, (_, i) => {
+            const hash = ((i * 2654435761) >>> 0) / 4294967296;
+            const hash2 = (((i + 7) * 2654435761) >>> 0) / 4294967296;
+            return {
+                id: i,
+                pathId: i % 8,
+                delay: hash * 8,
+                duration: 4 + hash2 * 4,
+            };
+        });
     }, []);
 
     return (

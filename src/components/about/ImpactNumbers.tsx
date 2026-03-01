@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, FileText, Eye, Calendar } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -12,9 +12,12 @@ const LAUNCH_DATE = new Date('2024-11-01');
 const ImpactNumbers: React.FC = () => {
     const { t } = useTranslation('about');
 
+    const [now] = useState(() => Date.now());
+    useEffect(() => { /* captured Date.now() once on mount */ }, []);
+
     const stats = useMemo(() => {
         const daysSinceLaunch = Math.floor(
-            (Date.now() - LAUNCH_DATE.getTime()) / (24 * 60 * 60 * 1000),
+            (now - LAUNCH_DATE.getTime()) / (24 * 60 * 60 * 1000),
         );
 
         return [
@@ -43,7 +46,7 @@ const ImpactNumbers: React.FC = () => {
                 label: t('impact.days'),
             },
         ];
-    }, [t]);
+    }, [t, now]);
 
     return (
         <section className="py-24 px-6 relative overflow-hidden">
