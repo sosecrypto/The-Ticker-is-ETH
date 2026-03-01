@@ -55,6 +55,17 @@ const ResearchDetail: React.FC = () => {
         }
     };
 
+    const sessionEntry = useMemo(() => {
+        try {
+            const stored = sessionStorage.getItem('publishedEntries');
+            if (!stored) return undefined;
+            const entries = JSON.parse(stored) as Array<Record<string, unknown>>;
+            return entries.find(e => e.id === id);
+        } catch {
+            return undefined;
+        }
+    }, [id]);
+
     const post = useMemo(() => {
         const found = mockResearch.find(p => p.id === id);
         if (found) return found;
@@ -62,8 +73,11 @@ const ResearchDetail: React.FC = () => {
         if (state?.publishedEntry && state.publishedEntry.id === id) {
             return state.publishedEntry as unknown as typeof mockResearch[number];
         }
+        if (sessionEntry) {
+            return sessionEntry as unknown as typeof mockResearch[number];
+        }
         return undefined;
-    }, [id, location.state]);
+    }, [id, location.state, sessionEntry]);
 
     useEffect(() => {
         if (!id) return;
@@ -72,8 +86,12 @@ const ResearchDetail: React.FC = () => {
             setContent(state.publishedContent);
             return;
         }
+        if (sessionEntry?._content) {
+            setContent(sessionEntry._content as string);
+            return;
+        }
         loadResearchContent(id).then(c => setContent(c ?? ''));
-    }, [id, location.state]);
+    }, [id, location.state, sessionEntry]);
 
     if (!post) {
         return (

@@ -93,7 +93,7 @@ const WriteResearch: React.FC = () => {
 
             const stored = sessionStorage.getItem('publishedEntries');
             const entries = stored ? JSON.parse(stored) as unknown[] : [];
-            entries.push(publishedEntry);
+            entries.push({ ...publishedEntry, _content: formData.content });
             sessionStorage.setItem('publishedEntries', JSON.stringify(entries));
 
             navigate(`/research/${publishedEntry.id}`, {
