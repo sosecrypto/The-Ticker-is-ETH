@@ -138,7 +138,7 @@ function main() {
   const inputPath = path.resolve(root, 'src/data/telegram-contributors.json');
   const teamOutputPath = path.resolve(root, 'src/data/team-enrichment.json');
   const researchIndexPath = path.resolve(root, 'src/data/research-index.json');
-  const researchContentPath = path.resolve(root, 'src/data/research-content.json');
+  const articlesDir = path.resolve(root, 'src/data/articles');
 
   if (!fs.existsSync(inputPath)) {
     console.error(`Input file not found: ${inputPath}`);
@@ -173,9 +173,13 @@ function main() {
   const teamSize = (fs.statSync(teamOutputPath).size / 1024).toFixed(1);
   console.log(`Written: team-enrichment.json (${teamSize} KB)`);
 
-  // --- Generate research-index.json + research-content.json ---
+  // --- Generate research-index.json + individual article .md files ---
+  if (!fs.existsSync(articlesDir)) {
+    fs.mkdirSync(articlesDir, { recursive: true });
+  }
+
   const index: Omit<ResearchArticle, 'content'>[] = [];
-  const contentMap: Record<string, string> = {};
+  let articlesWritten = 0;
 
   for (const contributor of data.contributors) {
     const avatar = `/assets/team/${contributor.name.toLowerCase()}.jpg`;
@@ -214,7 +218,9 @@ function main() {
 
       index.push(entry);
 
-      contentMap[id] = formatTelegramToMarkdown(text);
+      const articlePath = path.resolve(articlesDir, `${id}.md`);
+      fs.writeFileSync(articlePath, formatTelegramToMarkdown(text), 'utf-8');
+      articlesWritten++;
     }
   }
 
@@ -223,17 +229,13 @@ function main() {
   fs.writeFileSync(researchIndexPath, JSON.stringify(index), 'utf-8');
   const indexSize = (fs.statSync(researchIndexPath).size / 1024).toFixed(1);
   console.log(`Written: research-index.json (${indexSize} KB)`);
-
-  fs.writeFileSync(researchContentPath, JSON.stringify(contentMap), 'utf-8');
-  const contentSize = (fs.statSync(researchContentPath).size / 1024).toFixed(1);
-  console.log(`Written: research-content.json (${contentSize} KB) — lazy loaded`);
-  console.log(`  Articles: ${index.length}`);
+  console.log(`Written: ${articlesWritten} article .md files → src/data/articles/`);
 
   // --- Summary ---
   const inputSize = (fs.statSync(inputPath).size / 1024).toFixed(1);
   console.log(`\nSummary:`);
   console.log(`  Input:  telegram-contributors.json (${inputSize} KB)`);
-  console.log(`  Output: team-enrichment.json (${teamSize} KB) + research-index.json (${indexSize} KB) + research-content.json (${contentSize} KB, lazy)`);
+  console.log(`  Output: team-enrichment.json (${teamSize} KB) + research-index.json (${indexSize} KB) + ${articlesWritten} article .md files`);
   console.log('Preprocessing complete.');
 }
 
