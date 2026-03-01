@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Share2, Trash2, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ const ResearchDetail: React.FC = () => {
     const { t } = useTranslation('research');
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
     const [content, setContent] = useState<string>('');
     const [isDeleting, setIsDeleting] = useState(false);
     const [deleteError, setDeleteError] = useState('');
@@ -50,8 +51,14 @@ const ResearchDetail: React.FC = () => {
     };
 
     const post = useMemo(() => {
-        return mockResearch.find(p => p.id === id);
-    }, [id]);
+        const found = mockResearch.find(p => p.id === id);
+        if (found) return found;
+        const state = location.state as { publishedEntry?: Record<string, unknown> } | null;
+        if (state?.publishedEntry && state.publishedEntry.id === id) {
+            return state.publishedEntry as unknown as typeof mockResearch[number];
+        }
+        return undefined;
+    }, [id, location.state]);
 
     useEffect(() => {
         if (!id) return;
