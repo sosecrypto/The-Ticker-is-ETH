@@ -90,6 +90,12 @@ const WriteResearch: React.FC = () => {
             }
 
             const publishedEntry = await res.json() as Record<string, unknown>;
+
+            const stored = sessionStorage.getItem('publishedEntries');
+            const entries = stored ? JSON.parse(stored) as unknown[] : [];
+            entries.push(publishedEntry);
+            sessionStorage.setItem('publishedEntries', JSON.stringify(entries));
+
             navigate(`/research/${publishedEntry.id}`, {
                 state: { publishedEntry, publishedContent: formData.content },
             });

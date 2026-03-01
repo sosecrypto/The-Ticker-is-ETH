@@ -1,21 +1,28 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, BookOpen, Clock, ArrowRight, PenSquare } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { mockResearch } from '../data/researchData';
+import { mockResearch, type ResearchIndexItem } from '../data/researchData';
 import { getAvatarFallbackUrl } from '../utils/members';
 import EthThumbnail from '../components/shared/EthThumbnail';
 import usePageMeta from '../hooks/usePageMeta';
+
+function getSessionList<T>(key: string): T[] {
+    try {
+        const stored = sessionStorage.getItem(key);
+        return stored ? JSON.parse(stored) as T[] : [];
+    } catch {
+        return [];
+    }
+}
 
 const Research: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState<string>('all');
     const [isAdmin, setIsAdmin] = useState(false);
-    const location = useLocation();
     const { t } = useTranslation('research');
     usePageMeta({ title: 'Research', description: '이더리움 리서치 및 분석 아티클' });
-    const deletedId = (location.state as { deletedId?: string } | null)?.deletedId;
 
     React.useEffect(() => {
         setIsAdmin(localStorage.getItem('isAdmin') === 'true');
@@ -24,8 +31,15 @@ const Research: React.FC = () => {
     const categories = ['all', 'Short', 'Forwarded', 'Research'];
 
     const filteredResearch = useMemo(() => {
-        return mockResearch.filter(item => {
-            if (deletedId && item.id === deletedId) return false;
+        const deletedIds = new Set(getSessionList<string>('deletedIds'));
+        const published = getSessionList<ResearchIndexItem>('publishedEntries');
+
+        const existingIds = new Set(mockResearch.map(item => item.id));
+        const newEntries = published.filter(e => !existingIds.has(e.id) && !deletedIds.has(e.id));
+        const allItems = [...newEntries, ...mockResearch];
+
+        return allItems.filter(item => {
+            if (deletedIds.has(item.id)) return false;
             const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
             const matchesSearch =
                 item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -33,7 +47,7 @@ const Research: React.FC = () => {
                 item.author.toLowerCase().includes(searchQuery.toLowerCase());
             return matchesCategory && matchesSearch;
         });
-    }, [searchQuery, activeCategory, deletedId]);
+    }, [searchQuery, activeCategory]);
 
     return (
         <div className="min-h-screen pt-28 pb-20 px-6 container mx-auto text-white">

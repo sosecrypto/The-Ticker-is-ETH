@@ -42,7 +42,12 @@ const ResearchDetail: React.FC = () => {
                 throw new Error(data.error || 'Delete failed');
             }
 
-            navigate('/research', { state: { deletedId: id } });
+            const stored = sessionStorage.getItem('deletedIds');
+            const ids = stored ? JSON.parse(stored) as string[] : [];
+            ids.push(id!);
+            sessionStorage.setItem('deletedIds', JSON.stringify(ids));
+
+            navigate('/research');
         } catch (err) {
             setDeleteError(err instanceof Error ? err.message : t('detail.deleteError'));
         } finally {
