@@ -1,11 +1,11 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Send, Eye, PenLine, Loader2, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { mockMembers, mockContributors } from '../data/mockData';
-import MarkdownToolbar from '../components/editor/MarkdownToolbar';
+import BlockNoteEditor from '../components/editor/BlockNoteEditor';
 
 interface AuthorOption {
     name: string;
@@ -18,8 +18,6 @@ const WriteResearch: React.FC = () => {
     const [isPublishing, setIsPublishing] = useState(false);
     const [publishError, setPublishError] = useState('');
     const { t } = useTranslation('research');
-    const contentRef = useRef<HTMLTextAreaElement>(null);
-
     React.useEffect(() => {
         const isAdmin = localStorage.getItem('isAdmin') === 'true';
         if (!isAdmin) {
@@ -51,6 +49,10 @@ const WriteResearch: React.FC = () => {
         content: '',
         thumbnailUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=2832',
     });
+
+    const handleContentChange = useCallback((content: string) => {
+        setFormData((prev) => ({ ...prev, content }));
+    }, []);
 
     const handlePublish = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -203,19 +205,12 @@ const WriteResearch: React.FC = () => {
 
                         <div className="space-y-4">
                             <label className="text-sm font-semibold text-gray-500 uppercase tracking-widest pl-1">{t('write.contentLabel')}</label>
-                            <MarkdownToolbar
-                                textareaRef={contentRef}
-                                value={formData.content}
-                                onChange={(content) => setFormData({ ...formData, content })}
-                            />
-                            <textarea
-                                ref={contentRef}
-                                placeholder={t('write.contentPlaceholder')}
-                                value={formData.content}
-                                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                className="w-full bg-white/5 border border-white/10 rounded-2xl p-6 min-h-[500px] text-gray-100 font-mono text-lg focus:outline-none focus:border-brand-accent/50 transition-all leading-relaxed"
-                                required
-                            />
+                            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 focus-within:border-brand-accent/50 transition-all">
+                                <BlockNoteEditor
+                                    initialMarkdown={formData.content}
+                                    onChange={handleContentChange}
+                                />
+                            </div>
                         </div>
                     </motion.form>
                 ) : (
