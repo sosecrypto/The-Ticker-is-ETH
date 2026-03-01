@@ -102,5 +102,14 @@ export async function deleteFile(
 
 export async function getRawContent(path: string): Promise<string> {
   const file = await getFileContent(path);
-  return Buffer.from(file.content, 'base64').toString('utf-8');
+  // Files > 1MB: GitHub omits content, use download_url instead
+  if (file.content) {
+    return Buffer.from(file.content, 'base64').toString('utf-8');
+  }
+  if (file.download_url) {
+    const res = await fetch(file.download_url);
+    if (!res.ok) throw new Error(`GitHub download ${path}: ${res.status}`);
+    return res.text();
+  }
+  throw new Error(`GitHub GET ${path}: no content or download_url`);
 }
