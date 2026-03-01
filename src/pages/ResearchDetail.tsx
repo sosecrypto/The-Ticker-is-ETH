@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Share2, Trash2, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
-import { mockResearch, loadResearchContent } from '../data/researchData';
+import { loadResearchIndex, loadResearchContent, type ResearchIndexItem } from '../data/researchData';
 import { getAvatarFallbackUrl } from '../utils/members';
 import EthThumbnail from '../components/shared/EthThumbnail';
 
@@ -16,7 +16,12 @@ const ResearchDetail: React.FC = () => {
     const [content, setContent] = useState<string>('');
     const [isDeleting, setIsDeleting] = useState(false);
     const [deleteError, setDeleteError] = useState('');
+    const [researchItems, setResearchItems] = useState<ResearchIndexItem[]>([]);
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+    useEffect(() => {
+        loadResearchIndex().then(setResearchItems);
+    }, []);
 
     const handleDelete = async () => {
         if (!window.confirm(t('detail.deleteConfirm'))) return;
@@ -67,17 +72,17 @@ const ResearchDetail: React.FC = () => {
     }, [id]);
 
     const post = useMemo(() => {
-        const found = mockResearch.find(p => p.id === id);
+        const found = researchItems.find(p => p.id === id);
         if (found) return found;
         const state = location.state as { publishedEntry?: Record<string, unknown> } | null;
         if (state?.publishedEntry && state.publishedEntry.id === id) {
-            return state.publishedEntry as unknown as typeof mockResearch[number];
+            return state.publishedEntry as unknown as ResearchIndexItem;
         }
         if (sessionEntry) {
-            return sessionEntry as unknown as typeof mockResearch[number];
+            return sessionEntry as unknown as ResearchIndexItem;
         }
         return undefined;
-    }, [id, location.state, sessionEntry]);
+    }, [id, location.state, sessionEntry, researchItems]);
 
     useEffect(() => {
         if (!id) return;

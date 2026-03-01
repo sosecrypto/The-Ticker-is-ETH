@@ -4,7 +4,7 @@ import { Users, FileText, Eye, Calendar } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import AnimatedNumber from '../common/AnimatedNumber';
 import { mockContributors } from '../../data/mockData';
-import { mockResearch } from '../../data/researchData';
+import { loadResearchIndex } from '../../data/researchData';
 import telegramStats from '../../data/telegram-stats.json';
 
 const LAUNCH_DATE = new Date('2024-11-01');
@@ -13,7 +13,11 @@ const ImpactNumbers: React.FC = () => {
     const { t } = useTranslation('about');
 
     const [now] = useState(() => Date.now());
-    useEffect(() => { /* captured Date.now() once on mount */ }, []);
+    const [researchCount, setResearchCount] = useState(0);
+
+    useEffect(() => {
+        loadResearchIndex().then(data => setResearchCount(data.length));
+    }, []);
 
     const stats = useMemo(() => {
         const daysSinceLaunch = Math.floor(
@@ -29,7 +33,7 @@ const ImpactNumbers: React.FC = () => {
             },
             {
                 icon: <FileText size={20} />,
-                value: mockResearch.length,
+                value: researchCount,
                 suffix: '+',
                 label: t('impact.content'),
             },
@@ -46,7 +50,7 @@ const ImpactNumbers: React.FC = () => {
                 label: t('impact.days'),
             },
         ];
-    }, [t, now]);
+    }, [t, now, researchCount]);
 
     return (
         <section className="py-24 px-6 relative overflow-hidden">

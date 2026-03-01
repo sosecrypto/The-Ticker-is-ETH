@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { mockResearch } from '../../data/researchData';
+import { loadResearchIndex, type ResearchIndexItem } from '../../data/researchData';
 import EthThumbnail from '../shared/EthThumbnail';
-
-const latestUpdates = mockResearch.slice(0, 3);
 
 const UpdatesSection: React.FC = () => {
     const { t } = useTranslation('home');
+    const [latestUpdates, setLatestUpdates] = useState<ResearchIndexItem[]>([]);
+
+    useEffect(() => {
+        loadResearchIndex().then(data => setLatestUpdates(data.slice(0, 3)));
+    }, []);
+
     return (
         <section className="py-24 bg-brand-dark/50">
             <div className="container mx-auto px-6">
@@ -29,6 +33,20 @@ const UpdatesSection: React.FC = () => {
                     </Link>
                 </div>
 
+                {latestUpdates.length === 0 ? (
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {[0, 1, 2].map(i => (
+                            <div key={i} className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden animate-pulse">
+                                <div className="h-48 bg-white/5" />
+                                <div className="p-6 space-y-3">
+                                    <div className="h-3 w-20 bg-white/10 rounded" />
+                                    <div className="h-5 w-full bg-white/10 rounded" />
+                                    <div className="h-4 w-3/4 bg-white/10 rounded" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
                 <div className="grid md:grid-cols-3 gap-8">
                     {latestUpdates.map((item, i) => (
                         <motion.div
@@ -77,6 +95,7 @@ const UpdatesSection: React.FC = () => {
                         </motion.div>
                     ))}
                 </div>
+                )}
             </div>
         </section>
     );

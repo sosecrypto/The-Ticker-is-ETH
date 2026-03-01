@@ -1,12 +1,14 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, BookOpen, Clock, ArrowRight, PenSquare } from 'lucide-react';
+import { Search, BookOpen, Clock, ArrowRight, PenSquare, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { mockResearch, type ResearchIndexItem } from '../data/researchData';
+import { loadResearchIndex, type ResearchIndexItem } from '../data/researchData';
 import { getAvatarFallbackUrl } from '../utils/members';
 import EthThumbnail from '../components/shared/EthThumbnail';
 import usePageMeta from '../hooks/usePageMeta';
+
+const PAGE_SIZE = 12;
 
 function getSessionList<T>(key: string): T[] {
     try {
@@ -20,12 +22,18 @@ function getSessionList<T>(key: string): T[] {
 const Research: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState<string>('all');
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin] = useState(() => localStorage.getItem('isAdmin') === 'true');
+    const [researchItems, setResearchItems] = useState<ResearchIndexItem[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
     const { t } = useTranslation('research');
     usePageMeta({ title: 'Research', description: '이더리움 리서치 및 분석 아티클' });
 
-    React.useEffect(() => {
-        setIsAdmin(localStorage.getItem('isAdmin') === 'true');
+    useEffect(() => {
+        loadResearchIndex().then(data => {
+            setResearchItems(data);
+            setIsLoading(false);
+        });
     }, []);
 
     const categories = ['all', 'Short', 'Forwarded', 'Research'];
@@ -34,9 +42,9 @@ const Research: React.FC = () => {
         const deletedIds = new Set(getSessionList<string>('deletedIds'));
         const published = getSessionList<ResearchIndexItem>('publishedEntries');
 
-        const existingIds = new Set(mockResearch.map(item => item.id));
+        const existingIds = new Set(researchItems.map(item => item.id));
         const newEntries = published.filter(e => !existingIds.has(e.id) && !deletedIds.has(e.id));
-        const allItems = [...newEntries, ...mockResearch];
+        const allItems = [...newEntries, ...researchItems];
 
         return allItems.filter(item => {
             if (deletedIds.has(item.id)) return false;
@@ -47,7 +55,18 @@ const Research: React.FC = () => {
                 item.author.toLowerCase().includes(searchQuery.toLowerCase());
             return matchesCategory && matchesSearch;
         });
-    }, [searchQuery, activeCategory]);
+    }, [searchQuery, activeCategory, researchItems]);
+
+    const visibleItems = useMemo(
+        () => filteredResearch.slice(0, visibleCount),
+        [filteredResearch, visibleCount],
+    );
+
+    const hasMore = visibleCount < filteredResearch.length;
+
+    const handleLoadMore = useCallback(() => {
+        setVisibleCount(prev => prev + PAGE_SIZE);
+    }, []);
 
     return (
         <div className="min-h-screen pt-28 pb-20 px-6 container mx-auto text-white">
@@ -89,7 +108,7 @@ const Research: React.FC = () => {
                     {categories.map((cat) => (
                         <button
                             key={cat}
-                            onClick={() => setActiveCategory(cat)}
+                            onClick={() => { setActiveCategory(cat); setVisibleCount(PAGE_SIZE); }}
                             className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat
                                 ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/25'
                                 : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
@@ -107,15 +126,20 @@ const Research: React.FC = () => {
                         type="text"
                         placeholder={t('common:search.researchPlaceholder')}
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => { setSearchQuery(e.target.value); setVisibleCount(PAGE_SIZE); }}
                         className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-white text-lg focus:outline-none focus:border-brand-accent/50 focus:bg-white/10 transition-all font-light placeholder:text-gray-600 shadow-2xl"
                     />
                 </div>
             </div>
 
+            {isLoading ? (
+                <div className="flex justify-center py-32">
+                    <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
+                </div>
+            ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <AnimatePresence mode="popLayout">
-                    {filteredResearch.map((item) => (
+                    {visibleItems.map((item) => (
                         <motion.article
                             key={item.id}
                             layout
@@ -193,8 +217,21 @@ const Research: React.FC = () => {
                     ))}
                 </AnimatePresence>
             </div>
+            )}
 
-            {filteredResearch.length === 0 && (
+            {!isLoading && hasMore && (
+                <div className="flex justify-center mt-12">
+                    <button
+                        onClick={handleLoadMore}
+                        className="flex items-center gap-2 px-8 py-3 rounded-2xl bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 hover:border-brand-primary/30 transition-all font-medium"
+                    >
+                        <ChevronDown size={18} />
+                        {t('loadMore', { count: Math.min(PAGE_SIZE, filteredResearch.length - visibleCount) })}
+                    </button>
+                </div>
+            )}
+
+            {!isLoading && filteredResearch.length === 0 && (
                 <div className="text-center py-32 rounded-[3rem] bg-white/[0.02] border border-dashed border-white/10">
                     <BookOpen className="mx-auto text-gray-700 mb-6" size={64} />
                     <p className="text-gray-500 text-xl font-light italic">
