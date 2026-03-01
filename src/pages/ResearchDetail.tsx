@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, Share2, Trash2, Loader2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Trash2, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { loadResearchIndex, loadResearchContent, type ResearchIndexItem } from '../data/researchData';
@@ -198,10 +198,6 @@ const ResearchDetail: React.FC = () => {
 
                     <div className="mt-20 pt-10 border-t border-white/5 flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                            <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 transition-colors">
-                                <Share2 size={18} />
-                                {t('detail.share')}
-                            </button>
                             {isAdmin && (
                                 <button
                                     onClick={handleDelete}
